@@ -1,0 +1,14 @@
+{
+    "name": "laragento/checkout",
+    "description": "Laragento Quote",
+    "type": "extension",
+    "minimum-stability": "dev",
+    "require": {},
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Laragento\\Checkout\\CheckoutServiceProvider"
+            ]
+        }
+      }
+}

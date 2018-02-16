@@ -1,0 +1,14 @@
+{
+  "name": "laragento/customer",
+  "description": "All about the Laragento Customer",
+  "type": "extension",
+  "minimum-stability": "dev",
+  "require": {},
+  "extra": {
+    "laravel": {
+        "providers": [
+            "Laragento\\Customer\\CustomerServiceProvider"
+        ]
+    }
+  }
+}

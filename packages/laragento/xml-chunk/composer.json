@@ -1,0 +1,14 @@
+{
+  "name": "laragento/xml-chunk",
+  "description": "Laragento Xml Chunking",
+  "type": "extension",
+  "minimum-stability": "dev",
+  "require": {},
+  "extra": {
+    "laravel": {
+        "providers": [
+            "Laragento\\XmlChunk\\XmlChunkServiceProvider"
+        ]
+    }
+}
+}

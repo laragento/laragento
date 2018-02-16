@@ -1,0 +1,41 @@
+{
+  "name": "laragento/import-export",
+  "description": "Laragento Common Import Export",
+  "type": "extension",
+  "minimum-stability": "dev",
+  "require": {
+    "Laragento/Catalog": "dev-master",
+    "Laragento/catalog-import-export": "dev-master",
+    "Laragento/Eav": "dev-master",
+    "Laragento/import-export": "dev-master",
+    "Laragento/Store" : "dev-master"
+  },
+  "repositories": [
+    {
+        "type": "path",
+        "url": "./packages/laragento/catalog"
+    },
+    {
+        "type": "path",
+        "url": "./packages/laragento/catalog-import-export"
+    },
+    {
+        "type": "path",
+        "url": "./packages/laragento/eav"
+    },{
+        "type": "path",
+        "url": "./packages/laragento/import-export"
+    },
+    {
+        "type": "path",
+        "url": "./packages/laragento/store"
+    }
+  ],
+  "extra": {
+    "laravel": {
+        "providers": [
+            "Laragento\\ImportExport\\ImportExportServiceProvider"
+        ]
+    }
+}
+}

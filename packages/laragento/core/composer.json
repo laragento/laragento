@@ -1,0 +1,14 @@
+{
+  "name": "laragento/core",
+  "description": "Laragento Core Functionality",
+  "type": "extension",
+  "minimum-stability": "dev",
+  "require": {},
+  "extra": {
+    "laravel": {
+        "providers": [
+            "Laragento\\Core\\CoreServiceProvider"
+        ]
+    }
+  }
+}
