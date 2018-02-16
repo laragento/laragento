@@ -10,5 +10,10 @@
                 "Laragento\\MediaStorage\\MediaStorageServiceProvider"
             ]
         }
+    },
+    "autoload": {
+        "psr-4": {
+            "Laragento\\MediaStorage\\": "src"
+        }
     }
 }

@@ -1,18 +1,23 @@
 {
-  "name": "laragento/catalog",
-  "description": "Yeah",
-  "type": "extension",
-  "minimum-stability": "dev",
-  "require": {},
-  "extra": {
-    "laravel": {
-        "providers": [
-            "Laragento\\Catalog\\CatalogServiceProvider"
-        ],
-        "aliases": {
-            "product": "Laragento\\Catalog\\Support\\Facades\\ProductFacade",
-            "category": "Laragento\\Catalog\\Support\\Facades\\CategoryFacade"
+    "name": "laragento/catalog",
+    "description": "Yeah",
+    "type": "extension",
+    "minimum-stability": "dev",
+    "require": {},
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Laragento\\Catalog\\CatalogServiceProvider"
+            ],
+            "aliases": {
+                "product": "Laragento\\Catalog\\Support\\Facades\\ProductFacade",
+                "category": "Laragento\\Catalog\\Support\\Facades\\CategoryFacade"
+            }
+        }
+    },
+    "autoload": {
+        "psr-4": {
+            "Laragento\\Catalog\\": "src"
         }
     }
-  }
 }

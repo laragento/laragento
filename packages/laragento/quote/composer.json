@@ -10,5 +10,10 @@
                 "Laragento\\Quote\\QuoteServiceProvider"
             ]
         }
+    },
+    "autoload": {
+        "psr-4": {
+            "Laragento\\Quote\\": "src"
+        }
     }
 }

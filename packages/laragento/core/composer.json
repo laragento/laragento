@@ -10,5 +10,10 @@
             "Laragento\\Core\\CoreServiceProvider"
         ]
     }
+  },
+    "autoload": {
+      "psr-4": {
+          "Laragento\\Core\\": "src"
+      }
   }
 }

@@ -10,5 +10,10 @@
                 "Laragento\\CustomerImportExport\\CustomerImportExportServiceProvider"
             ]
         }
+    },
+    "autoload": {
+        "psr-4": {
+            "Laragento\\CustomerImportExport\\": "src"
+        }
     }
 }

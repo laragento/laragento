@@ -1,14 +1,19 @@
 {
-  "name": "laragento/eav",
-  "description": "Laragento Eav",
-  "type": "extension",
-  "minimum-stability": "dev",
-  "require": {},
-  "extra": {
-    "laravel": {
-        "providers": [
-            "Laragento\\Eav\\EavServiceProvider"
-        ]
+    "name": "laragento/eav",
+    "description": "Laragento Eav",
+    "type": "extension",
+    "minimum-stability": "dev",
+    "require": {},
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Laragento\\Eav\\EavServiceProvider"
+            ]
+        }
+    },
+    "autoload": {
+        "psr-4": {
+            "Laragento\\Eav\\": "src"
+        }
     }
-}
 }

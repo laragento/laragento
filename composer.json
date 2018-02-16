@@ -1,7 +1,7 @@
 {
-    "name": "laravel/laravel",
-    "description": "The Laravel Framework.",
-    "keywords": ["framework", "laravel"],
+    "name": "laragento/laragento",
+    "description": "The Laragento Framework.",
+    "keywords": ["framework", "laravel","magento","laragento"],
     "license": "MIT",
     "type": "project",
     "minimum-stability": "dev",
@@ -114,23 +114,9 @@
             "database/factories"
         ],
         "psr-4": {
-            "App\\": "app/",
-            "Laragento\\Core\\": "packages/laragento/core/src",
-            "Laragento\\Store\\": "packages/laragento/store/src",
-            "Laragento\\Eav\\": "packages/laragento/eav/src",
-            "Laragento\\Directory\\": "packages/laragento/directory/src",
-            "Laragento\\MediaStorage\\": "packages/laragento/media-storage/src",
-            "Laragento\\Catalog\\": "packages/laragento/catalog/src",
-            "Laragento\\Customer\\": "packages/laragento/customer/src",
-            "Laragento\\Quote\\": "packages/laragento/quote/src",
-            "Laragento\\Checkout\\": "packages/laragento/checkout/src",
-            "Laragento\\ImportExport\\": "packages/laragento/import-export/src",
-            "Laragento\\CatalogImportExport\\": "packages/laragento/catalog-import-export/src",
-            "Laragento\\CustomerImportExport\\": "packages/laragento/customer-import-export/src",
-            "Laragento\\CatalogUrlRewrite\\": "packages/laragento/catalog-url-rewrite/src",
-            "Laragento\\Review\\": "packages/laragento/review/src",
-            "Laragento\\Rating\\": "packages/laragento/rating/src",
-            "Laragento\\XmlChunk\\": "packages/laragento/xml-chunk/src"
+            "App\\": "app/"
+            
+            
         }
     },
     "autoload-dev": {
