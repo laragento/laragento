@@ -10,5 +10,10 @@
             "Laragento\\CatalogUrlRewrite\\CatalogUrlRewriteServiceProvider"
         ]
     }
+  },
+  "autoload": {
+    "psr-4": {
+      "Laragento\\CatalogUrlRewrite\\": "src"
+    }
   }
 }

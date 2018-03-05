@@ -10,5 +10,10 @@
                 "Laragento\\Checkout\\CheckoutServiceProvider"
             ]
         }
+    },
+    "autoload": {
+      "psr-4": {
+        "Laragento\\Checkout\\": "src"
       }
+    }
 }
