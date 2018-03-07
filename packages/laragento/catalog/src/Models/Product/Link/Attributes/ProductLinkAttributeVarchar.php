@@ -7,6 +7,18 @@ use Illuminate\Database\Eloquent\Model;
 
 /**
  * ProductLinkAttributeInteger model
+ *
+ * @property int $value_id Value ID
+ * @property int $product_link_attribute_id Product Link Attribute ID
+ * @property int $link_id Link ID
+ * @property string|null $value Value
+ * @property-read \Laragento\Catalog\Models\Product\Link\ProductLink $link
+ * @property-read \Laragento\Catalog\Models\Product\Link\ProductLinkAttribute $productLinkAttribute
+ * @method static \Illuminate\Database\Eloquent\Builder|\Laragento\Catalog\Models\Product\Link\ProductLinkAttributeVarchar whereLinkId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\Laragento\Catalog\Models\Product\Link\ProductLinkAttributeVarchar whereProductLinkAttributeId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\Laragento\Catalog\Models\Product\Link\ProductLinkAttributeVarchar whereValue($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\Laragento\Catalog\Models\Product\Link\ProductLinkAttributeVarchar whereValueId($value)
+ * @mixin \Eloquent
  */
 class ProductLinkAttributeVarchar extends Model
 {

@@ -8,6 +8,7 @@ use Laragento\Review\Models\Review;
 
 /**
  * Class RatingOptionVote
+ *
  * @package Laragento\Rating\Models
  * @property int vote_id
  * @property int option_id
@@ -19,6 +20,31 @@ use Laragento\Review\Models\Review;
  * @property mixed review_id
  * @property int percent
  * @property mixed value
+ * @property int $vote_id Vote id
+ * @property int $option_id Vote option id
+ * @property string $remote_ip Customer IP
+ * @property int $remote_ip_long Customer IP converted to long integer format
+ * @property int|null $customer_id Customer Id
+ * @property int $entity_pk_value Product id
+ * @property int $rating_id Rating id
+ * @property int|null $review_id Review id
+ * @property int $percent Percent amount
+ * @property int $value Vote option value
+ * @property-read \Laragento\Customer\Models\Customer|null $customer
+ * @property-read \Laragento\Rating\Models\RatingOption $option
+ * @property-read \Laragento\Rating\Models\Rating $rating
+ * @property-read \Laragento\Review\Models\Review|null $review
+ * @method static \Illuminate\Database\Eloquent\Builder|\Laragento\Rating\Models\RatingOptionVote whereCustomerId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\Laragento\Rating\Models\RatingOptionVote whereEntityPkValue($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\Laragento\Rating\Models\RatingOptionVote whereOptionId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\Laragento\Rating\Models\RatingOptionVote wherePercent($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\Laragento\Rating\Models\RatingOptionVote whereRatingId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\Laragento\Rating\Models\RatingOptionVote whereRemoteIp($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\Laragento\Rating\Models\RatingOptionVote whereRemoteIpLong($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\Laragento\Rating\Models\RatingOptionVote whereReviewId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\Laragento\Rating\Models\RatingOptionVote whereValue($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\Laragento\Rating\Models\RatingOptionVote whereVoteId($value)
+ * @mixin \Eloquent
  */
 class RatingOptionVote extends Model
 {

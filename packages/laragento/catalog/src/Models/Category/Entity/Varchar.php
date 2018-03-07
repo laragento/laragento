@@ -7,6 +7,19 @@ use Laragento\Eav\Models\Attribute;
 
 /**
  * Catalog category entity varchar model
+ *
+ * @property int $value_id Value ID
+ * @property int $attribute_id Attribute ID
+ * @property int $store_id Store ID
+ * @property int $entity_id Entity ID
+ * @property string|null $value Value
+ * @property-read \Laragento\Eav\Models\Attribute $attribute
+ * @method static \Illuminate\Database\Eloquent\Builder|\Laragento\Catalog\Models\Category\Entity\Varchar whereAttributeId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\Laragento\Catalog\Models\Category\Entity\Varchar whereEntityId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\Laragento\Catalog\Models\Category\Entity\Varchar whereStoreId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\Laragento\Catalog\Models\Category\Entity\Varchar whereValue($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\Laragento\Catalog\Models\Category\Entity\Varchar whereValueId($value)
+ * @mixin \Eloquent
  */
 class Varchar extends Model
 {

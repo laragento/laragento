@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 /**
  * Class RatingOptionVoteAggregated
+ *
  * @package Laragento\Rating\Models
  * @property int primary_id
  * @property int rating_id
@@ -15,6 +16,24 @@ use Illuminate\Database\Eloquent\Model;
  * @property int percent
  * @property int percent_approved
  * @property int store_id
+ * @property int $primary_id Vote aggregation id
+ * @property int $rating_id Rating id
+ * @property int $entity_pk_value Product id
+ * @property int $vote_count Vote dty
+ * @property int $vote_value_sum General vote sum
+ * @property int $percent Vote percent
+ * @property int|null $percent_approved Vote percent approved by admin
+ * @property int $store_id Store Id
+ * @property-read \Laragento\Rating\Models\Rating $rating
+ * @method static \Illuminate\Database\Eloquent\Builder|\Laragento\Rating\Models\RatingOptionVoteAggregated whereEntityPkValue($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\Laragento\Rating\Models\RatingOptionVoteAggregated wherePercent($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\Laragento\Rating\Models\RatingOptionVoteAggregated wherePercentApproved($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\Laragento\Rating\Models\RatingOptionVoteAggregated wherePrimaryId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\Laragento\Rating\Models\RatingOptionVoteAggregated whereRatingId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\Laragento\Rating\Models\RatingOptionVoteAggregated whereStoreId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\Laragento\Rating\Models\RatingOptionVoteAggregated whereVoteCount($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\Laragento\Rating\Models\RatingOptionVoteAggregated whereVoteValueSum($value)
+ * @mixin \Eloquent
  */
 class RatingOptionVoteAggregated extends Model
 {

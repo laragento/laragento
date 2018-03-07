@@ -8,6 +8,19 @@ use Laragento\Catalog\Models\Product\Product;
 
 /**
  * ProductLink model
+ *
+ * @property int $link_id Link ID
+ * @property int $product_id Product ID
+ * @property int $linked_product_id Linked Product ID
+ * @property int $link_type_id Link Type ID
+ * @property-read \Laragento\Catalog\Models\Product\Link\ProductLinkType $linkType
+ * @property-read \Laragento\Catalog\Models\Product\Product $linkedProduct
+ * @property-read \Laragento\Catalog\Models\Product\Product $product
+ * @method static \Illuminate\Database\Eloquent\Builder|\Laragento\Catalog\Models\Product\Link\ProductLink whereLinkId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\Laragento\Catalog\Models\Product\Link\ProductLink whereLinkTypeId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\Laragento\Catalog\Models\Product\Link\ProductLink whereLinkedProductId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\Laragento\Catalog\Models\Product\Link\ProductLink whereProductId($value)
+ * @mixin \Eloquent
  */
 class ProductLink extends Model
 {

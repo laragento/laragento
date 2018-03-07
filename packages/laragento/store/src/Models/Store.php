@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 /**
  * Class Store
+ *
  * @package Laragento\Store\Models
  * @property int store_id
  * @property string code
@@ -14,6 +15,23 @@ use Illuminate\Database\Eloquent\Model;
  * @property string name
  * @property int sort_order
  * @property int is_active
+ * @property int $store_id Store Id
+ * @property string|null $code Code
+ * @property int $website_id Website Id
+ * @property int $group_id Group Id
+ * @property string $name Store Name
+ * @property int $sort_order Store Sort Order
+ * @property int $is_active Store Activity
+ * @property-read \Laragento\Store\Models\StoreGroup $group
+ * @property-read \Laragento\Store\Models\StoreWebsite $website
+ * @method static \Illuminate\Database\Eloquent\Builder|\Laragento\Store\Models\Store whereCode($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\Laragento\Store\Models\Store whereGroupId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\Laragento\Store\Models\Store whereIsActive($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\Laragento\Store\Models\Store whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\Laragento\Store\Models\Store whereSortOrder($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\Laragento\Store\Models\Store whereStoreId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\Laragento\Store\Models\Store whereWebsiteId($value)
+ * @mixin \Eloquent
  */
 class Store extends Model
 {

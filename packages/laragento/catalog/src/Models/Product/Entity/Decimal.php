@@ -7,6 +7,19 @@ use Laragento\Eav\Models\Attribute;
 
 /**
  * Catalog product entity decimal model
+ *
+ * @property int $value_id Value ID
+ * @property int $attribute_id Attribute ID
+ * @property int $store_id Store ID
+ * @property int $entity_id Entity ID
+ * @property float|null $value Value
+ * @property-read \Laragento\Eav\Models\Attribute $attribute
+ * @method static \Illuminate\Database\Eloquent\Builder|\Laragento\Catalog\Models\Product\Entity\Decimal whereAttributeId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\Laragento\Catalog\Models\Product\Entity\Decimal whereEntityId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\Laragento\Catalog\Models\Product\Entity\Decimal whereStoreId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\Laragento\Catalog\Models\Product\Entity\Decimal whereValue($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\Laragento\Catalog\Models\Product\Entity\Decimal whereValueId($value)
+ * @mixin \Eloquent
  */
 class Decimal extends Model
 {

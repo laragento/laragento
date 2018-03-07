@@ -6,9 +6,18 @@ use Illuminate\Database\Eloquent\Model;
 
 /**
  * Group model
+ *
  * @property int customer_group_id
  * @property string customer_group_code
  * @property int tax_class_id
+ * @property int $customer_group_id
+ * @property string $customer_group_code Customer Group Code
+ * @property int $tax_class_id Tax Class Id
+ * @property-read \Illuminate\Database\Eloquent\Collection|\Laragento\Customer\Models\Customer[] $customers
+ * @method static \Illuminate\Database\Eloquent\Builder|\Laragento\Customer\Models\Group whereCustomerGroupCode($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\Laragento\Customer\Models\Group whereCustomerGroupId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\Laragento\Customer\Models\Group whereTaxClassId($value)
+ * @mixin \Eloquent
  */
 class Group extends Model
 {

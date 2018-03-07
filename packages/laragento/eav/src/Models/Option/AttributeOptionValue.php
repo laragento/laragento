@@ -5,6 +5,21 @@ namespace Laragento\Eav\Models\Option;
 use Illuminate\Database\Eloquent\Model;
 use Laragento\Store\Models\Store;
 
+/**
+ * Laragento\Eav\Models\Option\AttributeOptionValue
+ *
+ * @property int $value_id Value Id
+ * @property int $option_id Option Id
+ * @property int $store_id Store Id
+ * @property string|null $value Value
+ * @property-read \Laragento\Eav\Models\Option\AttributeOption $option
+ * @property-read \Laragento\Store\Models\Store $store
+ * @method static \Illuminate\Database\Eloquent\Builder|\Laragento\Eav\Models\Option\AttributeOptionValue whereOptionId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\Laragento\Eav\Models\Option\AttributeOptionValue whereStoreId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\Laragento\Eav\Models\Option\AttributeOptionValue whereValue($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\Laragento\Eav\Models\Option\AttributeOptionValue whereValueId($value)
+ * @mixin \Eloquent
+ */
 class AttributeOptionValue extends Model
 {
     protected $table = 'eav_attribute_option_value';

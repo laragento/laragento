@@ -11,6 +11,7 @@ use Laragento\Catalog\Models\Url\CatalogUrlRewriteProductCategory;
 
 /**
  * Catalog category model
+ *
  * @property int entity_id
  * @property int attribute_set_id
  * @property int parent_id
@@ -18,6 +19,32 @@ use Laragento\Catalog\Models\Url\CatalogUrlRewriteProductCategory;
  * @property int position
  * @property int level
  * @property int children_count
+ * @property int $entity_id Entity ID
+ * @property int $attribute_set_id Attriute Set ID
+ * @property int $parent_id Parent Category ID
+ * @property \Carbon\Carbon $created_at Creation Time
+ * @property \Carbon\Carbon $updated_at Update Time
+ * @property string $path Tree Path
+ * @property int $position Position
+ * @property int $level Tree Level
+ * @property int $children_count Child Count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\Laragento\Catalog\Models\Url\CatalogUrlRewriteProductCategory[] $categoryProductRewrites
+ * @property-read \Illuminate\Database\Eloquent\Collection|\Laragento\Catalog\Models\Category\Category[] $children
+ * @property-read \Illuminate\Database\Eloquent\Collection|\Laragento\Catalog\Models\Category\Entity\Integer[] $integers
+ * @property-read \Laragento\Catalog\Models\Category\Category $parent
+ * @property-read \Illuminate\Database\Eloquent\Collection|\Laragento\Catalog\Models\Product\Product[] $products
+ * @property-read \Illuminate\Database\Eloquent\Collection|\Laragento\Catalog\Models\Category\Entity\Text[] $texts
+ * @property-read \Illuminate\Database\Eloquent\Collection|\Laragento\Catalog\Models\Category\Entity\Varchar[] $varchars
+ * @method static \Illuminate\Database\Eloquent\Builder|\Laragento\Catalog\Models\Category\Category whereAttributeSetId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\Laragento\Catalog\Models\Category\Category whereChildrenCount($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\Laragento\Catalog\Models\Category\Category whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\Laragento\Catalog\Models\Category\Category whereEntityId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\Laragento\Catalog\Models\Category\Category whereLevel($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\Laragento\Catalog\Models\Category\Category whereParentId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\Laragento\Catalog\Models\Category\Category wherePath($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\Laragento\Catalog\Models\Category\Category wherePosition($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\Laragento\Catalog\Models\Category\Category whereUpdatedAt($value)
+ * @mixin \Eloquent
  */
 class Category extends Model
 {

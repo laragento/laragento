@@ -13,12 +13,40 @@ use Laragento\Catalog\Models\Product\Entity\Varchar;
 
 /**
  * Product product model
+ *
  * @property int entity_id
  * @property int attribute_set_id
  * @property string type_id
  * @property string sku
  * @property int has_options
  * @property mixed required_options
+ * @property int $entity_id Entity ID
+ * @property int $attribute_set_id Attribute Set ID
+ * @property string $type_id Type ID
+ * @property string|null $sku SKU
+ * @property int $has_options Has Options
+ * @property int $required_options Required Options
+ * @property \Carbon\Carbon $created_at Creation Time
+ * @property \Carbon\Carbon $updated_at Update Time
+ * @property-read \Illuminate\Database\Eloquent\Collection|\Laragento\Catalog\Models\Category\Category[] $categories
+ * @property-read \Illuminate\Database\Eloquent\Collection|\Laragento\Catalog\Models\Product\Product[] $children
+ * @property-read \Illuminate\Database\Eloquent\Collection|\Laragento\Catalog\Models\Product\Entity\Datetime[] $datetimes
+ * @property-read \Illuminate\Database\Eloquent\Collection|\Laragento\Catalog\Models\Product\Entity\Decimal[] $decimals
+ * @property-read \Illuminate\Database\Eloquent\Collection|\Laragento\Catalog\Models\Product\Entity\Integer[] $integers
+ * @property-read \Illuminate\Database\Eloquent\Collection|\Laragento\Catalog\Models\Product\Product[] $links
+ * @property-read \Illuminate\Database\Eloquent\Collection|\Laragento\Catalog\Models\Product\Product[] $parents
+ * @property-read \Illuminate\Database\Eloquent\Collection|\Laragento\Catalog\Models\Product\Entity\Text[] $texts
+ * @property-read \Illuminate\Database\Eloquent\Collection|\Laragento\Catalog\Models\Product\Entity\Tierprice[] $tierprices
+ * @property-read \Illuminate\Database\Eloquent\Collection|\Laragento\Catalog\Models\Product\Entity\Varchar[] $varchars
+ * @method static \Illuminate\Database\Eloquent\Builder|\Laragento\Catalog\Models\Product\Product whereAttributeSetId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\Laragento\Catalog\Models\Product\Product whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\Laragento\Catalog\Models\Product\Product whereEntityId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\Laragento\Catalog\Models\Product\Product whereHasOptions($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\Laragento\Catalog\Models\Product\Product whereRequiredOptions($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\Laragento\Catalog\Models\Product\Product whereSku($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\Laragento\Catalog\Models\Product\Product whereTypeId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\Laragento\Catalog\Models\Product\Product whereUpdatedAt($value)
+ * @mixin \Eloquent
  */
 class Product extends Model
 {
