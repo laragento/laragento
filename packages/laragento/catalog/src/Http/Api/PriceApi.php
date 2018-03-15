@@ -27,7 +27,7 @@ class PriceApi extends Controller implements PriceApiInterface
      */
     public function getRegularPrice($productId)
     {
-        return response()->json($this->priceRepository::regularPrice($productId),200);
+        return response()->json($this->priceRepository::regularPrice($productId));
     }
 
     /**

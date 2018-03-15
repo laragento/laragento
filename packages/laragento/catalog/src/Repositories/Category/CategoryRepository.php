@@ -18,7 +18,11 @@ class CategoryRepository implements CategoryRepositoryInterface
         return Category::with('children.entities', 'entities')->get();
     }
 
-    public function allByLevel(){
+    /**
+     * @return mixed
+     */
+    public function allByLevel()
+    {
         return Category::with('children.entities', 'entities')
             ->whereLevel(0)->get();
     }

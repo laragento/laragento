@@ -74,11 +74,16 @@ class CatalogServiceProvider extends ServiceProvider
                 'product/attribute-list/{attribute_set}' => $productApi . '@attributeList',
                 'product/{product_id}/attribute-list' => $productApi . '@attributeListWithValues',
                 'product/{product_id}/price' => $priceApi . '@getRegularPrice',
+                'product/{product_id}/special-price' => $priceApi . '@getSpecialPrice',
                 'product/{product_slug}' => $productApi . '@first',
+
+                'category/all' => $categoryApi . '@all',
+                'category/allByLevel' => $categoryApi . '@allByLevel',
+                'category/base/{website_id}' => $categoryApi . '@getBaseCategories', //TODO why we need this?
                 'category/{category_slug}' => $categoryApi . '@first',
+                'category/{category_id}/parent' => $categoryApi . '@parent',
                 'category/{category_id}/children' => $categoryApi . '@children',
                 'category/{category_id}/products' => $categoryApi . '@products',
-                'category/{category_id}/parent' => $categoryApi . '@parent',
             ],
             'post' => [
 
