@@ -1,0 +1,19 @@
+{
+    "name": "laragento/dev",
+    "description": "Laragento development",
+    "type": "extension",
+    "minimum-stability": "dev",
+    "require": {},
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Laragento\\Dev\\DevServiceProvider"
+            ]
+        }
+    },
+    "autoload": {
+        "psr-4": {
+            "Laragento\\Dev\\": "src"
+        }
+    }
+}

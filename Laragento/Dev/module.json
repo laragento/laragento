@@ -1,0 +1,16 @@
+{
+    "name": "Dev",
+    "alias": "dev",
+    "description": "",
+    "keywords": [],
+    "active": 1,
+    "order": 0,
+    "providers": [
+        "Laragento\\Dev\\Providers\\DevServiceProvider"
+    ],
+    "aliases": {},
+    "files": [
+        "start.php"
+    ],
+    "requires": []
+}
