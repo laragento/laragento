@@ -1,0 +1,16 @@
+{
+    "name": "XmlChunk",
+    "alias": "xmlchunk",
+    "description": "",
+    "keywords": [],
+    "active": 1,
+    "order": 0,
+    "providers": [
+        "Laragento\\XmlChunk\\Providers\\XmlChunkServiceProvider"
+    ],
+    "aliases": {},
+    "files": [
+        "start.php"
+    ],
+    "requires": []
+}

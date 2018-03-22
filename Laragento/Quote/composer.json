@@ -1,0 +1,19 @@
+{
+    "name": "laragento/quote",
+    "description": "Laragento Quote",
+    "type": "extension",
+    "minimum-stability": "dev",
+    "require": {},
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Laragento\\Quote\\QuoteServiceProvider"
+            ]
+        }
+    },
+    "autoload": {
+        "psr-4": {
+            "Laragento\\Quote\\": "src"
+        }
+    }
+}

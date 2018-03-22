@@ -1,0 +1,16 @@
+{
+    "name": "Review",
+    "alias": "review",
+    "description": "",
+    "keywords": [],
+    "active": 1,
+    "order": 0,
+    "providers": [
+        "Laragento\\Review\\Providers\\ReviewServiceProvider"
+    ],
+    "aliases": {},
+    "files": [
+        "start.php"
+    ],
+    "requires": []
+}

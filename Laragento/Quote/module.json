@@ -1,0 +1,16 @@
+{
+    "name": "Quote",
+    "alias": "quote",
+    "description": "",
+    "keywords": [],
+    "active": 1,
+    "order": 0,
+    "providers": [
+        "Laragento\\Quote\\Providers\\QuoteServiceProvider"
+    ],
+    "aliases": {},
+    "files": [
+        "start.php"
+    ],
+    "requires": []
+}
