@@ -49,7 +49,7 @@ return [
                 'MODULE_NAMESPACE',
             ],
         ],
-        'gitkeep' => true,
+        'gitkeep' => false,
     ],
     'paths' => [
         /*
@@ -62,7 +62,7 @@ return [
         |
         */
 
-        'modules' => base_path('Modules'),
+        'modules' => base_path('Laragento'),
         /*
         |--------------------------------------------------------------------------
         | Modules assets path
@@ -144,10 +144,10 @@ return [
     */
 
     'composer' => [
-        'vendor' => 'nwidart',
+        'vendor' => 'laragento',
         'author' => [
-            'name' => 'Nicolas Widart',
-            'email' => 'n.widart@gmail.com',
+            'name' => 'Stefan Mettler',
+            'email' => 'stefan.mettler92@gmail.com',
         ],
     ],
     /*

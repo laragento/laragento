@@ -11,22 +11,6 @@
         "barryvdh/laravel-ide-helper": "^2.3@dev",
         "doctrine/dbal": "~2.3",
         "fideloper/proxy": "~4.0",
-        "laragento/catalog": "dev-master",
-        "laragento/catalog-import-export": "dev-master",
-        "laragento/catalog-url-rewrite": "dev-master",
-        "laragento/checkout": "dev-master",
-        "laragento/core": "dev-master",
-        "laragento/customer": "dev-master",
-        "laragento/customer-import-export": "dev-master",
-        "laragento/directory": "dev-master",
-        "laragento/eav": "dev-master",
-        "laragento/import-export": "dev-master",
-        "laragento/media-storage": "dev-master",
-        "laragento/quote": "dev-master",
-        "laragento/rating": "dev-master",
-        "laragento/review": "dev-master",
-        "laragento/store": "dev-master",
-        "laragento/xml-chunk": "dev-master",
         "laravel/framework": "5.6.*",
         "laravel/tinker": "~1.0",
         "mpociot/laravel-apidoc-generator": "^2.0",
@@ -43,80 +27,14 @@
         "mockery/mockery": "0.9.*",
         "phpunit/phpunit": "~6.0"
     },
-    "repositories": [
-        {
-            "type": "path",
-            "url": "./packages/laragento/catalog"
-        },
-        {
-            "type": "path",
-            "url": "./packages/laragento/catalog-import-export"
-        },
-        {
-            "type": "path",
-            "url": "./packages/laragento/catalog-url-rewrite"
-        },       
-        {
-            "type": "path",
-            "url": "./packages/laragento/checkout"
-        },
-        {
-            "type": "path",
-            "url": "./packages/laragento/core"
-        },
-        {
-            "type": "path",
-            "url": "./packages/laragento/customer"
-        },
-        {
-            "type": "path",
-            "url": "./packages/laragento/customer-import-export"
-        },
-        {
-            "type": "path",
-            "url": "./packages/laragento/directory"
-        },
-        {
-            "type": "path",
-            "url": "./packages/laragento/eav"
-        },
-        {
-            "type": "path",
-            "url": "./packages/laragento/import-export"
-        },
-        {
-            "type": "path",
-            "url": "./packages/laragento/media-storage"
-        },
-        {
-            "type": "path",
-            "url": "./packages/laragento/quote"
-        },
-        {
-            "type": "path",
-            "url": "./packages/laragento/rating"
-        },
-        {
-            "type": "path",
-            "url": "./packages/laragento/review"
-        },
-        {
-            "type": "path",
-            "url": "./packages/laragento/store"
-        },
-        {
-            "type": "path",
-            "url": "./packages/laragento/xml-chunk"
-        }
-      ],
     "autoload": {
         "classmap": [
             "database/seeds",
             "database/factories"
         ],
         "psr-4": {
-            "App\\": "app/"
-            
+            "App\\": "app/",
+            "Laragento\\":"Laragento/"
             
         }
     },
