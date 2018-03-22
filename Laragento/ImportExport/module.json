@@ -1,0 +1,16 @@
+{
+    "name": "ImportExport",
+    "alias": "importexport",
+    "description": "",
+    "keywords": [],
+    "active": 1,
+    "order": 0,
+    "providers": [
+        "Laragento\\ImportExport\\Providers\\ImportExportServiceProvider"
+    ],
+    "aliases": {},
+    "files": [
+        "start.php"
+    ],
+    "requires": []
+}
