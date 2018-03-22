@@ -1,0 +1,16 @@
+{
+    "name": "Directory",
+    "alias": "directory",
+    "description": "",
+    "keywords": [],
+    "active": 1,
+    "order": 0,
+    "providers": [
+        "Laragento\\Directory\\Providers\\DirectoryServiceProvider"
+    ],
+    "aliases": {},
+    "files": [
+        "start.php"
+    ],
+    "requires": []
+}
