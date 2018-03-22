@@ -1,7 +1,7 @@
 <?php
 
 
-use DB;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Foundation\Testing\TestCase;
 use Laragento\Catalog\Models\Product\Entity\Media\MediaGallery;
 use Laragento\ImportExport\Managers\Import\ImportInterface;
