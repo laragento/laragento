@@ -7,7 +7,7 @@
     "extra": {
         "laravel": {
             "providers": [
-                "Laragento\\Checkout\\CheckoutServiceProvider"
+                "Laragento\\Checkout\\Providers\\CheckoutServiceProvider"
             ]
         }
     },

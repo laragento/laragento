@@ -35,7 +35,8 @@ class CustomerImportExportServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //
+        $this->app->bind('Laragento\CustomerImportExport\Repositories\CustomerImportRepositoryInterface',
+            'Laragento\CustomerImportExport\Repositories\CustomerImportRepository');
     }
 
     /**

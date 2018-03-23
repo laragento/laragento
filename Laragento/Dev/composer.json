@@ -7,7 +7,7 @@
     "extra": {
         "laravel": {
             "providers": [
-                "Laragento\\Dev\\DevServiceProvider"
+                "Laragento\\Dev\\Providers\\DevServiceProvider"
             ]
         }
     },

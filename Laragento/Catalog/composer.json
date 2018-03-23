@@ -7,7 +7,7 @@
     "extra": {
         "laravel": {
             "providers": [
-                "Laragento\\Catalog\\CatalogServiceProvider"
+                "Laragento\\Catalog\\Providers\\CatalogServiceProvider"
             ],
             "aliases": {
                 "product": "Laragento\\Catalog\\Support\\Facades\\ProductFacade",

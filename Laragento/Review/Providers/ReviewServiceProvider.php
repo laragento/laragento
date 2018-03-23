@@ -3,6 +3,7 @@
 namespace Laragento\Review\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Facades\Route;
 use Illuminate\Database\Eloquent\Factory;
 
 class ReviewServiceProvider extends ServiceProvider
@@ -35,7 +36,36 @@ class ReviewServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //
+        /* Managers */
+        $this->app->bind('Laragento\Review\Managers\ReviewManagerInterface',
+            'Laragento\Review\Managers\ReviewManager');
+
+        /* Repositories */
+        $this->app->bind('Laragento\Review\Repositories\ReviewRepositoryInterface',
+            'Laragento\Review\Repositories\ReviewRepository');
+
+        /* APIs */
+        $reviewApi = 'Laragento\Review\Http\Api\ReviewApi';
+
+        /* Routes */
+        $methods = [
+            'get' => [
+                'v1/reviews/{entity_id}' => $reviewApi . '@getByEntity',
+                'v1/reviews' => $reviewApi . '@get',
+            ],
+            'post' => [
+
+            ],
+            'delete' => [
+
+            ]
+        ];
+
+        foreach ($methods as $method => $routes) {
+            foreach ($routes AS $route => $controller) {
+                Route::$method($route, $controller);
+            }
+        }
     }
 
     /**

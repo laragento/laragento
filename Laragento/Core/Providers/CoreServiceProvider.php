@@ -4,6 +4,7 @@ namespace Laragento\Core\Providers;
 
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Database\Eloquent\Factory;
+use Illuminate\Routing\Router;
 
 class CoreServiceProvider extends ServiceProvider
 {
@@ -19,13 +20,14 @@ class CoreServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    public function boot()
+    public function boot(Router $router)
     {
         $this->registerTranslations();
         $this->registerConfig();
         $this->registerViews();
         $this->registerFactories();
         $this->loadMigrationsFrom(__DIR__ . '/../database/migrations');
+        $router->aliasMiddleware('storeId', ApiStoreIdMiddleware::class);
     }
 
     /**

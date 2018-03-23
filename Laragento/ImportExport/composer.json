@@ -34,7 +34,7 @@
     "extra": {
         "laravel": {
             "providers": [
-                "Laragento\\ImportExport\\ImportExportServiceProvider"
+                "Laragento\\ImportExport\\Providers\\ImportExportServiceProvider"
             ]
         }
     },

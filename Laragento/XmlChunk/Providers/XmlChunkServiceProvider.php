@@ -35,7 +35,7 @@ class XmlChunkServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //
+        $this->commands($this->commands);
     }
 
     /**

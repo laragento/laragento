@@ -7,7 +7,7 @@
     "extra": {
         "laravel": {
             "providers": [
-                "Laragento\\MediaStorage\\MediaStorageServiceProvider"
+                "Laragento\\MediaStorage\\Providers\\MediaStorageServiceProvider"
             ]
         }
     },

@@ -35,7 +35,8 @@ class EavServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //
+        $this->app->bind('Laragento\Eav\Repositories\AttributeRepositoryInterface',
+            'Laragento\Eav\Repositories\AttributeRepository');
     }
 
     /**

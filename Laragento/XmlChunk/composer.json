@@ -7,7 +7,7 @@
     "extra": {
         "laravel": {
             "providers": [
-                "Laragento\\XmlChunk\\XmlChunkServiceProvider"
+                "Laragento\\XmlChunk\\Providers\\XmlChunkServiceProvider"
             ]
         }
     },
