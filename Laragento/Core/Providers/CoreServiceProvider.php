@@ -87,7 +87,7 @@ class CoreServiceProvider extends ServiceProvider
         if (is_dir($langPath)) {
             $this->loadTranslationsFrom($langPath, 'core');
         } else {
-            $this->loadTranslationsFrom(__DIR__ .'/../src/resources/lang', 'core');
+            $this->loadTranslationsFrom(__DIR__ . '/../src/resources/lang', 'core');
         }
     }
 

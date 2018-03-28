@@ -17,7 +17,7 @@
     },
     "autoload": {
         "psr-4": {
-            "Laragento\\Catalog\\": "src"
+            "Laragento\\Catalog\\": "./"
         }
     }
 }

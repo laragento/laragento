@@ -15,8 +15,8 @@ class CatalogServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        $this->loadViewsFrom(__DIR__ . '/views/frontend', 'frontend_catalog');
-        $this->loadViewsFrom(__DIR__ . '/views/frontend/addto', 'frontend_catalog_addto');
+        $this->loadViewsFrom(__DIR__ . '../Resources/views/frontend', 'frontend_catalog');
+        $this->loadViewsFrom(__DIR__ . '../Resources/views/frontend/addto', 'frontend_catalog_addto');
         /*
         $this->publishes([
             __DIR__.'/views' => base_path('resources/views/laragento/catalog'),
