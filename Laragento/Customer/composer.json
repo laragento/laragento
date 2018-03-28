@@ -8,12 +8,15 @@
     "laravel": {
         "providers": [
             "Laragento\\Customer\\Providers\\CustomerServiceProvider"
-        ]
+        ],
+      "aliases": {
+        "customer": "Laragento\\Customer\\Support\\Facades\\CustomerFacade"
+      }
     }
   },
   "autoload": {
     "psr-4": {
-      "Laragento\\Customer\\": "src"
+      "Laragento\\Customer\\": "./"
     }
   }
 }

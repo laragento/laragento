@@ -40,7 +40,7 @@
     },
     "autoload": {
         "psr-4": {
-            "Laragento\\ImportExport\\": "src"
+            "Laragento\\ImportExport\\": "./"
         }
     }
 }

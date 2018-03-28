@@ -25,7 +25,7 @@ class EavServiceProvider extends ServiceProvider
         $this->registerConfig();
         $this->registerViews();
         $this->registerFactories();
-        $this->loadMigrationsFrom(__DIR__ . '/../database/migrations');
+        $this->loadMigrationsFrom(__DIR__ . '/../Database/Migrations');
     }
 
     /**
@@ -63,7 +63,7 @@ class EavServiceProvider extends ServiceProvider
     {
         $viewPath = resource_path('views/modules/eav');
 
-        $sourcePath = __DIR__.'/../src/views';
+        $sourcePath = __DIR__.'/../Resources/views';
 
         $this->publishes([
             $sourcePath => $viewPath
@@ -86,7 +86,7 @@ class EavServiceProvider extends ServiceProvider
         if (is_dir($langPath)) {
             $this->loadTranslationsFrom($langPath, 'eav');
         } else {
-            $this->loadTranslationsFrom(__DIR__ .'/../src/resources/lang', 'eav');
+            $this->loadTranslationsFrom(__DIR__ . '/../Resources/lang', 'eav');
         }
     }
 
@@ -97,7 +97,7 @@ class EavServiceProvider extends ServiceProvider
     public function registerFactories()
     {
         if (! app()->environment('production')) {
-            app(Factory::class)->load(__DIR__ . '/../database/factories');
+            app(Factory::class)->load(__DIR__ . '/../Database/Factories');
         }
     }
 
