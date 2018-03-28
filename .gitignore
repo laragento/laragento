@@ -14,6 +14,7 @@ yarn-error.log
 /.vscode
 .env
 .env.testing
+*.sql
 composer.lock
 
 .phpstorm.meta.php

@@ -10,6 +10,7 @@ use Laragento\Eav\Repositories\AttributeRepository;
 use Laragento\Catalog\Repositories\Catalog\CatalogAttributeRepository;
 use Laragento\Store\Repositories\StoreRepository;
 use Tests\CreatesApplication;
+use Illuminate\Support\Facades\DB;
 use Faker\Generator as Faker;
 
 class ProductRepositoryTest extends BaseTestCase

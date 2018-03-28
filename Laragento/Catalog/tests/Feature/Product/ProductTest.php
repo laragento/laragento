@@ -2,6 +2,7 @@
 
 use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
 use Tests\CreatesApplication;
+use Illuminate\Support\Facades\DB;
 use Laragento\Catalog\Support\Facades\ProductFacade;
 
 class ProductTest extends BaseTestCase

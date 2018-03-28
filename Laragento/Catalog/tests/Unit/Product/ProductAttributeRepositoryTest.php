@@ -5,6 +5,7 @@ use Laragento\Catalog\Models\Product\Product;
 use Laragento\Catalog\Repositories\Catalog\CatalogAttributeRepository;
 use Laragento\Catalog\Repositories\Product\ProductAttributeRepository;
 use Laragento\Eav\Repositories\AttributeRepository;
+use Illuminate\Support\Facades\DB;
 use Tests\CreatesApplication;
 
 class ProductAttributeRepositoryTest extends AbstractProductAttributeRepositoryTest
