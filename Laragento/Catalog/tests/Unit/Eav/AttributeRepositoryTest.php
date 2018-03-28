@@ -18,7 +18,7 @@ class AttributeRepositoryTest extends BaseTestCase
     {
         parent::setUp();
         $this->app->make('Illuminate\Database\Eloquent\Factory')->load(__DIR__ . '/../../database/factories');
-        $this->attributeRepository = new AttributeRepository();
+        $this->attributeRepository = $this->app->make("Laragento\Eav\Repositories\AttributeRepositoryInterface");//new AttributeRepository();
         DB::beginTransaction();
     }
 

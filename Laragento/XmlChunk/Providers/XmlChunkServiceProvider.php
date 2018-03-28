@@ -13,6 +13,9 @@ class XmlChunkServiceProvider extends ServiceProvider
      * @var bool
      */
     protected $defer = false;
+    protected $commands = [
+        'Laragento\XmlChunk\Commands\ChunkXml',
+    ];
 
     /**
      * Boot the application events.
