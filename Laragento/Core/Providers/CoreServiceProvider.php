@@ -26,7 +26,7 @@ class CoreServiceProvider extends ServiceProvider
         $this->registerConfig();
         $this->registerViews();
         $this->registerFactories();
-        $this->loadMigrationsFrom(__DIR__ . '/../database/migrations');
+        $this->loadMigrationsFrom(__DIR__ . '/../Database/Migrations');
         $router->aliasMiddleware('storeId', ApiStoreIdMiddleware::class);
     }
 
@@ -64,7 +64,7 @@ class CoreServiceProvider extends ServiceProvider
     {
         $viewPath = resource_path('views/modules/core');
 
-        $sourcePath = __DIR__.'/../src/views';
+        $sourcePath = __DIR__.'/../Resources/views';
 
         $this->publishes([
             $sourcePath => $viewPath
@@ -87,7 +87,7 @@ class CoreServiceProvider extends ServiceProvider
         if (is_dir($langPath)) {
             $this->loadTranslationsFrom($langPath, 'core');
         } else {
-            $this->loadTranslationsFrom(__DIR__ . '/../src/resources/lang', 'core');
+            $this->loadTranslationsFrom(__DIR__ . '/../Resources/lang', 'core');
         }
     }
 
@@ -98,7 +98,7 @@ class CoreServiceProvider extends ServiceProvider
     public function registerFactories()
     {
         if (! app()->environment('production')) {
-            app(Factory::class)->load(__DIR__ . '/../database/factories');
+            app(Factory::class)->load(__DIR__ . '/../Database/Factories');
         }
     }
 
