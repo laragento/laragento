@@ -27,7 +27,7 @@ class ExampleMediaTest extends TestCase
             'attribute_id' => 90,
             'value' => '_update',
             'media_type' =>'image'
-        ])->find();
+        ])->get();
         print_r($gallery);
     }
 

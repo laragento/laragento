@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
-
+use Illuminate\Support\Facades\DB;
 use Laragento\Eav\Repositories\AttributeRepository;
 use Tests\CreatesApplication;
 

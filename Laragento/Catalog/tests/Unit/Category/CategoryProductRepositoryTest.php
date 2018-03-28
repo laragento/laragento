@@ -6,6 +6,7 @@ use Laragento\Catalog\Models\Category\CategoryProduct;
 use Laragento\Catalog\Models\Product\Product;
 use Laragento\Catalog\Repositories\Category\CategoryProductRepository;
 use Tests\CreatesApplication;
+use Illuminate\Support\Facades\DB;
 use Faker\Generator as Faker;
 
 class CategoryProductRepositoryTest extends BaseTestCase

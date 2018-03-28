@@ -2,6 +2,7 @@
 
 use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
 use Laragento\Catalog\Repositories\Media\ImageRepository;
+use Illuminate\Support\Facades\DB;
 use Tests\CreatesApplication;
 
 class ImageRepositoryTest extends BaseTestCase

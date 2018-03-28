@@ -3,6 +3,7 @@
 use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
 use Laragento\Catalog\Models\Category\Category;
 use Laragento\Catalog\Models\Category\Entity\Varchar;
+use Illuminate\Support\Facades\DB;
 use Laragento\Catalog\Repositories\Category\CategoryRepository;
 use Tests\CreatesApplication;
 
