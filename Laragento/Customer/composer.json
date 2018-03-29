@@ -3,7 +3,9 @@
   "description": "All about the Laragento Customer",
   "type": "extension",
   "minimum-stability": "dev",
-  "require": {},
+  "require": {
+    "laragento/directory":"dev"
+  },
   "extra": {
     "laravel": {
         "providers": [

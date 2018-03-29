@@ -183,7 +183,7 @@ return [
         // App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
-
+        Laragento\Store\Providers\StoreServiceProvider::class,
         /*
          * Extension Providers...
          */
@@ -237,7 +237,8 @@ return [
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
 
-        'Catalog' => Laragento\Catalog\Facade::class
+        //'Catalog' => Laragento\Catalog\Facade::class
+
     ],
 
 ];

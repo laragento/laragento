@@ -3,7 +3,9 @@
     "description": "Countries, Regions and Currencies",
     "type": "extension",
     "minimum-stability": "dev",
-    "require": {},
+    "require": {
+        "laragento/core":"dev"
+    },
     "extra": {
         "laravel": {
             "providers": [

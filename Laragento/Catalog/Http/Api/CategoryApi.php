@@ -4,7 +4,6 @@ namespace Laragento\Catalog\Http\Api;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Spatie\Fractal\Fractal;
 use Laragento\Catalog\Repositories\Category\CategoryRepositoryInterface;
 use Laragento\Catalog\Transformers\CategoryTransformer;

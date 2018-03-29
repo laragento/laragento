@@ -3,7 +3,13 @@
     "description": "Laragento Review",
     "type": "extension",
     "minimum-stability": "dev",
-    "require": {},
+    "require": {
+        "laragento/catalog": "dev",
+        "laragento/core":"dev",
+        "laragento/customer":"dev",
+        "laragento/rating": "dev",
+        "laragento/store":"dev"
+    },
     "extra": {
         "laravel": {
             "providers": [

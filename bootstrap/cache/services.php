@@ -29,12 +29,13 @@
     25 => 'Laravel\\Tinker\\TinkerServiceProvider',
     26 => 'Barryvdh\\Debugbar\\ServiceProvider',
     27 => 'Fideloper\\Proxy\\TrustedProxyServiceProvider',
-    28 => 'Laravel\\Dusk\\DuskServiceProvider',
-    29 => 'Nwidart\\Modules\\LaravelModulesServiceProvider',
+    28 => 'Nwidart\\Modules\\LaravelModulesServiceProvider',
+    29 => 'Laravel\\Dusk\\DuskServiceProvider',
     30 => 'App\\Providers\\AppServiceProvider',
     31 => 'App\\Providers\\AuthServiceProvider',
     32 => 'App\\Providers\\EventServiceProvider',
     33 => 'App\\Providers\\RouteServiceProvider',
+    34 => 'Laragento\\Store\\Providers\\StoreServiceProvider',
   ),
   'eager' => 
   array (
@@ -52,12 +53,13 @@
     11 => 'Barryvdh\\Cors\\ServiceProvider',
     12 => 'Barryvdh\\Debugbar\\ServiceProvider',
     13 => 'Fideloper\\Proxy\\TrustedProxyServiceProvider',
-    14 => 'Laravel\\Dusk\\DuskServiceProvider',
-    15 => 'Nwidart\\Modules\\LaravelModulesServiceProvider',
+    14 => 'Nwidart\\Modules\\LaravelModulesServiceProvider',
+    15 => 'Laravel\\Dusk\\DuskServiceProvider',
     16 => 'App\\Providers\\AppServiceProvider',
     17 => 'App\\Providers\\AuthServiceProvider',
     18 => 'App\\Providers\\EventServiceProvider',
     19 => 'App\\Providers\\RouteServiceProvider',
+    20 => 'Laragento\\Store\\Providers\\StoreServiceProvider',
   ),
   'deferred' => 
   array (

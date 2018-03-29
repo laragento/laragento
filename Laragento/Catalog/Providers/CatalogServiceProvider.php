@@ -48,9 +48,9 @@ class CatalogServiceProvider extends ServiceProvider
 
         $this->app->bind('Laragento\Eav\Repositories\AttributeRepositoryInterface',
             'Laragento\Eav\Repositories\AttributeRepository');
+
         $this->app->bind('Laragento\Store\Repositories\StoreRepositoryInterface',
             'Laragento\Store\Repositories\StoreRepository');
-
         $this->app->alias(ProductRepository::class, 'product');
         //Evtl. Facade?
 //        $controller = config(env('APP_CLIENT') .  '.extensions.catalog.overrides.Laragento\Timezones\TimezonesController');

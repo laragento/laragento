@@ -3,7 +3,12 @@
     "description": "Yeah",
     "type": "extension",
     "minimum-stability": "dev",
-    "require": {},
+    "require": {
+        "laragento/eav": "dev",
+        "laragento/store": "dev",
+        "laragento/media-storage":"dev",
+        "laragento/import-export":"dev"
+    },
     "extra": {
         "laravel": {
             "providers": [

@@ -8,7 +8,10 @@
         "laravel": {
             "providers": [
                 "Laragento\\Store\\Providers\\StoreServiceProvider"
-            ]
+            ],
+            "aliases": {
+                "store": "Laragento\\Store\\Support\\Facades\\StoreFacade"
+            }
         }
     },
     "autoload": {

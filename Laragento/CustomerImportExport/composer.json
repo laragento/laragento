@@ -3,7 +3,10 @@
     "description": "Laragento Customer Import Export",
     "type": "extension",
     "minimum-stability": "dev",
-    "require": {},
+    "require": {
+        "laragento/customer":"dev",
+        "laragento/directory":"dev"
+    },
     "extra": {
         "laravel": {
             "providers": [

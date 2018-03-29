@@ -3,7 +3,9 @@
   "description": "Laragento Core Functionality",
   "type": "extension",
   "minimum-stability": "dev",
-  "require": {},
+  "require": {
+    "laragento/store":"dev"
+  },
   "extra": {
     "laravel": {
         "providers": [
