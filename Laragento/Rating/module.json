@@ -5,9 +5,6 @@
     "keywords": [],
     "active": 1,
     "order": 0,
-    "providers": [
-        "Laragento\\Rating\\Providers\\RatingServiceProvider"
-    ],
     "aliases": {},
     "files": [
         "start.php"

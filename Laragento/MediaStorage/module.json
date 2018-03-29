@@ -5,9 +5,6 @@
     "keywords": [],
     "active": 1,
     "order": 0,
-    "providers": [
-        "Laragento\\MediaStorage\\Providers\\MediaStorageServiceProvider"
-    ],
     "aliases": {},
     "files": [
         "start.php"
