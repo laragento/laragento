@@ -13,7 +13,7 @@
     },
     "autoload": {
         "psr-4": {
-            "Laragento\\Rating\\": "src"
+            "Laragento\\Rating\\": "./"
         }
     }
 }

@@ -1,6 +1,6 @@
 <?php
 
-namespace Laragento\Review\Database\Seeders;
+//namespace Laragento\Review\Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use Illuminate\Database\Eloquent\Model;

@@ -88,7 +88,7 @@ class XmlChunkServiceProvider extends ServiceProvider
         if (is_dir($langPath)) {
             $this->loadTranslationsFrom($langPath, 'xmlchunk');
         } else {
-            $this->loadTranslationsFrom(__DIR__ .'/../src/resources/lang', 'xmlchunk');
+            $this->loadTranslationsFrom(__DIR__ . '/../src/resources/lang', 'xmlchunk');
         }
     }
 

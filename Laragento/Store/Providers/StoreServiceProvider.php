@@ -25,7 +25,7 @@ class StoreServiceProvider extends ServiceProvider
         $this->registerConfig();
         $this->registerViews();
         $this->registerFactories();
-        $this->loadMigrationsFrom(__DIR__ . '/../database/migrations');
+        $this->loadMigrationsFrom(__DIR__ . '/../Database/Migrations');
     }
 
     /**
@@ -62,7 +62,7 @@ class StoreServiceProvider extends ServiceProvider
     {
         $viewPath = resource_path('views/modules/store');
 
-        $sourcePath = __DIR__.'/../src/views';
+        $sourcePath = __DIR__.'/../Resources/views';
 
         $this->publishes([
             $sourcePath => $viewPath
@@ -85,7 +85,7 @@ class StoreServiceProvider extends ServiceProvider
         if (is_dir($langPath)) {
             $this->loadTranslationsFrom($langPath, 'store');
         } else {
-            $this->loadTranslationsFrom(__DIR__ .'/../src/resources/lang', 'store');
+            $this->loadTranslationsFrom(__DIR__ . '/../Resources/lang', 'store');
         }
     }
 
@@ -96,7 +96,7 @@ class StoreServiceProvider extends ServiceProvider
     public function registerFactories()
     {
         if (! app()->environment('production')) {
-            app(Factory::class)->load(__DIR__ . '/../database/factories');
+            app(Factory::class)->load(__DIR__ . '/../Database/Factories');
         }
     }
 

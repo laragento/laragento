@@ -13,7 +13,7 @@
     },
     "autoload": {
         "psr-4": {
-            "Laragento\\Quote\\": "src"
+            "Laragento\\Quote\\": "./"
         }
     }
 }

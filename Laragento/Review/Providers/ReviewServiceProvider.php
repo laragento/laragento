@@ -26,7 +26,7 @@ class ReviewServiceProvider extends ServiceProvider
         $this->registerConfig();
         $this->registerViews();
         $this->registerFactories();
-        $this->loadMigrationsFrom(__DIR__ . '/../database/migrations');
+        $this->loadMigrationsFrom(__DIR__ . '/../Database/Migrations');
     }
 
     /**
@@ -92,7 +92,7 @@ class ReviewServiceProvider extends ServiceProvider
     {
         $viewPath = resource_path('views/modules/review');
 
-        $sourcePath = __DIR__.'/../src/views';
+        $sourcePath = __DIR__.'/../Resources/views';
 
         $this->publishes([
             $sourcePath => $viewPath
@@ -115,7 +115,7 @@ class ReviewServiceProvider extends ServiceProvider
         if (is_dir($langPath)) {
             $this->loadTranslationsFrom($langPath, 'review');
         } else {
-            $this->loadTranslationsFrom(__DIR__ .'/../src/resources/lang', 'review');
+            $this->loadTranslationsFrom(__DIR__ . '/../Resources/lang', 'review');
         }
     }
 
@@ -126,7 +126,7 @@ class ReviewServiceProvider extends ServiceProvider
     public function registerFactories()
     {
         if (! app()->environment('production')) {
-            app(Factory::class)->load(__DIR__ . '/../database/factories');
+            app(Factory::class)->load(__DIR__ . '/../Database/Factories');
         }
     }
 
