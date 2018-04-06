@@ -5,6 +5,7 @@ namespace Laragento\Core\Providers;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Database\Eloquent\Factory;
 use Illuminate\Routing\Router;
+use Laragento\Core\Http\Middleware\ApiStoreIdMiddleware;
 
 class CoreServiceProvider extends ServiceProvider
 {
