@@ -1,6 +1,6 @@
 <?php
 
-namespace Laragento\Rating\src\Http\Controllers;
+namespace Laragento\Rating\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;

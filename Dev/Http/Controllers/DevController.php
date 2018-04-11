@@ -1,6 +1,6 @@
 <?php
 
-namespace Laragento\Dev\src\Http\Controllers;
+namespace Laragento\Dev\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
