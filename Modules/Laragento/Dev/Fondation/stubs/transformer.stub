@@ -1,0 +1,29 @@
+<?php
+
+namespace DummyNamespace;
+
+use League\Fractal;
+
+class CategoryTransformer extends Fractal\TransformerAbstract
+{
+      /**
+       * @var array
+       */
+      protected $defaultIncludes = [
+
+      ];
+
+      /**
+       * @var array
+       */
+      protected $availableIncludes = [
+            '',
+      ];
+
+      /**
+       * @param DummyClass $dummy
+       * @return array
+       */
+      public function transform(DummyClass $dummy)
+      {
+}
