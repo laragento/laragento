@@ -16,7 +16,7 @@ yarn-error.log
 .env.testing
 *.sql
 composer.lock
-
+/bootstrap/cache
 .phpstorm.meta.php
 _ide_helper*
 

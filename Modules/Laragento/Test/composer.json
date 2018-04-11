@@ -1,0 +1,25 @@
+{
+    "name": "laragento/test",
+    "description": "",
+    "authors": [
+        {
+            "name": "Stefan Mettler",
+            "email": "stefan.mettler92@gmail.com"
+        }
+    ],
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Laragento\\Test\\Providers\\TestServiceProvider"
+            ],
+            "aliases": {
+                
+            }
+        }
+    },
+    "autoload": {
+        "psr-4": {
+            "Laragento\\Test\\": ""
+        }
+    }
+}

@@ -1,0 +1,25 @@
+{
+    "name": "laragento/review",
+    "description": "Laragento Review",
+    "type": "extension",
+    "minimum-stability": "dev",
+    "require": {
+        "laragento/catalog": "dev",
+        "laragento/core":"dev",
+        "laragento/customer":"dev",
+        "laragento/rating": "dev",
+        "laragento/store":"dev"
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Laragento\\Review\\Providers\\ReviewServiceProvider"
+            ]
+        }
+    },
+    "autoload": {
+        "psr-4": {
+            "Laragento\\Review\\": "./"
+        }
+    }
+}

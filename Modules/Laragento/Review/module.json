@@ -1,0 +1,13 @@
+{
+    "name": "Review",
+    "alias": "review",
+    "description": "",
+    "keywords": [],
+    "active": 1,
+    "order": 0,
+    "aliases": {},
+    "files": [
+        "start.php"
+    ],
+    "requires": []
+}
