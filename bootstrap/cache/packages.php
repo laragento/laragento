@@ -1,34 +1,9 @@
 <?php return array (
-  'barryvdh/laravel-ide-helper' => 
-  array (
-    'providers' => 
-    array (
-      0 => 'Barryvdh\\LaravelIdeHelper\\IdeHelperServiceProvider',
-    ),
-  ),
-  'spatie/laravel-fractal' => 
-  array (
-    'providers' => 
-    array (
-      0 => 'Spatie\\Fractal\\FractalServiceProvider',
-    ),
-    'aliases' => 
-    array (
-      'Fractal' => 'Spatie\\Fractal\\FractalFacade',
-    ),
-  ),
   'barryvdh/laravel-cors' => 
   array (
     'providers' => 
     array (
       0 => 'Barryvdh\\Cors\\ServiceProvider',
-    ),
-  ),
-  'laravel/tinker' => 
-  array (
-    'providers' => 
-    array (
-      0 => 'Laravel\\Tinker\\TinkerServiceProvider',
     ),
   ),
   'barryvdh/laravel-debugbar' => 
@@ -42,11 +17,32 @@
       'Debugbar' => 'Barryvdh\\Debugbar\\Facade',
     ),
   ),
+  'barryvdh/laravel-ide-helper' => 
+  array (
+    'providers' => 
+    array (
+      0 => 'Barryvdh\\LaravelIdeHelper\\IdeHelperServiceProvider',
+    ),
+  ),
   'fideloper/proxy' => 
   array (
     'providers' => 
     array (
       0 => 'Fideloper\\Proxy\\TrustedProxyServiceProvider',
+    ),
+  ),
+  'laravel/dusk' => 
+  array (
+    'providers' => 
+    array (
+      0 => 'Laravel\\Dusk\\DuskServiceProvider',
+    ),
+  ),
+  'laravel/tinker' => 
+  array (
+    'providers' => 
+    array (
+      0 => 'Laravel\\Tinker\\TinkerServiceProvider',
     ),
   ),
   'nwidart/laravel-modules' => 
@@ -60,11 +56,15 @@
       'Module' => 'Nwidart\\Modules\\Facades\\Module',
     ),
   ),
-  'laravel/dusk' => 
+  'spatie/laravel-fractal' => 
   array (
     'providers' => 
     array (
-      0 => 'Laravel\\Dusk\\DuskServiceProvider',
+      0 => 'Spatie\\Fractal\\FractalServiceProvider',
+    ),
+    'aliases' => 
+    array (
+      'Fractal' => 'Spatie\\Fractal\\FractalFacade',
     ),
   ),
 );

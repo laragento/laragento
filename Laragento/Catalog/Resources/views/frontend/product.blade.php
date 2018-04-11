@@ -75,6 +75,7 @@
         <div class="tabs-content" data-tabs-content="example-tabs">
             <div class="tabs-panel is-active" id="panel1">
                 <h4>Attributes</h4>
+                <?php /*
                 @foreach($attributes as $attribute)
                     <?php $code = $attribute->attribute_code ?>
                     @if(isset($product->$code))
@@ -85,7 +86,7 @@
                             </div>
                         </div>
                      @endif
-                @endforeach
+                @endforeach */?>
             </div>
             <div class="tabs-panel" id="panel2">
                 <h4>Reviews</h4>

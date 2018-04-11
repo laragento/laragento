@@ -15,8 +15,8 @@ class CatalogServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        $this->loadViewsFrom(__DIR__ . '../Resources/views/frontend', 'frontend_catalog');
-        $this->loadViewsFrom(__DIR__ . '../Resources/views/frontend/addto', 'frontend_catalog_addto');
+        $this->loadViewsFrom(__DIR__ . '/../Resources/views/frontend', 'frontend_catalog');
+        $this->loadViewsFrom(__DIR__ . '/../Resources/views/frontend/addto', 'frontend_catalog_addto');
         /*
         $this->publishes([
             __DIR__.'/views' => base_path('resources/views/laragento/catalog'),
@@ -94,6 +94,28 @@ class CatalogServiceProvider extends ServiceProvider
         ];
 
         Route::group(['prefix'=>'v1', 'middleware' => 'storeId'], function () use ($methods) {
+            foreach ($methods as $method => $routes) {
+                foreach ($routes AS $route => $controller) {
+                    // Create default routes without StoreCode
+                    Route::$method($route, $controller);
+                }
+            }
+        });
+
+        $methods = [
+            'get' => [
+                'category/all' => $controller . '@all',
+                'category/{category_slug}' => $controller . '@category',
+            ],
+            'post' => [
+
+            ],
+            'delete' => [
+
+            ]
+        ];
+
+        Route::group(['prefix'=>'', 'middleware' => 'storeId'], function () use ($methods) {
             foreach ($methods as $method => $routes) {
                 foreach ($routes AS $route => $controller) {
                     // Create default routes without StoreCode

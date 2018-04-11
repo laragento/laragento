@@ -154,22 +154,21 @@ return [
         /*
          * Laragento Service Providers...
          */
-        /*Laragento\Core\CoreServiceProvider::class,
-        Laragento\Eav\EavServiceProvider::class,
-        Laragento\Store\StoreServiceProvider::class,
-        Laragento\Directory\DirectoryServiceProvider::class,
-        Laragento\MediaStorage\MediaStorageServiceProvider::class,
-        //Laragento\Catalog\CatalogServiceProvider::class,
+        Laragento\Core\Providers\CoreServiceProvider::class,
+        Laragento\Eav\Providers\EavServiceProvider::class,
+        Laragento\Store\Providers\StoreServiceProvider::class,
+        Laragento\Directory\Providers\DirectoryServiceProvider::class,
+        Laragento\MediaStorage\Providers\MediaStorageServiceProvider::class,
+        Laragento\Catalog\CatalogServiceProvider::class,
         Laragento\Customer\CustomerServiceProvider::class,
-        Laragento\Quote\QuoteServiceProvider::class,
-        Laragento\Checkout\CheckoutServiceProvider::class,
+        Laragento\Quote\Providers\QuoteServiceProvider::class,
+        Laragento\Checkout\Providers\CheckoutServiceProvider::class,
         //Laragento\CustomerImportExport\CustomerImportExportServiceProvider::class,
-        Laragento\CatalogImportExport\CatalogImportExportServiceProvider::class,
-        Laragento\CatalogUrlRewrite\CatalogUrlRewriteServiceProvider::class,
-        Laragento\Review\ReviewServiceProvider::class,
-        Laragento\Rating\RatingServiceProvider::class,
-        Laragento\XmlChunk\XmlChunkServiceProvider::class,
-*/
+        //Laragento\CatalogImportExport\Providers\CatalogImportExportServiceProvider::class,
+        //Laragento\CatalogUrlRewrite\Providers\CatalogUrlRewriteServiceProvider::class,
+        Laragento\Review\Providers\ReviewServiceProvider::class,
+        Laragento\Rating\Providers\RatingServiceProvider::class,
+        Laragento\XmlChunk\Providers\XmlChunkServiceProvider::class,
         /*
          * Client Service Providers...
          */

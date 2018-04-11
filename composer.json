@@ -1,7 +1,12 @@
 {
     "name": "laragento/laragento",
     "description": "The Laragento Framework.",
-    "keywords": ["framework", "laravel","magento","laragento"],
+    "keywords": [
+        "framework",
+        "laravel",
+        "magento",
+        "laragento"
+    ],
     "license": "MIT",
     "type": "project",
     "minimum-stability": "dev",
@@ -35,8 +40,7 @@
         ],
         "psr-4": {
             "App\\": "app/",
-            "Laragento\\":"Laragento/"
-            
+            "Laragento\\": "Laragento/"
         }
     },
     "autoload-dev": {
