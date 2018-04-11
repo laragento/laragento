@@ -18,61 +18,61 @@
         </testsuite>
 
         <testsuite name="Catalog">
-            <directory suffix="Test.php">./Laragento/Catalog/tests/</directory>
+            <directory suffix="Test.php">./Catalog/tests/</directory>
         </testsuite>
 
         <testsuite name="Checkout">
-            <directory suffix="Test.php">./Laragento/Checkout/tests/</directory>
+            <directory suffix="Test.php">./Checkout/tests/</directory>
         </testsuite>
 
         <testsuite name="Core">
-            <directory suffix="Test.php">.//Laragento/Core/tests/</directory>
+            <directory suffix="Test.php">./Core/tests/</directory>
         </testsuite>
 
         <testsuite name="Customer">
-            <directory suffix="Test.php">./Laragento/Customer/tests/</directory>
+            <directory suffix="Test.php">./Customer/tests/</directory>
         </testsuite>
 
 
         <testsuite name="CustomerImportExport">
-            <directory suffix="Test.php">./Laragento/CustomerImportExport/tests/</directory>
+            <directory suffix="Test.php">./CustomerImportExport/tests/</directory>
         </testsuite>
 
         <testsuite name="Dev">
-            <directory suffix="Test.php">./Laragento/Dev/tests/</directory>
+            <directory suffix="Test.php">./Dev/tests/</directory>
         </testsuite>
 
 
         <testsuite name="Eav">
-            <directory suffix="Test.php">./Laragento/Eav/tests/</directory>
+            <directory suffix="Test.php">./Eav/tests/</directory>
         </testsuite>
 
         <testsuite name="ImportExport">
-            <directory suffix="Test.php">./Laragento/ImportExport/tests/</directory>
+            <directory suffix="Test.php">./ImportExport/tests/</directory>
         </testsuite>
 
         <testsuite name="MediaStorage">
-            <directory suffix="Test.php">./Laragento/MediaStorage/tests/</directory>
+            <directory suffix="Test.php">./MediaStorage/tests/</directory>
         </testsuite>
 
         <testsuite name="Quote">
-            <directory suffix="Test.php">./Laragento/Quote/tests/</directory>
+            <directory suffix="Test.php">./Quote/tests/</directory>
         </testsuite>
 
         <testsuite name="Rating">
-            <directory suffix="Test.php">./Laragento/Rating/tests/</directory>
+            <directory suffix="Test.php">./Rating/tests/</directory>
         </testsuite>
 
         <testsuite name="Review">
-            <directory suffix="Test.php">./Laragento/Review/tests/</directory>
+            <directory suffix="Test.php">./Review/tests/</directory>
         </testsuite>
 
         <testsuite name="Store">
-            <directory suffix="Test.php">./Laragento/Store/tests/</directory>
+            <directory suffix="Test.php">./Store/tests/</directory>
         </testsuite>
 
         <testsuite name="XmlChunk">
-            <directory suffix="Test.php">./Laragento/XmlChunk/tests/</directory>
+            <directory suffix="Test.php">./XmlChunk/tests/</directory>
         </testsuite>
     </testsuites>
     <filter>
