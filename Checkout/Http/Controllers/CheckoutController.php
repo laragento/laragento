@@ -1,6 +1,6 @@
 <?php
 
-namespace Laragento\Checkout\src\Http\Controllers;
+namespace Laragento\Checkout\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
