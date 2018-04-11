@@ -30,8 +30,6 @@
     },
     "autoload": {
         "classmap": [
-            "database/seeds",
-            "database/factories"
         ],
         "psr-4": {
             "Laragento\\": "./"
@@ -52,13 +50,6 @@
     "scripts": {
         "post-root-package-install": [
             "@php -r \"file_exists('.env') || copy('.env.example', '.env');\""
-        ],
-        "post-create-project-cmd": [
-            "@php artisan key:generate"
-        ],
-        "post-autoload-dump": [
-            "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
-            "@php artisan package:discover"
         ]
     },
     "config": {
