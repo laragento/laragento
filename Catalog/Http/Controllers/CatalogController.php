@@ -13,6 +13,11 @@ use Laragento\Catalog\Repositories\Product\ProductRepositoryInterface;
 
 class CatalogController extends Controller
 {
+    public function index()
+    {
+        return "bla";
+    }
+
     /**
      * @var ProductRepositoryInterface
      */

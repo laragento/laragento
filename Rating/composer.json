@@ -4,10 +4,10 @@
     "type": "extension",
     "minimum-stability": "dev",
     "require": {
-        "laragento/customer":"dev",
-        "laragento/review": "dev",
-        "laragento/core":"dev",
-        "laragento/store":"dev"
+        "laragento/customer":"dev-dev",
+        "laragento/review": "dev-dev",
+        "laragento/core":"dev-dev",
+        "laragento/store":"dev-dev"
     },
     "extra": {
         "laravel": {

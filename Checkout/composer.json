@@ -1,6 +1,6 @@
 {
     "name": "laragento/checkout",
-    "description": "Laragento Quote",
+    "description": "Laragento checkout",
     "type": "extension",
     "minimum-stability": "dev",
     "require": {},

@@ -10,6 +10,120 @@
     "license": "MIT",
     "type": "project",
     "minimum-stability": "dev",
+    "repositories": [
+        {
+            "type": "path",
+            "url": "./Catalog",
+            "options": {
+              "symlink": true
+            }
+        },
+        {
+            "type": "path",
+            "url": "./CatalogImportExport",
+          "options": {
+            "symlink": true
+          }
+        },
+        {
+            "type": "path",
+            "url": "./CatalogUrlRewrite",
+          "options": {
+            "symlink": true
+          }
+        },
+        {
+            "type": "path",
+            "url": "./Checkout",
+          "options": {
+            "symlink": true
+          }
+        },
+        {
+            "type": "path",
+            "url": "./Core",
+          "options": {
+            "symlink": true
+          }
+        },
+        {
+            "type": "path",
+            "url": "./Customer",
+          "options": {
+            "symlink": true
+          }
+        },
+        {
+            "type": "path",
+            "url": "./CustomerImportExport",
+          "options": {
+            "symlink": true
+          }
+        },
+        {
+            "type": "path",
+            "url": "./Directory",
+          "options": {
+            "symlink": true
+          }
+        },
+        {
+            "type": "path",
+            "url": "./Eav",
+          "options": {
+            "symlink": true
+          }
+        },
+        {
+            "type": "path",
+            "url": "./ImportExport",
+          "options": {
+            "symlink": true
+          }
+        },
+        {
+            "type": "path",
+            "url": "./MediaStorage",
+          "options": {
+            "symlink": true
+          }
+        },
+        {
+            "type": "path",
+            "url": "./Quote",
+          "options": {
+            "symlink": true
+          }
+        },
+        {
+            "type": "path",
+            "url": "./Rating",
+          "options": {
+            "symlink": true
+          }
+        },
+        {
+            "type": "path",
+            "url": "./Review",
+          "options": {
+            "symlink": true
+          }
+        },
+        {
+            "type": "path",
+            "url": "./Store",
+          "options": {
+            "symlink": true
+          }
+        },
+        {
+            "type": "path",
+            "url": "./XmlChunk",
+          "options": {
+            "symlink": true
+          }
+        }
+    ],
     "require": {
         "php": ">=7.1.3",
         "laravel/framework": "5.6.*",
@@ -17,7 +131,23 @@
         "nwidart/laravel-modules": "^3.0@dev",
         "predis/predis": "^1.1",
         "prewk/xml-string-streamer": "^0.11.0",
-        "spatie/laravel-fractal": "^5.2"
+        "spatie/laravel-fractal": "^5.2",
+        "laragento/catalog": "dev-dev",
+        "laragento/catalog-import-export": "dev-dev",
+        "laragento/catalog-url-rewrite": "dev-dev",
+        "laragento/checkout": "dev-dev",
+        "laragento/core": "dev-dev",
+        "laragento/customer": "dev-dev",
+        "laragento/customer-import-export": "dev-dev",
+        "laragento/directory": "dev-dev",
+        "laragento/eav": "dev-dev",
+        "laragento/import-export": "dev-dev",
+        "laragento/media-storage": "dev-dev",
+        "laragento/quote": "dev-dev",
+        "laragento/rating": "dev-dev",
+        "laragento/review": "dev-dev",
+        "laragento/store": "dev-dev",
+        "laragento/xml-chunk": "dev-dev"
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.1",
@@ -48,10 +178,7 @@
         "laravel": {
             "dont-discover": [
                 "Laragento/Store"
-            ],
-            "providers": [
-                "Laragento\\Checkout\\Providers\\CheckoutServiceProvider"
-             ]
+            ]
          }
         }
     },
