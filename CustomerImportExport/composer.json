@@ -4,8 +4,8 @@
     "type": "extension",
     "minimum-stability": "dev",
     "require": {
-        "laragento/customer":"dev",
-        "laragento/directory":"dev"
+        "laragento/customer":"dev-dev",
+        "laragento/directory":"dev-dev"
     },
     "extra": {
         "laravel": {

@@ -4,7 +4,7 @@
     "type": "extension",
     "minimum-stability": "dev",
     "require": {
-        "laragento/core":"dev"
+        "laragento/core":"dev-dev"
     },
     "extra": {
         "laravel": {

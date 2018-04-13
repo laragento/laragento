@@ -1,0 +1,19 @@
+{
+  "name": "laragento/catalog-import-export",
+  "description": "Laragento catalog-import-export",
+  "type": "extension",
+  "minimum-stability": "dev",
+  "require": {},
+  "extra": {
+    "laravel": {
+        "providers": [
+            "Laragento\\CatalogImportExport\\CatalogImportExportServiceProvider"
+        ]
+    }
+  },
+  "autoload": {
+    "psr-4": {
+      "Laragento\\CatalogImportExport\\": "./"
+    }
+  }
+}
