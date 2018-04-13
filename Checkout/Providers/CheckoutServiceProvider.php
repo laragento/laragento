@@ -25,6 +25,7 @@ class CheckoutServiceProvider extends ServiceProvider
         $this->registerConfig();
         $this->registerViews();
         $this->registerFactories();
+        $this->loadViewsFrom("/..Resources/views","checkout");
         $this->loadMigrationsFrom(__DIR__ . '/../Database/Migrations');
     }
 
