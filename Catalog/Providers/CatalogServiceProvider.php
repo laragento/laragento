@@ -1,6 +1,6 @@
 <?php
 
-namespace Laragento\Catalog;
+namespace Laragento\Catalog\Providers;
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
@@ -15,8 +15,10 @@ class CatalogServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+
         $this->loadViewsFrom(__DIR__ . '/../Resources/views/frontend', 'frontend_catalog');
         $this->loadViewsFrom(__DIR__ . '/../Resources/views/frontend/addto', 'frontend_catalog_addto');
+        $this->loadRoutesFrom(__DIR__.'/../Http/routes.php');
         /*
         $this->publishes([
             __DIR__.'/views' => base_path('resources/views/laragento/catalog'),

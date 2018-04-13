@@ -21,11 +21,13 @@ class CheckoutServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+
         $this->registerTranslations();
         $this->registerConfig();
         $this->registerViews();
         $this->registerFactories();
-        $this->loadViewsFrom("/..Resources/views","checkout");
+        $this->loadRoutesFrom(__DIR__.'/../Http/routes.php');
+        $this->loadViewsFrom("../Resources/views","checkout");
         $this->loadMigrationsFrom(__DIR__ . '/../Database/Migrations');
     }
 

@@ -31,6 +31,7 @@ class CustomerApi extends Controller implements CustomerApiInterface
      */
     public function first($identifier)
     {
+        dd("Method Illuminate\Http\JsonResponse::toArray does not exist.");
         $customer = $this->customerRepository->first($identifier);
         $fractal = Fractal::create($customer, new CustomerTransformer());
         return response()->json($fractal, 200);
