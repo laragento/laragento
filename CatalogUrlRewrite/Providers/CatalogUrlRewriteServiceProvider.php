@@ -1,6 +1,6 @@
 <?php
 
-namespace Laragento\CatalogUrlRewrite;
+namespace Laragento\CatalogUrlRewrite\Providers;
 
 use Illuminate\Support\ServiceProvider;
 
