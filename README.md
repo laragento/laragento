@@ -10,10 +10,10 @@ Add following provider to your app.php config:
 
 
 # Create a new Module
-Use following Command:
+Use following Command:<br>
 `php artisan module:make MyModule`
 
-In composer.json add psr-4 line "Module" in autoload block:
+In composer.json add psr-4 line "Module" in autoload block:<br>
 `"autoload": {
     "classmap": [
         "database/seeds",
@@ -25,7 +25,7 @@ In composer.json add psr-4 line "Module" in autoload block:
     }
 },`
 
-Add the Provider to your app.php config:
+Add the Provider to your app.php config:<br>
 `Modules\BachmannkartenImport\Providers\MyModuleProvider::class,`
 
 The module is ready to use! Great :-)
