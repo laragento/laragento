@@ -352,9 +352,9 @@ class ProductRepository implements ProductRepositoryInterface
                 $stockStatus = StockStatus::firstOrCreate([
                     'product_id' => $product->entity_id,
                     'website_id' => $websiteId,
+                    'stock_id' => isset($stock['stock_id']) ? $stock['stock_id'] : 1
                 ]);
 
-                $stockStatus->stock_id = isset($stock['stock_id']) ? $stock['stock_id'] : 1;
                 $stockStatus->qty = isset($stock['qty']) ? $stock['qty'] : 0;
                 $stockStatus->stock_status = isset($stock['stock_status']) ? $stock['stock_status'] : 1;
 
