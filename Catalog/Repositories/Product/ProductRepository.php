@@ -177,7 +177,7 @@ class ProductRepository implements ProductRepositoryInterface
 
         $product = Product::where('sku' , $productData['sku'])->first();
 
-        if (!$product) {
+        if (!isset($product)) {
             if (ImportInterface::BEHAVIOR_UPDATE != $behavior) {
                 $product = new Product($productOptions);
                 $product->save();
@@ -188,7 +188,7 @@ class ProductRepository implements ProductRepositoryInterface
             }
         }
 
-        if (!$product) {
+        if (!isset($product)) {
             $productData = $this->saveImage($productData, $product->entity_id, $config);
             $this->saveCategories($productData, $product->entity_id);
             $this->saveAttributes($productData, $product, $update);
