@@ -352,10 +352,10 @@ class ProductRepository implements ProductRepositoryInterface
 
                 $stockItem = StockItem::firstOrNew([
                     'product_id' => $product->entity_id,
-                    'website_id' => $websiteId,
                     'stock_id' => isset($stock['stock_id']) ? $stock['stock_id'] : 1
                 ]);
 
+                $stockItem->website_id = $websiteId;
                 $stockItem->qty = isset($stock['qty']) ? $stock['qty'] : 0;
                 $stockItem->min_qty = isset($stock['min_qty']) ? $stock['min_qty'] : 0;
                 $stockItem->use_config_min_qty = isset($stock['use_config_min_qty']) ? $stock['use_config_min_qty'] : 1;
