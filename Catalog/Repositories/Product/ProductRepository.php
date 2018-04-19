@@ -179,8 +179,7 @@ class ProductRepository implements ProductRepositoryInterface
 
         if (!isset($product)) {
             if (ImportInterface::BEHAVIOR_UPDATE != $behavior) {
-                $product = new Product($productOptions);
-                $product->save();
+                $product = Product::create($productOptions);
                 //ToDo Update Website in Product-Website Relationship
                 $this->saveWebsite($product, $productData['website_id']);
             } else {
@@ -198,11 +197,11 @@ class ProductRepository implements ProductRepositoryInterface
                 // rollback db
                 dd($this->errors);
             }
-        } else {
-            return false;
+
+            return $product;
         }
 
-        return $product;
+        return false;
     }
 
     /**
