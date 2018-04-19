@@ -176,13 +176,11 @@ class ProductRepository implements ProductRepositoryInterface
                 'instant_buyable' => 0,
                 'options_container' => "container2",
             ]);
-            dd($product);
 
             $this->saveWebsites($product, $productData['websites']);
         }
 
-        if (!$product) {
-            print 'created product not found!?' . "\n";
+        if ($product) {
             //$productData = $this->saveImage($productData, $product->entity_id, $config);
             $this->saveCategories($productData, $product->entity_id);
             $this->saveAttributes($productData, $product, $update);

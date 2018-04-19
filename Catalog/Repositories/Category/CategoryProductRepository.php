@@ -3,6 +3,7 @@
 namespace Laragento\Catalog\Repositories\Category;
 
 use Laragento\Catalog\Models\Category\CategoryProduct;
+use Laragento\Store\Models\StoreGroup;
 use Laragento\Store\Repositories\StoreRepository;
 
 
@@ -54,7 +55,7 @@ class CategoryProductRepository implements CategoryProductRepositoryInterface
     public function storeByPath($path, $productId, $storeId, $create = true)
     {
         $categories = explode("/", $path);
-        $parentId = $this->getStoreRootCategory($storeId);
+        $parentId = $this->getStoreRootCategoryId($storeId);
 
         $rootCategory = $this->categoryRepository->get($parentId);
         $categoryPath = $rootCategory->path;
@@ -85,14 +86,21 @@ class CategoryProductRepository implements CategoryProductRepositoryInterface
         }
     }
 
-    private function getStoreRootCategory($storeId)
+    private function getStoreRootCategoryId($storeId)
     {
         $storeRepo = new StoreRepository();
-        $groupId = $storeRepo->getById($storeId)['group_id'];
-        $group = $storeRepo->getGroupById($groupId);
 
-        return $group['root_category_id'];
+        $store = $storeRepo->getById($storeId);
 
+        if(isset($store['group_id'])) {
+            if($storeGroup = StoreGroup::whereGroupId($store['group_id'])
+                ->first()) {
+
+                return $storeGroup['root_category_id'];
+            }
+        }
+
+        return false;
     }
 
 }
