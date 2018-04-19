@@ -57,8 +57,7 @@ class CategoryProductRepository implements CategoryProductRepositoryInterface
         $categories = explode("/", $path);
         $parentId = $this->getStoreRootCategoryId($storeId);
 
-        $rootCategory = $this->categoryRepository->get($parentId);
-        $categoryPath = $rootCategory->path;
+        $categoryPath = isset($categories[0]) ? $categories[0] : '';
 
         foreach ($categories as $categoryName) {
             $categoryId = CategoryRepository::getCategoryIdByName(trim($categoryName), $storeId);
@@ -69,15 +68,16 @@ class CategoryProductRepository implements CategoryProductRepositoryInterface
                     return null;
                 }
 
+                $categoryPath .= '/' . trim($categoryName);
+
                 $category = $this->categoryRepository->store([
                     'name' => trim($categoryName),
-                    'path' => $categoryPath . '/' . trim($categoryName)
+                    'path' => $categoryPath
                 ], $parentId, $storeId);
                 $categoryId = $category->entity_id;
             }
 
-            $childCategory = $this->categoryRepository->get($categoryId);
-            $categoryPath .= '/' . $childCategory->path;
+
 
             $parentId = $categoryId;
         }
