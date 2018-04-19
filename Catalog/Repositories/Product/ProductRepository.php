@@ -2,6 +2,7 @@
 
 namespace Laragento\Catalog\Repositories\Product;
 
+use Laragento\Catalog\Models\Inventory\StockStatus;
 use Laragento\Catalog\Models\Product\Entity\Tierprice;
 use Laragento\Catalog\Models\Product\Entity\Varchar;
 use Laragento\Catalog\Models\Product\Product;
@@ -334,7 +335,7 @@ class ProductRepository implements ProductRepositoryInterface
     {
         $syncedProductWebsites = [];
 
-        foreach ($websites as $websiteId) {
+        foreach ($websites as $websiteId => $additionalConfig) {
             $productWebsite = ProductWebsite::firstOrCreate([
                 'product_id' => $product->entity_id,
                 'website_id' => $websiteId
@@ -342,6 +343,22 @@ class ProductRepository implements ProductRepositoryInterface
 
             if(!$productWebsite) {
                 return false;
+            }
+
+            //handle additional website config
+            if(isset($additionalConfig['stock'])) {
+                $stock = $additionalConfig['stock'];
+
+                $stockStatus = StockStatus::firstOrCreate([
+                    'product_id' => $product->entity_id,
+                    'website_id' => $websiteId,
+                ]);
+
+                $stockStatus->stock_id = isset($stock['stock_id']) ? $stock['stock_id'] : 1;
+                $stockStatus->qty = isset($stock['qty']) ? $stock['qty'] : 0;
+                $stockStatus->stock_status = isset($stock['stock_status']) ? $stock['stock_status'] : 1;
+
+                $stockStatus->save();
             }
 
             $syncedProductWebsites[] = $productWebsite->website_id;
