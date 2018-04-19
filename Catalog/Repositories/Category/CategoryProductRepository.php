@@ -46,6 +46,7 @@ class CategoryProductRepository implements CategoryProductRepositoryInterface
     /**
      * @param $path
      * @param $productId
+     * @param $storeId
      * @param bool $create
      * @return mixed
      * @todo check and refactor
@@ -54,6 +55,9 @@ class CategoryProductRepository implements CategoryProductRepositoryInterface
     {
         $categories = explode("/", $path);
         $parentId = $this->getStoreRootCategory($storeId);
+
+        $rootCategory = $this->categoryRepository->get($parentId);
+        $categoryPath = $rootCategory->path;
 
         foreach ($categories as $categoryName) {
             $categoryId = CategoryRepository::getCategoryIdByName(trim($categoryName), $storeId);
@@ -66,9 +70,14 @@ class CategoryProductRepository implements CategoryProductRepositoryInterface
 
                 $category = $this->categoryRepository->store([
                     'name' => trim($categoryName),
+                    'path' => $categoryPath . '/' . trim($categoryName)
                 ], $parentId, $storeId);
                 $categoryId = $category->entity_id;
             }
+
+            $childCategory = $this->categoryRepository->get($categoryId);
+            $categoryPath .= '/' . $childCategory->path;
+
             $parentId = $categoryId;
         }
         if ($parentId) {

@@ -193,7 +193,7 @@ class ProductRepository implements ProductRepositoryInterface
 
         if ($productObj != null) {
             $productData = $this->saveImage($productData, $productObj->entity_id, $config);
-            $this->saveCategory($productData, $productObj->entity_id);
+            $this->saveCategories($productData, $productObj->entity_id);
             $this->saveAttributes($productData, $productObj, $update);
             $this->saveTierPrices($productData, $productObj->entity_id);
 
@@ -315,7 +315,7 @@ class ProductRepository implements ProductRepositoryInterface
      * @param $productId
      * @return null
      */
-    public function saveCategory($productData, $productId)
+    public function saveCategories($productData, $productId)
     {
         if (!isset($productData['categories'])) {
             return null;
@@ -326,7 +326,9 @@ class ProductRepository implements ProductRepositoryInterface
          */
         $storeId = !isset($productData['store_id']) || $productData['store_id'] == null ? $this->storeRepository->getAdminStoreId() : $productData['store_id'];
 
-        return $this->categoryProductRepository->storeByPath($productData['categories'], $productId, $storeId);
+        foreach($productData['categories'] as $category) {
+            $this->categoryProductRepository->storeByPath($category, $productId, $storeId);
+        }
     }
 
     /**

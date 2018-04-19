@@ -144,7 +144,7 @@ class CategoryRepository implements CategoryRepositoryInterface
             'attribute_id' => 54,
             'store_id' => $storeId,
             'entity_id' => $category->entity_id,
-            'value' => 1
+            'value' => 0
         ]);
         $entity->save();
 
@@ -154,6 +154,24 @@ class CategoryRepository implements CategoryRepositoryInterface
             'store_id' => $storeId,
             'entity_id' => $category->entity_id,
             'value' => 1
+        ]);
+        $entity->save();
+
+        //category urlkey attribute
+        $entity = new Integer([
+            'attribute_id' => 117,
+            'store_id' => $storeId,
+            'entity_id' => $category->entity_id,
+            'value' => str_replace(' ', '-', trim(strtolower($categoryData['name'])))
+        ]);
+        $entity->save();
+
+        //category urlpath attribute
+        $entity = new Integer([
+            'attribute_id' => 118,
+            'store_id' => $storeId,
+            'entity_id' => $category->entity_id,
+            'value' => str_replace(' ', '-', trim(strtolower($categoryData['path'])))
         ]);
         $entity->save();
 
@@ -169,8 +187,9 @@ class CategoryRepository implements CategoryRepositoryInterface
         if ($categoryId == 0) {
             $categoryId = 1;
         }
-        $category = Category::whereEntityId($categoryId)->first();
-            return $category->path;
+
+        $category = Category::whereEntityId($categoryId)->firstOrFail();
+        return $category->path;
     }
 
     /**
@@ -185,10 +204,12 @@ class CategoryRepository implements CategoryRepositoryInterface
 
     /**
      * Get info about category by category id
+     * @param $categoryId
+     * @return \Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Eloquent\Model|Category
      */
-    public function get($categoryId, $storeId = null)
+    public function get($categoryId)
     {
-        // TODO: Implement get() method.
+        return Category::whereEntityId($categoryId)->firstOrFail();
     }
 
     /**
