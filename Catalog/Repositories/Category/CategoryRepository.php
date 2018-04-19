@@ -158,7 +158,7 @@ class CategoryRepository implements CategoryRepositoryInterface
         $entity->save();
 
         //category urlkey attribute
-        $entity = new Integer([
+        $entity = new Varchar([
             'attribute_id' => 117,
             'store_id' => $storeId,
             'entity_id' => $category->entity_id,
@@ -167,7 +167,7 @@ class CategoryRepository implements CategoryRepositoryInterface
         $entity->save();
 
         //category urlpath attribute
-        $entity = new Integer([
+        $entity = new Varchar([
             'attribute_id' => 118,
             'store_id' => $storeId,
             'entity_id' => $category->entity_id,
