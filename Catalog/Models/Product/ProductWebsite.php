@@ -20,6 +20,7 @@ use Laragento\Catalog\Models\Inventory\Stock;
 class ProductWebsite extends Model
 {
     protected $table = 'catalog_product_website';
+
     protected $fillable = [
         'product_id',
         'website_id'

@@ -161,8 +161,7 @@ class ProductRepository implements ProductRepositoryInterface
      */
     public function store($productData, $config = null)
     {
-        $behavior = isset($config[ImportInterface::CONFIG_BEHAVIOR]) ? $config[ImportInterface::CONFIG_BEHAVIOR] : ImportInterface::BEHAVIOR_ADD_UPDATE;
-
+        //default options for product
         $productOptions = [
             'attribute_set_id' => 4,
             'type_id' => $productData['type_id'],
@@ -175,20 +174,17 @@ class ProductRepository implements ProductRepositoryInterface
 
         $update = false;
 
+        //check if product already exists, if not create new db entry
         $product = Product::where('sku' , $productData['sku'])->first();
+        if (!$product) {
+            print 'create new product' . "\n";
+            $product = Product::create($productOptions);
 
-        if (!isset($product)) {
-            if (ImportInterface::BEHAVIOR_UPDATE != $behavior) {
-                $product = Product::create($productOptions);
-                //ToDo Update Website in Product-Website Relationship
-                $this->saveWebsite($product, $productData['website_id']);
-            } else {
-                $update = true;
-            }
+            $this->saveWebsites($product, $productData['websites']);
         }
 
-        if (!isset($product)) {
-            $productData = $this->saveImage($productData, $product->entity_id, $config);
+        if (!$product) {
+            //$productData = $this->saveImage($productData, $product->entity_id, $config);
             $this->saveCategories($productData, $product->entity_id);
             $this->saveAttributes($productData, $product, $update);
             $this->saveTierPrices($productData, $product->entity_id);
@@ -330,19 +326,35 @@ class ProductRepository implements ProductRepositoryInterface
     }
 
     /**
-     * @param $productObj
-     * @param $websiteId
+     * Save Websites <-> Product relationship
+     *
+     * @param $product
+     * @param $websites
+     * @return bool
      */
-    public function saveWebsite($productObj, $websiteId)
+    public function saveWebsites($product, $websites)
     {
-        if ($websiteId == null) {
-            $websiteId = $this->storeRepository->getDefaultWebsiteId();
+        $syncedProductWebsites = [];
+
+        foreach ($websites as $websiteId) {
+            $productWebsite = ProductWebsite::firstOrCreate([
+                'product_id' => $product->entity_id,
+                'website_id' => $websiteId
+            ]);
+
+            if(!$productWebsite) {
+                return false;
+            }
+
+            $syncedProductWebsites[] = $productWebsite->website_id;
         }
-        $productWebsite = new ProductWebsite([
-            'product_id' => $productObj->entity_id,
-            'website_id' => $websiteId
-        ]);
-        $productWebsite->save();
+
+        //remove old website_id entries
+        ProductWebsite::whereProductId($product->entity_id)
+            ->whereNotIn('website_id', $syncedProductWebsites)
+            ->delete();
+
+        return true;
     }
 
 
