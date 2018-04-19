@@ -179,10 +179,8 @@ class ProductRepository implements ProductRepositoryInterface
         }
 
         if ($product) {
-            //update product website relations
-            if(isset($productData['websites'])) {
-                $this->saveWebsites($product, $productData['websites']);
-            }
+            //update product website relations{
+            $this->saveWebsites($product, $productData['websites']);
 
             //$productData = $this->saveImage($productData, $product->entity_id, $config);
             $this->saveCategories($productData, $product->entity_id);
