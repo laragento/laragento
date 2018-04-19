@@ -161,29 +161,28 @@ class ProductRepository implements ProductRepositoryInterface
      */
     public function store($productData, $config = null)
     {
-        //default options for product
-        $productOptions = [
-            'attribute_set_id' => 4,
-            'type_id' => $productData['type_id'],
-            'sku' => $productData['sku'],
-            'has_options' => 0,
-            'required_options' => 0,
-            'instant_buyable' => 0,
-            'options_container' => "container2",
-        ];
-
         $update = false;
 
         //check if product already exists, if not create new db entry
         $product = Product::where('sku' , $productData['sku'])->first();
         if (!$product) {
             print 'create new product' . "\n";
-            $product = Product::create($productOptions);
+            $product = Product::create([
+                'attribute_set_id' => 4,
+                'type_id' => $productData['type_id'],
+                'sku' => $productData['sku'],
+                'has_options' => 0,
+                'required_options' => 0,
+                'instant_buyable' => 0,
+                'options_container' => "container2",
+            ]);
+            dd($product);
 
             $this->saveWebsites($product, $productData['websites']);
         }
 
         if (!$product) {
+            print 'created product not found!?' . "\n";
             //$productData = $this->saveImage($productData, $product->entity_id, $config);
             $this->saveCategories($productData, $product->entity_id);
             $this->saveAttributes($productData, $product, $update);
