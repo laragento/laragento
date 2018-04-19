@@ -3,6 +3,7 @@
 namespace Laragento\Catalog\Repositories\Category;
 
 use Laragento\Catalog\Models\Category\Category;
+use Laragento\Catalog\Models\Category\Entity\Integer;
 use Laragento\Catalog\Models\Category\Entity\Varchar;
 
 
@@ -120,11 +121,39 @@ class CategoryRepository implements CategoryRepositoryInterface
         $category->level = $this->level($category->path);
         $category->save();
 
+        //category name attribute
         $entity = new Varchar([
             'attribute_id' => 45,
             'store_id' => $storeId,
             'entity_id' => $category->entity_id,
             'value' => $categoryData['name']
+        ]);
+        $entity->save();
+
+        //category is_active attribute
+        $entity = new Integer([
+            'attribute_id' => 46,
+            'store_id' => $storeId,
+            'entity_id' => $category->entity_id,
+            'value' => 1
+        ]);
+        $entity->save();
+
+        //category is_anchor attribute
+        $entity = new Integer([
+            'attribute_id' => 54,
+            'store_id' => $storeId,
+            'entity_id' => $category->entity_id,
+            'value' => 1
+        ]);
+        $entity->save();
+
+        //category include in menu attribute
+        $entity = new Integer([
+            'attribute_id' => 69,
+            'store_id' => $storeId,
+            'entity_id' => $category->entity_id,
+            'value' => 1
         ]);
         $entity->save();
 
