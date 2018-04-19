@@ -161,11 +161,9 @@ class ProductRepository implements ProductRepositoryInterface
      */
     public function store($productData, $config = null)
     {
-        //ToDo No ImportThings here
         $behavior = isset($config[ImportInterface::CONFIG_BEHAVIOR]) ? $config[ImportInterface::CONFIG_BEHAVIOR] : ImportInterface::BEHAVIOR_ADD_UPDATE;
 
-        $update = false;
-        $product = [
+        $productOptions = [
             'attribute_set_id' => 4,
             'type_id' => $productData['type_id'],
             'sku' => $productData['sku'],
@@ -174,51 +172,48 @@ class ProductRepository implements ProductRepositoryInterface
             'instant_buyable' => 0,
             'options_container' => "container2",
         ];
-        $productObj = Product::where('sku' , $productData['sku'])->first();
 
-        if ($productObj == null) {
+        $product = Product::where('sku' , $productData['sku'])->first();
+
+        if (!$product) {
             if (ImportInterface::BEHAVIOR_UPDATE != $behavior) {
-                $productObj = new Product($product);
-                $productObj->save();
+                $product = new Product($productOptions);
+                $product->save();
                 //ToDo Update Website in Product-Website Relationship
-                $this->saveWebsite($productObj, $productData['website_id']);
-            } else {
-                //print_r('Creation of Product ' . $productData['sku'] . ' skipped');
+                $this->saveWebsite($product, $productData['website_id']);
             }
-        } else {
-            $update = true;
-            // It's not necessary to update the product at the moment
-            //Product::where('sku' , $product['sku'])->update($product);
         }
 
-        if ($productObj != null) {
-            $productData = $this->saveImage($productData, $productObj->entity_id, $config);
-            $this->saveCategories($productData, $productObj->entity_id);
-            $this->saveAttributes($productData, $productObj, $update);
-            $this->saveTierPrices($productData, $productObj->entity_id);
+        if (!$product) {
+            $productData = $this->saveImage($productData, $product->entity_id, $config);
+            $this->saveCategories($productData, $product->entity_id);
+            $this->saveAttributes($productData, $product);
+            $this->saveTierPrices($productData, $product->entity_id);
 
             if (!empty($this->errors)) {
                 // rollback db
                 dd($this->errors);
             }
+        } else {
+            return false;
         }
 
-        return $productObj;
+        return $product;
     }
 
     /**
-     * @param $product
+     * @param $productData
      * @param $productId
      * @param $config
      * @return mixed
      */
-    protected function saveImage($product, $productId, $config)
+    protected function saveImage($productData, $productId, $config)
     {
         // @ToDo No ImportThings here
         $storeMedia = isset($config[ImportInterface::CONFIG_STORE_MEDIADATA_ON_IMPORT]) ? $config[ImportInterface::CONFIG_STORE_MEDIADATA_ON_IMPORT] : true;
 
         if (!$storeMedia) {
-            return $product;
+            return $productData;
         }
 
         // @ToDo Replace config keys with constants?
@@ -230,33 +225,33 @@ class ProductRepository implements ProductRepositoryInterface
         $image = false;
         $imageName = '';
         //print_r($product);
-        if (isset($product['name'])) {
-            $imageName = $product['name'];
+        if (isset($productData['name'])) {
+            $imageName = $productData['name'];
         }
 
-        if (isset($product['image'])) {
-            $image = $this->imageRepository->saveImage($product['image'], $productId, $imageName, $links);
+        if (isset($productData['image'])) {
+            $image = $this->imageRepository->saveImage($productData['image'], $productId, $imageName, $links);
         }
-        if (isset($product['images'])) {
-            $image = $this->imageRepository->saveImages($product['images'], $productId, $imageName, $links);
+        if (isset($productData['images'])) {
+            $image = $this->imageRepository->saveImages($productData['images'], $productId, $imageName, $links);
         }
 
         if ($image) {
-            $product['image'] = $image;
-            $product['small_image'] = $image;
-            $product['thumbnail'] = $image;
-            $product['image_label'] = $imageName;
+            $productData['image'] = $image;
+            $productData['small_image'] = $image;
+            $productData['thumbnail'] = $image;
+            $productData['image_label'] = $imageName;
         }
-        return $product;
+
+        return $productData;
     }
 
 
     /**
      * @param $productData
      * @param $product
-     * @param $update
      */
-    public function saveAttributes($productData, $product, $update)
+    public function saveAttributes($productData, $product)
     {
         if (!isset($productData['store_id']) || $productData['store_id'] == null) {
             /*
@@ -265,7 +260,7 @@ class ProductRepository implements ProductRepositoryInterface
              */
             $productData['store_id'] = $this->storeRepository->getAdminStoreId();
         }
-        $this->productAttributeRepository->save($productData, $product, $update);
+        $this->productAttributeRepository->save($productData, $product);
     }
 
 

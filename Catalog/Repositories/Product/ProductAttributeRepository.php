@@ -145,21 +145,13 @@ class ProductAttributeRepository implements ProductAttributeRepositoryInterface
     /**
      * @param $attributeData
      * @param $product
-     * @param $update
      * @todo take care of the attribute set id
      */
-    public function save($attributeData, $product, $update)
+    public function save($attributeData, $product)
     {
         $attributes = $this->attributeRepository->attributesByAttributeSet(4);
 
         foreach ($attributes as $attribute) {
-//            $result[] = [
-//                'attribute_id' => $attribute->attribute_id,
-//                'attribute_code' => $attribute->attribute_code,
-//                'backend_type' => $attribute->backend_type,
-//                'is_required' => $attribute->is_required,
-//                'default_value' => $attribute->default_value,
-//            ];
             $entity = [
                 'attribute_id' => $attribute->attribute_id,
                 'store_id' => $attributeData['store_id'],
@@ -169,14 +161,14 @@ class ProductAttributeRepository implements ProductAttributeRepositoryInterface
 
             if (isset($attributeData[$attribute->attribute_code])) {
                 $entity['value'] = $attributeData[$attribute->attribute_code];
-                $this->saveEntity($attribute, $entity, $update);
+                $this->saveEntity($attribute, $entity);
             } else {
-                if (!$update) {
+                /*if (!$update) {
                     if ($attribute->default_value != null) {
                         $entity['value'] = $attribute->default_value;
-                        $this->saveEntity($attribute, $entity, $update);
+                        $this->saveEntity($attribute, $entity);
                     }
-                }
+                }*/
             }
         }
     }
@@ -185,10 +177,9 @@ class ProductAttributeRepository implements ProductAttributeRepositoryInterface
     /**
      * @param $attribute
      * @param $entity
-     * @param bool $update
      * @return null
      */
-    public function saveEntity($attribute, $entity, $update = false)
+    public function saveEntity($attribute, $entity)
     {
         if (in_array($attribute->backend_type, ['varchar', 'int', 'text', 'decimal', 'datetime'])) {
             $var = false;

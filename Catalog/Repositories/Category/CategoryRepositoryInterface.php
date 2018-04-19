@@ -18,8 +18,10 @@ interface CategoryRepositoryInterface
 
     /**
      * Get info about category by category id
+     * @param $categoryId
+     * @return
      */
-    public function get($categoryId, $storeId = null);
+    public function get($categoryId);
 
 
     public function first($identifier);
