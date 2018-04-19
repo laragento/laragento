@@ -50,7 +50,7 @@ class CategoryProductRepository implements CategoryProductRepositoryInterface
      * @return mixed
      * @todo check and refactor
      */
-    public function storeByPath($path, $productId, $storeId, $create = false)
+    public function storeByPath($path, $productId, $storeId, $create = true)
     {
         $categories = explode("/", $path);
         $parentId = $this->getStoreRootCategory($storeId);
