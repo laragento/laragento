@@ -145,9 +145,10 @@ class ProductAttributeRepository implements ProductAttributeRepositoryInterface
     /**
      * @param $attributeData
      * @param $product
+     * @param $update
      * @todo take care of the attribute set id
      */
-    public function save($attributeData, $product)
+    public function save($attributeData, $product, $update)
     {
         $attributes = $this->attributeRepository->attributesByAttributeSet(4);
 
@@ -161,14 +162,14 @@ class ProductAttributeRepository implements ProductAttributeRepositoryInterface
 
             if (isset($attributeData[$attribute->attribute_code])) {
                 $entity['value'] = $attributeData[$attribute->attribute_code];
-                $this->saveEntity($attribute, $entity);
+                $this->saveEntity($attribute, $entity, $update);
             } else {
-                /*if (!$update) {
+                if (!$update) {
                     if ($attribute->default_value != null) {
                         $entity['value'] = $attribute->default_value;
-                        $this->saveEntity($attribute, $entity);
+                        $this->saveEntity($attribute, $entity, $update);
                     }
-                }*/
+                }
             }
         }
     }
@@ -177,9 +178,10 @@ class ProductAttributeRepository implements ProductAttributeRepositoryInterface
     /**
      * @param $attribute
      * @param $entity
+     * @param bool $update
      * @return null
      */
-    public function saveEntity($attribute, $entity)
+    public function saveEntity($attribute, $entity, $update = false)
     {
         if (in_array($attribute->backend_type, ['varchar', 'int', 'text', 'decimal', 'datetime'])) {
             $var = false;

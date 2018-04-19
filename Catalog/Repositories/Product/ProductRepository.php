@@ -173,6 +173,8 @@ class ProductRepository implements ProductRepositoryInterface
             'options_container' => "container2",
         ];
 
+        $update = false;
+
         $product = Product::where('sku' , $productData['sku'])->first();
 
         if (!$product) {
@@ -181,13 +183,15 @@ class ProductRepository implements ProductRepositoryInterface
                 $product->save();
                 //ToDo Update Website in Product-Website Relationship
                 $this->saveWebsite($product, $productData['website_id']);
+            } else {
+                $update = true;
             }
         }
 
         if (!$product) {
             $productData = $this->saveImage($productData, $product->entity_id, $config);
             $this->saveCategories($productData, $product->entity_id);
-            $this->saveAttributes($productData, $product);
+            $this->saveAttributes($productData, $product, $update);
             $this->saveTierPrices($productData, $product->entity_id);
 
             if (!empty($this->errors)) {
@@ -242,7 +246,6 @@ class ProductRepository implements ProductRepositoryInterface
             $productData['thumbnail'] = $image;
             $productData['image_label'] = $imageName;
         }
-
         return $productData;
     }
 
@@ -250,8 +253,9 @@ class ProductRepository implements ProductRepositoryInterface
     /**
      * @param $productData
      * @param $product
+     * @param $update
      */
-    public function saveAttributes($productData, $product)
+    public function saveAttributes($productData, $product, $update)
     {
         if (!isset($productData['store_id']) || $productData['store_id'] == null) {
             /*
@@ -260,7 +264,7 @@ class ProductRepository implements ProductRepositoryInterface
              */
             $productData['store_id'] = $this->storeRepository->getAdminStoreId();
         }
-        $this->productAttributeRepository->save($productData, $product);
+        $this->productAttributeRepository->save($productData, $product, $update);
     }
 
 
