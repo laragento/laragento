@@ -96,7 +96,11 @@ class CategoryProductRepository implements CategoryProductRepositoryInterface
             if($storeGroup = StoreGroup::whereGroupId($store['group_id'])
                 ->first()) {
 
-                return $storeGroup['root_category_id'];
+                if($storeGroup->root_category_id == 0) { //if 0 return default root category 1
+                    return 1;
+                }
+
+                return $storeGroup->root_category_id;
             }
         }
 
