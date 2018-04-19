@@ -355,7 +355,7 @@ class ProductRepository implements ProductRepositoryInterface
                     'website_id' => $websiteId
                 ]);
 
-                $stockItem->item_id = $product->entity_id;
+
                 $stockItem->stock_id = isset($stock['stock_id']) ? $stock['stock_id'] : 1;
                 $stockItem->qty = isset($stock['qty']) ? $stock['qty'] : 0;
                 $stockItem->min_qty = isset($stock['min_qty']) ? $stock['min_qty'] : 0;
