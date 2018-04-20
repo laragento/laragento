@@ -1,18 +1,18 @@
 <?php
 
-namespace Laragento\Catalog\Repositories\Product;
+namespace Laragento\Catalog\Repositories\Category;
 
 use Illuminate\Database\QueryException;
-use Laragento\Catalog\Models\Product\Entity\Datetime;
-use Laragento\Catalog\Models\Product\Entity\Decimal;
-use Laragento\Catalog\Models\Product\Entity\Integer;
-use Laragento\Catalog\Models\Product\Entity\Text;
-use Laragento\Catalog\Models\Product\Entity\Varchar;
-use Laragento\Catalog\Models\Product\Product;
+use Laragento\Catalog\Models\Category\Entity\Datetime;
+use Laragento\Catalog\Models\Category\Entity\Decimal;
+use Laragento\Catalog\Models\Category\Entity\Integer;
+use Laragento\Catalog\Models\Category\Entity\Text;
+use Laragento\Catalog\Models\Category\Entity\Varchar;
+use Laragento\Catalog\Models\Category\Category;
 use Laragento\Catalog\Repositories\Catalog\CatalogAttributeRepositoryInterface;
 use Laragento\Eav\Repositories\AttributeRepositoryInterface;
 
-class ProductAttributeRepository implements ProductAttributeRepositoryInterface
+class CategoryAttributeRepository implements CategoryAttributeRepositoryInterface
 {
     const IN_DELIMITER = '|';
     const STORE_DELIMITER = ',';
@@ -33,11 +33,11 @@ class ProductAttributeRepository implements ProductAttributeRepositoryInterface
      * Returns attribute value by product id and attribute code
      *
      * @param $attributeCode
-     * @param $productId
+     * @param $categoryId
      * @return bool
      * @throws \Exception
      */
-    public function data($attributeCode, $productId)
+    public function data($attributeCode, $categoryId)
     {
         $attribute = $this->attributeRepository::attribute($attributeCode);
         if (!$attribute) {
@@ -45,7 +45,7 @@ class ProductAttributeRepository implements ProductAttributeRepositoryInterface
         }
         $where = [
             'attribute_id' => $attribute->attribute_id,
-            'entity_id' => $productId,
+            'entity_id' => $categoryId,
         ];
         return $this->dataByAttribute($attribute,$where);
     }
@@ -55,11 +55,11 @@ class ProductAttributeRepository implements ProductAttributeRepositoryInterface
      *
      * @param $attributeCode
      * @param $value
-     * @param $productId
+     * @param $categoryId
      * @return mixed
      * @throws \Exception
      */
-    public function isDataUnique($attributeCode, $value, $productId)
+    public function isDataUnique($attributeCode, $value, $categoryId)
     {
         $attribute = $this->attributeRepository::attribute($attributeCode);
         if (!$attribute) {
@@ -71,7 +71,7 @@ class ProductAttributeRepository implements ProductAttributeRepositoryInterface
         ];
         $compare = $this->dataByAttribute($attribute,$where);
         if($compare){
-            if($compare->entity_id != $productId){
+            if($compare->entity_id != $categoryId){
                 return false;
             }
             return true;
@@ -102,19 +102,20 @@ class ProductAttributeRepository implements ProductAttributeRepositoryInterface
         }
     }
 
-
-
-
-    public function get($productId)
+    /**
+     * @param $categoryId
+     * @return array
+     */
+    public function get($categoryId)
     {
         $attributeValues = [];
         $attributes = $this->catalogAttributeRepository->catalogAttributesByAttributeSet(4);
 
-        $product = Product::with('entities.attribute')
-            ->where(['entity_id' => $productId])
+        $category = Category::with('entities.attribute')
+            ->where(['entity_id' => $categoryId])
             ->first();
 
-        foreach ($product->entities as $entity) {
+        foreach ($category->entities as $entity) {
             $values[$entity->attribute->attribute_id] = $entity->value;
         }
 
@@ -134,10 +135,10 @@ class ProductAttributeRepository implements ProductAttributeRepositoryInterface
 
     /**
      * @param $attributeData
-     * @param $product
+     * @param $category
      * @todo take care of the attribute set id
      */
-    public function save($attributeData, $product)
+    public function save($attributeData, $category)
     {
         $attributes = $this->attributeRepository->attributesByAttributeSet(4);
 
@@ -145,7 +146,7 @@ class ProductAttributeRepository implements ProductAttributeRepositoryInterface
             $entity = [
                 'attribute_id' => $attribute->attribute_id,
                 'store_id' => $attributeData['store_id'],
-                'entity_id' => $product->entity_id
+                'entity_id' => $category->entity_id
             ];
 
             if (isset($attributeData[$attribute->attribute_code])) {
@@ -161,7 +162,6 @@ class ProductAttributeRepository implements ProductAttributeRepositoryInterface
             }
         }
     }
-
 
     /**
      * @param $attribute

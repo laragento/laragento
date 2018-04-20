@@ -5,11 +5,22 @@ namespace Laragento\Catalog\Repositories\Category;
 use Laragento\Catalog\Models\Category\Category;
 use Laragento\Catalog\Models\Category\Entity\Integer;
 use Laragento\Catalog\Models\Category\Entity\Varchar;
+use Laragento\Store\Repositories\StoreRepositoryInterface;
 
 
 class CategoryRepository implements CategoryRepositoryInterface
 {
     protected $errors;
+    protected $storeRepository;
+    protected $categoryAttributeRepository;
+
+    public function __construct(
+        StoreRepositoryInterface $storeRepository,
+        CategoryAttributeRepositoryInterface $categoryAttributeRepository
+    ) {
+        $this->storeRepository = $storeRepository;
+        $this->categoryAttributeRepository = $categoryAttributeRepository;
+    }
 
     /**
      * @return mixed
@@ -121,61 +132,25 @@ class CategoryRepository implements CategoryRepositoryInterface
         $category->level = $this->level($category->path);
         $category->save();
 
-        //category name attribute
-        $entity = new Varchar([
-            'attribute_id' => 45,
-            'store_id' => $storeId,
-            'entity_id' => $category->entity_id,
-            'value' => $categoryData['name']
-        ]);
-        $entity->save();
-
-        //category is_active attribute
-        $entity = new Integer([
-            'attribute_id' => 46,
-            'store_id' => $storeId,
-            'entity_id' => $category->entity_id,
-            'value' => 1
-        ]);
-        $entity->save();
-
-        //category is_anchor attribute
-        $entity = new Integer([
-            'attribute_id' => 54,
-            'store_id' => $storeId,
-            'entity_id' => $category->entity_id,
-            'value' => 0
-        ]);
-        $entity->save();
-
-        //category include in menu attribute
-        $entity = new Integer([
-            'attribute_id' => 69,
-            'store_id' => $storeId,
-            'entity_id' => $category->entity_id,
-            'value' => 1
-        ]);
-        $entity->save();
-
-        //category urlkey attribute
-        $entity = new Varchar([
-            'attribute_id' => 117,
-            'store_id' => $storeId,
-            'entity_id' => $category->entity_id,
-            'value' => str_replace(' ', '-', trim(strtolower($categoryData['name'])))
-        ]);
-        $entity->save();
-
-        //category urlpath attribute
-        $entity = new Varchar([
-            'attribute_id' => 118,
-            'store_id' => $storeId,
-            'entity_id' => $category->entity_id,
-            'value' => str_replace(' ', '-', trim(strtolower($categoryData['path'])))
-        ]);
-        $entity->save();
+        $this->saveAttributes($categoryData, $category);
 
         return $category;
+    }
+
+    /**
+     * @param $categoryData
+     * @param $category
+     */
+    public function saveAttributes($categoryData, $category)
+    {
+        if (!isset($categoryData['store_id']) || $categoryData['store_id'] == null) {
+            /*
+             * Here we need the AdminStoreId and not the DefaultStoreId because we never save Information to the
+             * default store-view. Instead we access the admin e.g. parent information.
+             */
+            $categoryData['store_id'] = $this->storeRepository->getAdminStoreId();
+        }
+        $this->categoryAttributeRepository->save($categoryData, $category);
     }
 
     /**

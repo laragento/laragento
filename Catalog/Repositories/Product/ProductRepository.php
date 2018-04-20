@@ -16,12 +16,6 @@ use Laragento\Store\Repositories\StoreRepositoryInterface;
 
 class ProductRepository implements ProductRepositoryInterface
 {
-    const DEFAULT_FRONTEND_CONFIG = [
-        'visibility' => [self::VISIBILITY_CATALOG, self::VISIBILITY_CATALOG_SEARCH],
-        'status' => ['1'],
-        'child_config' => ['status' => ['1']],
-    ];
-
     protected $errors;
     protected $imageRepository;
     protected $storeRepository;
@@ -157,14 +151,11 @@ class ProductRepository implements ProductRepositoryInterface
 
     /**
      * @param $productData
-     * @param null $config
      * @return Product
      * @internal param $behavior
      */
-    public function store($productData, $config = null)
+    public function store($productData)
     {
-        $update = false;
-
         //check if product already exists, if not create new db entry
         $product = Product::where('sku' , $productData['sku'])->first();
         if (!$product) {
@@ -183,10 +174,11 @@ class ProductRepository implements ProductRepositoryInterface
         if ($product) {
             //update product website relations{
             $this->saveWebsites($product, $productData['websites']);
+            $this->saveStock($product, $productData['stock'], $productData['websites']);
 
-            //$productData = $this->saveImage($productData, $product->entity_id, $config);
+            //$productData = $this->saveImage($productData, $product->entity_id, $config); //TODO refactor
             $this->saveCategories($productData, $product->entity_id);
-            $this->saveAttributes($productData, $product, $update);
+            $this->saveAttributes($productData, $product);
             $this->saveTierPrices($productData, $product->entity_id);
 
             if (!empty($this->errors)) {
@@ -248,9 +240,8 @@ class ProductRepository implements ProductRepositoryInterface
     /**
      * @param $productData
      * @param $product
-     * @param $update
      */
-    public function saveAttributes($productData, $product, $update)
+    public function saveAttributes($productData, $product)
     {
         if (!isset($productData['store_id']) || $productData['store_id'] == null) {
             /*
@@ -259,7 +250,7 @@ class ProductRepository implements ProductRepositoryInterface
              */
             $productData['store_id'] = $this->storeRepository->getAdminStoreId();
         }
-        $this->productAttributeRepository->save($productData, $product, $update);
+        $this->productAttributeRepository->save($productData, $product);
     }
 
 
@@ -346,42 +337,6 @@ class ProductRepository implements ProductRepositoryInterface
                 return false;
             }
 
-            //handle additional website config
-            if(isset($additionalConfig['stock'])) {
-                $stock = $additionalConfig['stock'];
-
-                $stockItem = StockItem::firstOrNew([
-                    'product_id' => $product->entity_id,
-                    'stock_id' => isset($stock['stock_id']) ? $stock['stock_id'] : 1
-                ]);
-
-                $stockItem->website_id = $websiteId;
-                $stockItem->qty = isset($stock['qty']) ? $stock['qty'] : 0;
-                $stockItem->min_qty = isset($stock['min_qty']) ? $stock['min_qty'] : 0;
-                $stockItem->use_config_min_qty = isset($stock['use_config_min_qty']) ? $stock['use_config_min_qty'] : 1;
-                $stockItem->is_qty_decimal = isset($stock['is_qty_decimal']) ? $stock['is_qty_decimal'] : 0;
-                $stockItem->backorders = isset($stock['backorders']) ? $stock['backorders'] : 0;
-                $stockItem->use_config_backorders = isset($stock['use_config_backorders']) ? $stock['use_config_backorders'] : 1;
-                $stockItem->min_sale_qty = isset($stock['min_sale_qty']) ? $stock['min_sale_qty'] : 1;
-                $stockItem->use_config_min_sale_qty = isset($stock['use_config_min_sale_qty']) ? $stock['use_config_min_sale_qty'] : 1;
-                $stockItem->max_sale_qty = isset($stock['max_sale_qty']) ? $stock['max_sale_qty'] : 0;
-                $stockItem->use_config_max_sale_qty = isset($stock['use_config_max_sale_qty']) ? $stock['use_config_max_sale_qty'] : 1;
-                $stockItem->is_in_stock = isset($stock['is_in_stock']) ? $stock['is_in_stock'] : 1;
-                $stockItem->low_stock_date = isset($stock['low_stock_date']) ? $stock['low_stock_date'] : null;
-                $stockItem->notify_stock_qty = isset($stock['notify_stock_qty']) ? $stock['notify_stock_qty'] : null;
-                $stockItem->use_config_notify_stock_qty = isset($stock['use_config_notify_stock_qty']) ? $stock['use_config_notify_stock_qty'] : 1;
-                $stockItem->manage_stock = isset($stock['manage_stock']) ? $stock['manage_stock'] : 0;
-                $stockItem->use_config_manage_stock = isset($stock['use_config_manage_stock']) ? $stock['use_config_manage_stock'] : 1;
-                $stockItem->stock_status_changed_auto = isset($stock['stock_status_changed_auto']) ? $stock['stock_status_changed_auto'] : 0;
-                $stockItem->use_config_qty_increments = isset($stock['use_config_qty_increments']) ? $stock['use_config_qty_increments'] : 1;
-                $stockItem->qty_increments = isset($stock['qty_increments']) ? $stock['qty_increments'] : 0;
-                $stockItem->use_config_enable_qty_inc = isset($stock['use_config_enable_qty_inc']) ? $stock['use_config_enable_qty_inc'] : 1;
-                $stockItem->enable_qty_increments = isset($stock['enable_qty_increments']) ? $stock['enable_qty_increments'] : 0;
-                $stockItem->is_decimal_divided = isset($stock['is_decimal_divided']) ? $stock['is_decimal_divided'] : 0;
-
-                $stockItem->save();
-            }
-
             $syncedProductWebsites[] = $productWebsite->website_id;
         }
 
@@ -393,5 +348,43 @@ class ProductRepository implements ProductRepositoryInterface
         return true;
     }
 
+    /**
+     * Save Stock for Product
+     *
+     * @param $product
+     * @param $stock
+     * @param $websites
+     */
+    public function saveStock($product, $stock, $websites) {
+        $stockItem = StockItem::firstOrNew([
+            'product_id' => $product->entity_id,
+            'stock_id' => isset($stock['stock_id']) ? $stock['stock_id'] : 1
+        ]);
 
+        $stockItem->website_id = isset($websites[0]) ? $websites[0] : 1;
+        $stockItem->qty = isset($stock['qty']) ? $stock['qty'] : 0;
+        $stockItem->min_qty = isset($stock['min_qty']) ? $stock['min_qty'] : 0;
+        $stockItem->use_config_min_qty = isset($stock['use_config_min_qty']) ? $stock['use_config_min_qty'] : 1;
+        $stockItem->is_qty_decimal = isset($stock['is_qty_decimal']) ? $stock['is_qty_decimal'] : 0;
+        $stockItem->backorders = isset($stock['backorders']) ? $stock['backorders'] : 0;
+        $stockItem->use_config_backorders = isset($stock['use_config_backorders']) ? $stock['use_config_backorders'] : 1;
+        $stockItem->min_sale_qty = isset($stock['min_sale_qty']) ? $stock['min_sale_qty'] : 1;
+        $stockItem->use_config_min_sale_qty = isset($stock['use_config_min_sale_qty']) ? $stock['use_config_min_sale_qty'] : 1;
+        $stockItem->max_sale_qty = isset($stock['max_sale_qty']) ? $stock['max_sale_qty'] : 0;
+        $stockItem->use_config_max_sale_qty = isset($stock['use_config_max_sale_qty']) ? $stock['use_config_max_sale_qty'] : 1;
+        $stockItem->is_in_stock = isset($stock['is_in_stock']) ? $stock['is_in_stock'] : 1;
+        $stockItem->low_stock_date = isset($stock['low_stock_date']) ? $stock['low_stock_date'] : null;
+        $stockItem->notify_stock_qty = isset($stock['notify_stock_qty']) ? $stock['notify_stock_qty'] : null;
+        $stockItem->use_config_notify_stock_qty = isset($stock['use_config_notify_stock_qty']) ? $stock['use_config_notify_stock_qty'] : 1;
+        $stockItem->manage_stock = isset($stock['manage_stock']) ? $stock['manage_stock'] : 0;
+        $stockItem->use_config_manage_stock = isset($stock['use_config_manage_stock']) ? $stock['use_config_manage_stock'] : 1;
+        $stockItem->stock_status_changed_auto = isset($stock['stock_status_changed_auto']) ? $stock['stock_status_changed_auto'] : 0;
+        $stockItem->use_config_qty_increments = isset($stock['use_config_qty_increments']) ? $stock['use_config_qty_increments'] : 1;
+        $stockItem->qty_increments = isset($stock['qty_increments']) ? $stock['qty_increments'] : 0;
+        $stockItem->use_config_enable_qty_inc = isset($stock['use_config_enable_qty_inc']) ? $stock['use_config_enable_qty_inc'] : 1;
+        $stockItem->enable_qty_increments = isset($stock['enable_qty_increments']) ? $stock['enable_qty_increments'] : 0;
+        $stockItem->is_decimal_divided = isset($stock['is_decimal_divided']) ? $stock['is_decimal_divided'] : 0;
+
+        $stockItem->save();
+    }
 }

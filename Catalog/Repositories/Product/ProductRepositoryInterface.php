@@ -13,7 +13,7 @@ interface ProductRepositoryInterface
 
     public function find($id);
 
-    public function store($productData, $behavior);
+    public function store($productData);
 
     public static function first($identifier);
 

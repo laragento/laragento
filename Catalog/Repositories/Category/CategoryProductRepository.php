@@ -12,9 +12,10 @@ class CategoryProductRepository implements CategoryProductRepositoryInterface
     protected $errors;
     protected $categoryRepository;
 
-    public function __construct()
-    {
-        $this->categoryRepository = new CategoryRepository();
+    public function __construct(
+        CategoryRepository $categoryRepository
+    ) {
+        $this->categoryRepository = $categoryRepository;
     }
 
     /**
@@ -60,7 +61,9 @@ class CategoryProductRepository implements CategoryProductRepositoryInterface
         $categoryPath = isset($categories[0]) ? $categories[0] : '';
 
         foreach ($categories as $categoryName) {
-            $categoryId = CategoryRepository::getCategoryIdByName(trim($categoryName), $storeId);
+            $categoryName = trim($categoryName);
+
+            $categoryId = CategoryRepository::getCategoryIdByName($categoryName, $storeId);
 
             if (!$categoryId) {
                 if (!$create) {
@@ -68,11 +71,16 @@ class CategoryProductRepository implements CategoryProductRepositoryInterface
                     return null;
                 }
 
-                $categoryPath .= '/' . trim($categoryName);
+                $categoryPath .= '/' . $categoryName;
 
                 $category = $this->categoryRepository->store([
-                    'name' => trim($categoryName),
-                    'path' => $categoryPath
+                    'path' => $categoryPath,
+                    'name' => $categoryName,
+                    'is_active' => 1,
+                    'is_anchor' => 0,
+                    'include_in_menu' => 1,
+                    'url_key' => str_replace(' ', '-', strtolower($categoryName)),
+                    'url_path' => str_replace(' ', '-', strtolower($categoryPath))
                 ], $parentId, $storeId);
                 $categoryId = $category->entity_id;
             }
