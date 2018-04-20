@@ -327,7 +327,7 @@ class ProductRepository implements ProductRepositoryInterface
     {
         $syncedProductWebsites = [];
 
-        foreach ($websites as $websiteId => $additionalConfig) {
+        foreach ($websites as $websiteId) {
             $productWebsite = ProductWebsite::firstOrCreate([
                 'product_id' => $product->entity_id,
                 'website_id' => $websiteId
