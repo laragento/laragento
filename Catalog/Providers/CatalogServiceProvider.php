@@ -40,8 +40,12 @@ class CatalogServiceProvider extends ServiceProvider
             'Laragento\Catalog\Repositories\Category\CategoryProductRepository');
         $this->app->bind('Laragento\Catalog\Repositories\Catalog\CatalogAttributeRepositoryInterface',
             'Laragento\Catalog\Repositories\Catalog\CatalogAttributeRepository');
+
         $this->app->bind('Laragento\Catalog\Repositories\Product\ProductAttributeRepositoryInterface',
             'Laragento\Catalog\Repositories\Product\ProductAttributeRepository');
+        $this->app->bind('Laragento\Catalog\Repositories\Category\CategoryAttributeRepositoryInterface',
+            'Laragento\Catalog\Repositories\Category\CategoryAttributeRepository');
+
         $this->app->bind('Laragento\Catalog\Repositories\Media\ImageRepositoryInterface',
             'Laragento\Catalog\Repositories\Media\ImageRepository');
 
