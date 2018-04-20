@@ -140,7 +140,7 @@ class CategoryAttributeRepository implements CategoryAttributeRepositoryInterfac
      */
     public function save($attributeData, $category)
     {
-        $attributes = $this->attributeRepository->attributesByAttributeSet(4);
+        $attributes = $this->attributeRepository->attributesByAttributeSet(3);
 
         foreach ($attributes as $attribute) {
             $entity = [
