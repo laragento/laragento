@@ -150,6 +150,17 @@ class ProductRepository implements ProductRepositoryInterface
     }
 
     /**
+     * @param $productId
+     * @param int $stockId
+     * @return \Illuminate\Database\Eloquent\Model|null|object|static
+     */
+    public static function stockByProductId($productId, $stockId = 1) {
+        return StockItem::whereProductId($productId)
+            ->whereStockId($stockId)
+            ->first();
+    }
+
+    /**
      * @param $productData
      * @return Product
      * @internal param $behavior

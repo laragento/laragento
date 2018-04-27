@@ -20,4 +20,6 @@ interface ProductRepositoryInterface
     public static function product($id);
 
     public static function productBySku($sku);
+
+    public static function stockByProductId($productId, $stockId = 1);
 }
