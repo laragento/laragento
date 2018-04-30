@@ -24,6 +24,14 @@ interface CategoryRepositoryInterface
     public function get($categoryId);
 
 
+    /**
+     * Get all products ny categoryId
+     * @param $categoryId
+     * @return mixed
+     */
+    public function products($categoryId);
+
+
     public function first($identifier);
 
     /**
