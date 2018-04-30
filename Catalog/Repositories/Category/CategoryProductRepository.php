@@ -58,8 +58,6 @@ class CategoryProductRepository implements CategoryProductRepositoryInterface
         $categories = explode("/", $path);
         $parentId = $this->getStoreRootCategoryId($storeId);
 
-        $syncedCategories = [];
-
         $categoryPath = isset($categories[0]) ? $categories[0] : '';
 
         foreach ($categories as $categoryName) {
@@ -87,22 +85,17 @@ class CategoryProductRepository implements CategoryProductRepositoryInterface
                 $categoryId = $category->entity_id;
             }
 
-            $syncedCategories[] = $categoryId;
-
-            //assign product to category
-            $this->store($categoryId, $productId);
-
             $parentId = $categoryId;
         }
 
-        //remove old product <-> category relations
-        CategoryProduct::whereProductId($productId)
-            ->whereNotIn('category_id', $syncedCategories)
-            ->delete();
+        //assign product to last category in $categories array
+        $this->store($parentId, $productId);
+
+        return $parentId; //return assigned categoryId
     }
 
     /**
-     * Get Rppt Category based On given StoreID
+     * Get Root Category based On given StoreID
      *
      * @param $storeId
      * @return bool|int|mixed

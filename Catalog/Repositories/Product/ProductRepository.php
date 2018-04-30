@@ -2,6 +2,7 @@
 
 namespace Laragento\Catalog\Repositories\Product;
 
+use Laragento\Catalog\Models\Category\CategoryProduct;
 use Laragento\Catalog\Models\Inventory\StockItem;
 use Laragento\Catalog\Models\Inventory\StockStatus;
 use Laragento\Catalog\Models\Product\Entity\Tierprice;
@@ -328,9 +329,16 @@ class ProductRepository implements ProductRepositoryInterface
          */
         $storeId = !isset($productData['store_id']) || $productData['store_id'] == null ? $this->storeRepository->getAdminStoreId() : $productData['store_id'];
 
+        $syncedCategories = [];
+
         foreach($productData['categories'] as $category) {
-            $this->categoryProductRepository->storeByPath($category, $productId, $storeId);
+            $syncedCategories[] = $this->categoryProductRepository->storeByPath($category, $productId, $storeId);
         }
+
+        //remove old product <-> category relations
+        CategoryProduct::whereProductId($productId)
+            ->whereNotIn('category_id', $syncedCategories)
+            ->delete();
     }
 
     /**
