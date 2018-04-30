@@ -7,7 +7,6 @@ use Laragento\Eav\Models\Attribute;
 
 class AttributeRepository implements AttributeRepositoryInterface
 {
-    const ENTITY_TYPE_ID = 4;
     protected $attributeSetId;
 
     /**
@@ -39,20 +38,22 @@ class AttributeRepository implements AttributeRepositoryInterface
 
     /**
      * @param $attributeCode
+     * @param int $entityTypeId
      * @return mixed
      */
-    public static function attributeByCode($attributeCode)
+    public static function attributeByCode($attributeCode, $entityTypeId = self::ENTITY_TYPE_ID)
     {
-        return Attribute::whereAttributeCode($attributeCode)->whereEntityTypeId(self::ENTITY_TYPE_ID)->first();
+        return Attribute::whereAttributeCode($attributeCode)->whereEntityTypeId($entityTypeId)->first();
     }
 
     /**
      * @param $attributeId
+     * @param int $entityTypeId
      * @return mixed
      */
-    public static function attributeById($attributeId)
+    public static function attributeById($attributeId, $entityTypeId = self::ENTITY_TYPE_ID)
     {
-        return Attribute::whereAttributeId($attributeId)->whereEntityTypeId(self::ENTITY_TYPE_ID)->first();
+        return Attribute::whereAttributeId($attributeId)->whereEntityTypeId($entityTypeId)->first();
     }
 
     /**
