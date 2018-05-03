@@ -112,6 +112,8 @@ class Address extends Model
         'vat_request_date',
         'vat_request_id',
         'vat_request_success',
+        'created_at',
+        'updated_at'
     ];
     protected $hidden = [
         'vat_id',
