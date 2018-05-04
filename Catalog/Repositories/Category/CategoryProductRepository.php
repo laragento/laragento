@@ -66,7 +66,7 @@ class CategoryProductRepository implements CategoryProductRepositoryInterface
         foreach ($categories as $categoryName) {
             $categoryName = trim($categoryName);
 
-            $categoryId = CategoryRepository::getCategoryIdByName($categoryName, $this->storeRepository->getAdminStoreId());
+            $categoryId = CategoryRepository::getCategoryIdByName($categoryName, $this->storeRepository->getAdminStoreId(), $parentId);
 
             if (!$categoryId) {
                 if (!$create) {

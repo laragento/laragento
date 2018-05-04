@@ -98,18 +98,38 @@ class CategoryRepository implements CategoryRepositoryInterface
     /**
      * @param $categoryName
      * @param int $storeId
+     * @param int $parentCategoryId
      * @return null
      */
-    public static function getCategoryIdByName($categoryName, $storeId = 0)
+    public static function getCategoryIdByName($categoryName, $storeId = 0, $parentCategoryId = 0)
     {
-        $entity = Varchar::whereValue($categoryName)
+        //return first category
+        if($parentCategoryId == 0) {
+            $entity = Varchar::whereValue($categoryName)
+                ->whereStoreId($storeId)
+                ->whereAttributeId(45)
+                ->first();
+
+            return isset($entity) ? $entity->entity_id : null;
+        }
+
+        //get all categories by name
+        $entities = Varchar::whereValue($categoryName)
             ->whereStoreId($storeId)
             ->whereAttributeId(45)
-            ->first();
-        if (!$entity) {
-            return null;
+            ->get();
+
+        foreach($entities as $entity) {
+            //check if categoryId matches parent, if yes return ID
+            if($category = Category::whereEntityId($entity->entity_id)
+                ->whereParentId($parentCategoryId)
+                ->first()) {
+
+                return $category->entity_id;
+            }
         }
-        return $entity->entity_id;
+
+        return null;
     }
 
 
