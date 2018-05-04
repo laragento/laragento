@@ -17,5 +17,5 @@ interface CategoryProductRepositoryInterface
      */
     public function store($categoryId, $productId);
 
-    public function storeByPath($path, $productId, $storeId, $create = true);
+    public function storeByPath($categoryData, $productId, $create = true);
 }

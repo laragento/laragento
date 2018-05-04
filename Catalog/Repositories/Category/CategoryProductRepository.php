@@ -11,11 +11,14 @@ class CategoryProductRepository implements CategoryProductRepositoryInterface
 {
     protected $errors;
     protected $categoryRepository;
+    protected $storeRepository;
 
     public function __construct(
-        CategoryRepository $categoryRepository
+        CategoryRepository $categoryRepository,
+        StoreRepository $storeRepository
     ) {
         $this->categoryRepository = $categoryRepository;
+        $this->storeRepository = $storeRepository;
     }
 
     /**
@@ -46,17 +49,17 @@ class CategoryProductRepository implements CategoryProductRepositoryInterface
     }
 
     /**
-     * @param $path
+     * @param $categoryData
      * @param $productId
-     * @param $storeId
      * @param bool $create
      * @return mixed
-     * @todo check and refactor
      */
-    public function storeByPath($path, $productId, $storeId, $create = true)
+    public function storeByPath($categoryData, $productId, $create = true)
     {
-        $categories = explode("/", $path);
-        $parentId = $this->getStoreRootCategoryId($storeId);
+        $categories = explode("/", $categoryData['path']);
+
+        //parent ID is AdminStore 0
+        $parentId = $this->getStoreRootCategoryId($this->storeRepository->getAdminStoreId());
 
         $categoryPath = isset($categories[0]) ? $categories[0] : '';
 
@@ -73,15 +76,13 @@ class CategoryProductRepository implements CategoryProductRepositoryInterface
 
                 $categoryPath .= '/' . $categoryName;
 
-                $category = $this->categoryRepository->store([
-                    'path' => $categoryPath,
-                    'name' => $categoryName,
-                    'is_active' => 1,
-                    'is_anchor' => 0,
-                    'include_in_menu' => 1,
-                    'url_key' => str_replace(' ', '-', strtolower($categoryName)),
-                    'url_path' => str_replace(' ', '-', strtolower($categoryPath))
-                ], $parentId, $storeId);
+                //set values extracted from path
+                $categoryData['path'] = $categoryPath;
+                $categoryData['name'] = $categoryName;
+                $categoryData['url_key'] = str_replace(' ', '-', strtolower($categoryName));
+                $categoryData['url_path'] = str_replace(' ', '-', strtolower($categoryPath));
+
+                $category = $this->categoryRepository->store($categoryData, $parentId);
                 $categoryId = $category->entity_id;
             }
 

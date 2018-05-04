@@ -118,7 +118,7 @@ class CategoryRepository implements CategoryRepositoryInterface
      * @param int $parentId
      * @return Category
      */
-    public function store($categoryData, $parentId = 0, $storeId)
+    public function store($categoryData, $parentId = 0)
     {
         $category = new Category([
             'attribute_set_id' => 3,
@@ -132,9 +132,6 @@ class CategoryRepository implements CategoryRepositoryInterface
         $category->level = $this->level($category->path);
         $category->save();
 
-        //name 45
-
-
         $this->saveAttributes($categoryData, $category);
 
         return $category;
@@ -146,7 +143,8 @@ class CategoryRepository implements CategoryRepositoryInterface
      */
     public function saveAttributes($categoryData, $category)
     {
-        if (!isset($categoryData['store_id']) || $categoryData['store_id'] == null) {
+        //set store id to default store
+        if (!isset($categoryData['store_id'])) {
             /*
              * Here we need the AdminStoreId and not the DefaultStoreId because we never save Information to the
              * default store-view. Instead we access the admin e.g. parent information.

@@ -195,7 +195,9 @@ class ProductRepository implements ProductRepositoryInterface
             }
 
             //$productData = $this->saveImage($productData, $product->entity_id, $config); //TODO refactor
-            $this->saveCategories($productData, $product->entity_id);
+            if(isset($productData['categories'])) {
+                $this->saveCategories($productData['categories'], $product->entity_id);
+            }
             $this->saveAttributes($productData, $product);
             $this->saveTierPrices($productData, $product->entity_id);
 
@@ -314,25 +316,16 @@ class ProductRepository implements ProductRepositoryInterface
     }
 
     /**
-     * @param $productData
+     * @param $categories
      * @param $productId
      * @return null
      */
-    public function saveCategories($productData, $productId)
+    public function saveCategories($categories, $productId)
     {
-        if (!isset($productData['categories'])) {
-            return null;
-        }
-        /**
-         * Keep in mind that information shall be saved in the AdminStore and not in the default language. The default
-         * languages information mustn't be touched.
-         */
-        $storeId = !isset($productData['store_id']) || $productData['store_id'] == null ? $this->storeRepository->getAdminStoreId() : $productData['store_id'];
-
         $syncedCategories = [];
 
-        foreach($productData['categories'] as $category) {
-            $syncedCategories[] = $this->categoryProductRepository->storeByPath($category, $productId, $storeId);
+        foreach($categories as $category) {
+            $syncedCategories[] = $this->categoryProductRepository->storeByPath($category, $productId);
         }
 
         //remove old product <-> category relations
