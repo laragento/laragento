@@ -13,8 +13,11 @@ interface CategoryRepositoryInterface
 {
     /**
      * Create category
+     * @param $categoryData
+     * @param int $parentId
+     * @return
      */
-    public function store($categoryData, $parentId = 0, $storeId);
+    public function store($categoryData, $parentId = 0);
 
     /**
      * Get info about category by category id
