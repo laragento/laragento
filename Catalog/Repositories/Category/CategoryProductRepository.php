@@ -70,7 +70,7 @@ class CategoryProductRepository implements CategoryProductRepositoryInterface
 
             if (!$categoryId) {
                 if (!$create) {
-                    print_r('    CATEGORY #>' . $path . '<# not found    ');
+                    print_r('    CATEGORY #>' . $categoryData['path'] . '<# not found    ');
                     return null;
                 }
 
