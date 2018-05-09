@@ -69,16 +69,16 @@ class ProductRepository implements ProductRepositoryInterface
      */
     public static function product($identifier)
     {
-        if (!is_numeric($identifier)) {
-            $identifier = self::getIdByUrlKey($identifier);
-        }
+        //if (!is_numeric($identifier)) {
+        //    $identifier = self::getIdByUrlKey($identifier);
+        //}
 
         return Product::with([
             'categories.entities.attribute',
             'entities.attribute',
             'children.entities.attribute',
             //'links',
-        ])->where(['entity_id' => $identifier])->first();
+        ])->where(['sku' => $identifier])->first();
     }
 
     /**

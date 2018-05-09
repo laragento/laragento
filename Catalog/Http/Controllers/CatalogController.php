@@ -47,7 +47,6 @@ class CatalogController extends Controller
      */
     public function product($product_slug)
     {
-        dd($this->productRepository->first($product_slug));
         $fractal = Fractal::create(
             $this->productRepository->first($product_slug),
             new GroupedProductTransformer()
