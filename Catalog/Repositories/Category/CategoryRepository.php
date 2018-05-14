@@ -31,12 +31,13 @@ class CategoryRepository implements CategoryRepositoryInterface
     }
 
     /**
+     * @param $level
      * @return mixed
      */
-    public function allByLevel()
+    public function allByLevel($level)
     {
         return Category::with('children.entities', 'entities')
-            ->whereLevel(0)->get();
+            ->whereLevel($level)->get();
     }
 
     /**
