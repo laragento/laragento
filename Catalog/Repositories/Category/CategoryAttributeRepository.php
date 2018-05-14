@@ -39,7 +39,7 @@ class CategoryAttributeRepository implements CategoryAttributeRepositoryInterfac
      */
     public function data($attributeCode, $categoryId)
     {
-        $attribute = $this->attributeRepository::attribute($attributeCode);
+        $attribute = $this->attributeRepository::attributeByCode($attributeCode, 3);
         if (!$attribute) {
             throw new \Exception('Attribute Code ' . $attributeCode . ' not found');
         }
@@ -61,7 +61,7 @@ class CategoryAttributeRepository implements CategoryAttributeRepositoryInterfac
      */
     public function isDataUnique($attributeCode, $value, $categoryId)
     {
-        $attribute = $this->attributeRepository::attribute($attributeCode);
+        $attribute = $this->attributeRepository::attributeByCode($attributeCode, 3);
         if (!$attribute) {
             throw new \Exception('Attribute Code ' . $attributeCode . ' not found');
         }
@@ -109,7 +109,7 @@ class CategoryAttributeRepository implements CategoryAttributeRepositoryInterfac
     public function get($categoryId)
     {
         $attributeValues = [];
-        $attributes = $this->catalogAttributeRepository->catalogAttributesByAttributeSet(4);
+        $attributes = $this->catalogAttributeRepository->catalogAttributesByAttributeSet(3);
 
         $category = Category::with('entities.attribute')
             ->where(['entity_id' => $categoryId])
