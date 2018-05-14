@@ -84,7 +84,7 @@ class CatalogServiceProvider extends ServiceProvider
                 'product/{product_slug}' => $productApi . '@first',
 
                 'category/all' => $categoryApi . '@all',
-                'category/allByLevel' => $categoryApi . '@allByLevel',
+                'category/allByLevel/{level}' => $categoryApi . '@allByLevel',
                 'category/base/{website_id}' => $categoryApi . '@getBaseCategories', //TODO why we need this?
                 'category/{category_slug}' => $categoryApi . '@first',
                 'category/{category_id}/parent' => $categoryApi . '@parent',
