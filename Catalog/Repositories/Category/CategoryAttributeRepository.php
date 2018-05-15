@@ -34,10 +34,11 @@ class CategoryAttributeRepository implements CategoryAttributeRepositoryInterfac
      *
      * @param $attributeCode
      * @param $categoryId
+     * @param int $storeId
      * @return bool
      * @throws \Exception
      */
-    public function data($attributeCode, $categoryId)
+    public function data($attributeCode, $categoryId, $storeId = 0)
     {
         $attribute = $this->attributeRepository::attributeByCode($attributeCode, 3);
         if (!$attribute) {
@@ -46,6 +47,7 @@ class CategoryAttributeRepository implements CategoryAttributeRepositoryInterfac
         $where = [
             'attribute_id' => $attribute->attribute_id,
             'entity_id' => $categoryId,
+            'store_id' => $storeId
         ];
         return $this->dataByAttribute($attribute,$where);
     }

@@ -34,10 +34,11 @@ class ProductAttributeRepository implements ProductAttributeRepositoryInterface
      *
      * @param $attributeCode
      * @param $productId
+     * @param int $storeId
      * @return bool
      * @throws \Exception
      */
-    public function data($attributeCode, $productId)
+    public function data($attributeCode, $productId, $storeId = 0)
     {
         $attribute = $this->attributeRepository::attribute($attributeCode);
         if (!$attribute) {
@@ -46,6 +47,7 @@ class ProductAttributeRepository implements ProductAttributeRepositoryInterface
         $where = [
             'attribute_id' => $attribute->attribute_id,
             'entity_id' => $productId,
+            'store_id' => $storeId
         ];
         return $this->dataByAttribute($attribute,$where);
     }

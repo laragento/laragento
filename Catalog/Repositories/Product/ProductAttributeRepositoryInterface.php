@@ -6,7 +6,7 @@ interface ProductAttributeRepositoryInterface
 {
     public function save($productData, $productId);
 
-    public function data($attributeCode, $productId);
+    public function data($attributeCode, $productId, $storeId);
 
     public function saveEntity($attribute, $entity);
 }
