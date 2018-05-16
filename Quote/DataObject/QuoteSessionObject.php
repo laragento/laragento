@@ -4,7 +4,7 @@
 namespace Laragento\Quote\DataObject;
 
 
-class QuoteData
+class QuoteSessionObject
 {
     /* ORIGINAL from DB
     protected $entity_id;

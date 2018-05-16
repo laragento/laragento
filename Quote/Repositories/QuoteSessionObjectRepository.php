@@ -2,13 +2,13 @@
 
 namespace Laragento\Quote\Repositories;
 
-use Laragento\Quote\DataObject\QuoteData;
+use Laragento\Quote\DataObject\QuoteSessionObject;
 
-class QuoteDataRepository
+class QuoteSessionObjectRepository
 {
     protected $quote;
 
-    public function __construct(QuoteData $quote)
+    public function __construct(QuoteSessionObject $quote)
     {
 
         $this->quote = $quote;
@@ -16,13 +16,14 @@ class QuoteDataRepository
 
     public function createQuote()
     {
-
+        $cart = [];
+        $cart['cart_id'] = request('cart_id');
+        session()->put('laragento_cart', $cart);
     }
 
     public function getAllQuotes()
     {
-
-
+        return session()->get('laragento_cart');
     }
 
     public function getQuote()

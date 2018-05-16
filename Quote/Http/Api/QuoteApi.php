@@ -4,7 +4,7 @@ namespace Laragento\Quote\Http\Api;
 
 use Illuminate\Http\Response;
 use Illuminate\Routing\Controller;
-use Laragento\Quote\Repositories\QuoteDataRepository;
+use Laragento\Quote\Repositories\QuoteSessionObjectRepository;
 
 class QuoteApi extends Controller
 {
@@ -13,9 +13,9 @@ class QuoteApi extends Controller
 
     /**
      * QuoteApi constructor.
-     * @param QuoteDataRepository $quoteDataRepository
+     * @param QuoteSessionObjectRepository $quoteDataRepository
      */
-    public function __construct(QuoteDataRepository $quoteDataRepository)
+    public function __construct(QuoteSessionObjectRepository $quoteDataRepository)
     {
         $this->middleware('auth')->except([]);
         $this->quoteDataRepository = $quoteDataRepository;
