@@ -4,6 +4,12 @@
     "type": "extension",
     "minimum-stability": "dev",
     "require": {},
+    "authors": [
+        {
+            "name": "Tanja Braether",
+            "email": "tanja.braether@mexan.ch"
+        }
+    ],
     "extra": {
         "laravel": {
             "providers": [

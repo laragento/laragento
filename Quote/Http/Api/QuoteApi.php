@@ -1,38 +1,24 @@
 <?php
 
-namespace Laragento\Quote\Http\Controllers;
+namespace Laragento\Quote\Http\Api;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Routing\Controller;
 
-class QuoteController extends Controller
+class QuoteApi extends Controller
 {
-    /**
-     * QuoteController constructor.
-     */
-    public function __construct()
-    {
-        $this->middleware('auth')->except([]);
-    }
+
 
     /**
      * Display a listing of the resource.
      * @return Response
      */
-    public function index()
+    public function get()
     {
-        return view('quote::index');
+        return response()->json([]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     * @return Response
-     */
-    public function create()
-    {
-        return view('quote::create');
-    }
 
     /**
      * Store a newly created resource in storage.
@@ -41,24 +27,16 @@ class QuoteController extends Controller
      */
     public function store(Request $request)
     {
+        return response()->json([]);
     }
 
     /**
      * Show the specified resource.
      * @return Response
      */
-    public function show()
+    public function first()
     {
-        return view('quote::show');
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     * @return Response
-     */
-    public function edit()
-    {
-        return view('quote::edit');
+        return response()->json([]);
     }
 
     /**
@@ -68,6 +46,7 @@ class QuoteController extends Controller
      */
     public function update(Request $request)
     {
+        return response()->json([]);
     }
 
     /**
@@ -76,5 +55,6 @@ class QuoteController extends Controller
      */
     public function destroy()
     {
+        return response()->json([]);
     }
 }

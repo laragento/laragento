@@ -2,33 +2,13 @@
 
 namespace Laragento\Customer\Models;
 
+use App\User;
 use Illuminate\Database\Eloquent\Model;
 
 
 /**
  * Customer model
  *
- * @property int entity_id
- * @property int website_id
- * @property string email
- * @property int group_id
- * @property int increment_id
- * @property int store_id
- * @property mixed created_at
- * @property mixed updated_at
- * @property int is_active
- * @property string created_in
- * @property string prefix
- * @property string firstname
- * @property string middlename
- * @property string lastname
- * @property string suffix
- * @property mixed dob
- * @property int default_billing
- * @property int default_shipping
- * @property int taxvat
- * @property int confirmation
- * @property string gender
  * @property int $entity_id Entity Id
  * @property int|null $website_id Website Id
  * @property string|null $email Email
