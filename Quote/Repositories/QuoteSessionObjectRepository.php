@@ -23,12 +23,12 @@ class QuoteSessionObjectRepository
 
     public function getAllQuotes()
     {
-        return session()->get('laragento_cart');
+
     }
 
     public function getQuote()
     {
-
+        return session()->get('laragento_cart');
     }
 
     public function updateQuote()
