@@ -20,6 +20,7 @@ class CreateQuoteTest extends QuoteTestCase
     {
         print_r("\r\n".__FUNCTION__ . "\r\n*******************\r\n");
 
+        $this->withoutExceptionHandling();
         // We have a signedin customer
         $this->actingAs($this->customer);
 

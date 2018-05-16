@@ -2,28 +2,30 @@
 
 namespace Laragento\Quote\Repositories;
 
+use Illuminate\Support\Facades\Auth;
 use Laragento\Quote\DataObject\QuoteSessionObject;
 
 class QuoteSessionObjectRepository
 {
+
     protected $quote;
 
-    public function __construct(QuoteSessionObject $quote)
+    public function __construct(QuoteSessionObject $quoteSessionObject)
     {
-
-        $this->quote = $quote;
+        $this->quote = $quoteSessionObject;
     }
+
+
 
     public function createQuote()
     {
-        $cart = [];
-        $cart['cart_id'] = request('cart_id');
-        session()->put('laragento_cart', $cart);
-    }
+        $quote = app()->make('Laragento\Quote\DataObject\QuoteSessionObject');
 
-    public function getAllQuotes()
-    {
-
+        if (!session()->exists('laragento_cart')) {
+            session('laragento_cart', []);
+        }
+        dd($quote);
+        session()->put('laragento_cart', $quote);
     }
 
     public function getQuote()

@@ -4,6 +4,8 @@
 namespace Laragento\Quote\DataObject;
 
 
+use Illuminate\Support\Facades\Auth;
+
 class QuoteSessionObject
 {
     /* ORIGINAL from DB
@@ -60,22 +62,51 @@ class QuoteSessionObject
     protected $gift_message_id;
     */
 
-    protected $store_id;
-    protected $created_at;
-    protected $updated_at;
-    protected $items_count;
-    protected $items_qty;
-    protected $quote_currency_code;
+    protected $cart_id;
+    protected $store_id = 1;
+    protected $items_count = 0;
+    protected $items_qty = 0;
+    protected $items = [];
+    protected $quote_currency_code = 'CHF';
     protected $customer_id;
     protected $remote_ip;
     protected $coupon_code;
-    protected $base_to_quote_rate;
-    protected $customer_taxvat;
-    protected $grand_total;
-    protected $subtotal;
-    protected $base_subtotal;
-    protected $subtotal_with_discount;
-    protected $base_subtotal_with_discount;
+    protected $grand_total = 0.0000;
+    protected $subtotal = 0.0000;
+    protected $base_subtotal = 0.0000;
+    protected $subtotal_with_discount = 0.0000;
+    protected $base_subtotal_with_discount = 0.0000;
+
+    public function __construct()
+    {
+        if (!$this->getCartId()) {
+            $this->setCartId($this->generateGUID(true, false));
+        }
+        if (Auth::user() && !$this->getCustomerId()) {
+            $this->setCustomerId(Auth::user()['entity_id']);
+        }
+        if (!$this->getRemoteIp()) {
+            $this->setRemoteIp(request()->ip());
+        }
+
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getCartId()
+    {
+        return $this->cart_id;
+    }
+
+    /**
+     * @param mixed $cart_id
+     */
+    public function setCartId($cart_id): void
+    {
+        $this->cart_id = $cart_id;
+    }
+
 
     /**
      * @return mixed
@@ -91,38 +122,6 @@ class QuoteSessionObject
     public function setStoreId($store_id): void
     {
         $this->store_id = $store_id;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getCreatedAt()
-    {
-        return $this->created_at;
-    }
-
-    /**
-     * @param mixed $created_at
-     */
-    public function setCreatedAt($created_at): void
-    {
-        $this->created_at = $created_at;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getUpdatedAt()
-    {
-        return $this->updated_at;
-    }
-
-    /**
-     * @param mixed $updated_at
-     */
-    public function setUpdatedAt($updated_at): void
-    {
-        $this->updated_at = $updated_at;
     }
 
     /**
@@ -331,6 +330,35 @@ class QuoteSessionObject
     public function setBaseSubtotalWithDiscount($base_subtotal_with_discount): void
     {
         $this->base_subtotal_with_discount = $base_subtotal_with_discount;
+    }
+
+    private function generateGUID($trim, $upper, $hyphen = null)
+    {
+        mt_srand((double)microtime() * 10000);
+        $charid = md5(uniqid(rand(), true));
+        $beginn = '';
+        $end = '';
+
+        if ($upper) {
+            $charid = strtoupper($charid);
+        }
+        if ($hyphen) {
+            $hyphen = chr(45);
+        }
+
+        if (!$trim) {
+            $beginn = chr(123);
+            $end = chr(125);
+        }
+        $uuid = $beginn
+            . substr($charid, 0, 8) . $hyphen
+            . substr($charid, 8, 4) . $hyphen
+            . substr($charid, 12, 4) . $hyphen
+            . substr($charid, 16, 4) . $hyphen
+            . substr($charid, 20, 12)
+            . $end;
+
+        return $uuid;
     }
 
 
