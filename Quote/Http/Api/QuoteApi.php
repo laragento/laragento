@@ -2,13 +2,24 @@
 
 namespace Laragento\Quote\Http\Api;
 
-use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Routing\Controller;
+use Laragento\Quote\Repositories\QuoteDataRepository;
 
 class QuoteApi extends Controller
 {
 
+    protected $quoteDataRepository;
+
+    /**
+     * QuoteApi constructor.
+     * @param QuoteDataRepository $quoteDataRepository
+     */
+    public function __construct(QuoteDataRepository $quoteDataRepository)
+    {
+        $this->middleware('auth')->except([]);
+        $this->quoteDataRepository = $quoteDataRepository;
+    }
 
     /**
      * Display a listing of the resource.
@@ -22,11 +33,11 @@ class QuoteApi extends Controller
 
     /**
      * Store a newly created resource in storage.
-     * @param  Request $request
      * @return Response
      */
-    public function store(Request $request)
+    public function store()
     {
+        $this->quoteDataRepository->createQuote();
         return response()->json([]);
     }
 
@@ -36,15 +47,15 @@ class QuoteApi extends Controller
      */
     public function first()
     {
-        return response()->json([]);
+        $quote = $this->quoteDataRepository->getQuote();
+        return response()->json($quote);
     }
 
     /**
      * Update the specified resource in storage.
-     * @param  Request $request
      * @return Response
      */
-    public function update(Request $request)
+    public function update()
     {
         return response()->json([]);
     }
