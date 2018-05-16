@@ -4,6 +4,7 @@ namespace Laragento\Customer;
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
+use Laragento\Customer\Models\Customer;
 
 class CustomerServiceProvider extends ServiceProvider
 {
@@ -14,7 +15,8 @@ class CustomerServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //$this->loadViewsFrom(__DIR__.'/views/frontend', 'frontend_catalog');
+        $this->loadMigrationsFrom(__DIR__.'/../Database/Migrations');
+        config(['auth.providers.users.model' => Laragento\Customer\Models\Customer::class ]);
     }
 
     /**
