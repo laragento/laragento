@@ -2,14 +2,22 @@
 
 namespace Laragento\Quote\Tests\Unit;
 
-use Tests\TestCase;
+use Laragento\Quote\Tests\QuoteTestCase;
 
-abstract class SessionTest extends TestCase
+class SessionTest extends QuoteTestCase
 {
 
     public function setUp()
     {
         parent::setUp();
+    }
+
+    /**
+     * @test
+     */
+    public function hasSession()
+    {
+        $this->assertTrue(true);
     }
 
     public function tearDown()

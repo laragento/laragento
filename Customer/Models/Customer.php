@@ -71,7 +71,7 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|\Laragento\Customer\Models\Customer whereWebsiteId($value)
  * @mixin \Eloquent
  */
-class Customer extends Model
+class Customer extends User
 {
     protected $table = 'customer_entity';
     protected $primaryKey = 'entity_id';

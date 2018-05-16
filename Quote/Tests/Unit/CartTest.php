@@ -2,14 +2,22 @@
 
 namespace Laragento\Quote\Tests\Unit;
 
-use Tests\TestCase;
+use Laragento\Quote\Tests\QuoteTestCase;
 
-abstract class CartTest extends TestCase
+class CartTest extends QuoteTestCase
 {
 
     public function setUp()
     {
         parent::setUp();
+    }
+
+    /**
+     * @test
+     */
+    public function hasUserId()
+    {
+        $this->assertTrue(true);
     }
 
     public function tearDown()
