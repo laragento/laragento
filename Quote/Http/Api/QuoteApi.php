@@ -57,7 +57,10 @@ class QuoteApi extends Controller
      */
     public function update()
     {
-        return response()->json([]);
+        $quote = [];
+        $quote['cart_id'] = request('cart_id');
+        $newQuote = $this->quoteDataRepository->updateQuote($quote);
+        return response()->json($newQuote);
     }
 
     /**
