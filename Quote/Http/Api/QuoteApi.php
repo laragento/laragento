@@ -69,6 +69,7 @@ class QuoteApi extends Controller
      */
     public function destroy()
     {
-        return response()->json([]);
+        $this->quoteDataRepository->destroyQuote();
+        return response()->json([],204);
     }
 }

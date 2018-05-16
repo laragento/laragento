@@ -40,8 +40,7 @@ class QuoteSessionObjectRepository
 
     public function destroyQuote()
     {
-
-
+        session()->forget('laragento_cart');
     }
 
 

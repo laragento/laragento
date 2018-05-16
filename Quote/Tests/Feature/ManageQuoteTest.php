@@ -48,6 +48,40 @@ class ManageQuoteTest extends QuoteTestCase
 
     }
 
+    /**
+     * @test
+     */
+    public function an_authenticated_user_can_delete_a_quote_by_cartid()
+    {
+        print_r("\r\n".__FUNCTION__ . "\r\n*******************\r\n");
+
+        // We have a signedin customer
+        $this->actingAs($this->customer);
+
+        // We have a cart
+        $quote = [];
+        $quote['cart_id'] = 9999;
+        $this->post('/v1/quote', ['cart_id' => $quote['cart_id']]);
+
+        // we get the shopping cart via API by ID
+        $this->delete('/v1/quote/'.$quote['cart_id']);
+
+        $this->assertTrue(!Session::has('laragento_cart'));
+
+
+    }
+
+    /**
+     * @test
+     */
+    public function an_unauthenticated_user_cannot_delete_any_quote()
+    {
+        print_r("\r\n".__FUNCTION__ . "\r\n*******************\r\n");
+
+        $this->delete('/v1/quote/9999')->assertRedirect('/login');
+
+    }
+
     public function tearDown()
     {
 
