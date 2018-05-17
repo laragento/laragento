@@ -20,12 +20,11 @@ class CreateQuoteTest extends QuoteTestCase
     {
         print_r("\r\n".__FUNCTION__ . "\r\n*******************\r\n");
 
-        $this->withoutExceptionHandling();
         // We have a signedin customer
         $this->actingAs($this->customer);
 
         // we create a shopping cart via API
-        $this->post('/v1/quote', []);
+        $this->post('/v1/quote');
 
         // We verify the cartentry is in the session
         $this->assertTrue(Session::exists('laragento_cart'));
@@ -39,7 +38,7 @@ class CreateQuoteTest extends QuoteTestCase
     {
         print_r("\r\n".__FUNCTION__ . "\r\n*******************\r\n");
 
-        $this->post('/v1/quote', [])->assertRedirect('/login');
+        $this->post('/v1/quote')->assertRedirect('/login');
 
     }
 

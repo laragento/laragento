@@ -88,6 +88,8 @@ class QuoteSessionObject
         if (!$this->getRemoteIp()) {
             $this->setRemoteIp(request()->ip());
         }
+        dd($this->toArray());
+
 
     }
 
@@ -223,38 +225,6 @@ class QuoteSessionObject
     /**
      * @return mixed
      */
-    public function getBaseToQuoteRate()
-    {
-        return $this->base_to_quote_rate;
-    }
-
-    /**
-     * @param mixed $base_to_quote_rate
-     */
-    public function setBaseToQuoteRate($base_to_quote_rate): void
-    {
-        $this->base_to_quote_rate = $base_to_quote_rate;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getCustomerTaxvat()
-    {
-        return $this->customer_taxvat;
-    }
-
-    /**
-     * @param mixed $customer_taxvat
-     */
-    public function setCustomerTaxvat($customer_taxvat): void
-    {
-        $this->customer_taxvat = $customer_taxvat;
-    }
-
-    /**
-     * @return mixed
-     */
     public function getGrandTotal()
     {
         return $this->grand_total;
@@ -330,6 +300,16 @@ class QuoteSessionObject
     public function setBaseSubtotalWithDiscount($base_subtotal_with_discount): void
     {
         $this->base_subtotal_with_discount = $base_subtotal_with_discount;
+    }
+
+    public function toArray()
+    {
+        $serialized = (array)$this;
+        $search = "\x00*\x00";
+        $replacedKeys = str_replace($search, '', array_keys($serialized));
+
+        return array_combine($replacedKeys,$serialized);
+
     }
 
     private function generateGUID($trim, $upper, $hyphen = null)

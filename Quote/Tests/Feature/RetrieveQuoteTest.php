@@ -15,7 +15,7 @@ class RetrieveQuoteTest extends QuoteTestCase
     /**
      * @test
      */
-    public function an_authenticated_user_can_get_a_quote_by_cartid()
+    public function an_authenticated_user_can_get_his_quote()
     {
         print_r("\r\n".__FUNCTION__ . "\r\n*******************\r\n");
 
@@ -23,12 +23,11 @@ class RetrieveQuoteTest extends QuoteTestCase
         $this->actingAs($this->customer);
 
         // We have a cart
-        $quote = [];
-        $quote['cart_id'] = 9999;
-        $this->post('/v1/quote', ['cart_id' => $quote['cart_id']]);
+        $this->post('/v1/quote');
 
         // we get the shopping cart via API by ID
-        $this->get('/v1/quote/'.$quote['cart_id'])->assertJson(['cart_id' => $quote['cart_id']]);
+        //$this->get('/v1/quote')->assertJson(['customer_id' => $this->customer['entity_id']]);
+        $this->get('/v1/quote')->dump();
 
     }
 

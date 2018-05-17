@@ -24,8 +24,8 @@ class QuoteSessionObjectRepository
         if (!session()->exists('laragento_cart')) {
             session('laragento_cart', []);
         }
-        dd($quote);
-        session()->put('laragento_cart', $quote);
+
+        session()->put('laragento_cart', $quote->_toJSON($quote));
     }
 
     public function getQuote()

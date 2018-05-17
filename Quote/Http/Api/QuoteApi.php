@@ -21,15 +21,6 @@ class QuoteApi extends Controller
         $this->quoteDataRepository = $quoteDataRepository;
     }
 
-    /**
-     * Display a listing of the resource.
-     * @return Response
-     */
-    public function get()
-    {
-        return response()->json([]);
-    }
-
 
     /**
      * Store a newly created resource in storage.

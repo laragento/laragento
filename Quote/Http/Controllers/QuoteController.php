@@ -5,6 +5,7 @@ namespace Laragento\Quote\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Routing\Controller;
+use Laragento\Quote\DataObject\QuoteSessionObject;
 
 class QuoteController extends Controller
 {
@@ -22,6 +23,7 @@ class QuoteController extends Controller
      */
     public function index()
     {
+        $quote = new QuoteSessionObject();
         return view('quote::index');
     }
 
