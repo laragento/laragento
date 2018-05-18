@@ -60,7 +60,8 @@ class QuoteController extends Controller
      */
     public function update()
     {
-        $quoteData = request()->all();
+        $quoteData = request()->except('_method','_token');
+
 
         /* Only for Testin purposes */
         $quoteData['quote_currency_code'] ='EUR';
