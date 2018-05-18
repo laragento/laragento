@@ -28,8 +28,8 @@ class QuoteApi extends Controller
      */
     public function store()
     {
-        $this->quoteDataRepository->createQuote();
-        return response()->json([]);
+        $quote = $this->quoteDataRepository->createQuote();
+        return response()->json($quote,201);
     }
 
     /**
@@ -48,10 +48,9 @@ class QuoteApi extends Controller
      */
     public function update()
     {
-        $quote = [];
-        $quote['cart_id'] = request('cart_id');
-        $newQuote = $this->quoteDataRepository->updateQuote($quote);
-        return response()->json($newQuote);
+        $quoteData = request()->all();
+        $quote = $this->quoteDataRepository->updateQuote($quoteData);
+        return response()->json($quote);
     }
 
     /**

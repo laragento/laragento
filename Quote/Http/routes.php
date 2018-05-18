@@ -2,7 +2,7 @@
 
 Route::group(['middleware' => 'web', 'prefix' => 'quote', 'namespace' => 'Laragento\Quote\Http\Controllers'], function()
 {
-    Route::get('/', 'QuoteController@index')->name('quote.index');
+    //Route::get('/', 'QuoteController@index')->name('quote.index');
     Route::post('/', 'QuoteController@store')->name('quote.store');
     Route::get('/{cartId?}', 'QuoteController@show')->name('quote.show');
     Route::patch('/{cartId?}', 'QuoteController@update')->name('quote.update');

@@ -32,6 +32,8 @@ class QuoteSessionObjectRepository
         }
 
         session()->put('laragento_cart', $this->quote->toArray());
+        return session()->get('laragento_cart');
+
     }
 
     public function getQuote()
