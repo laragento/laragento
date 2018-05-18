@@ -16,16 +16,22 @@ class QuoteSessionObjectRepository
     }
 
 
-
     public function createQuote()
     {
-        $quote = app()->make('Laragento\Quote\DataObject\QuoteSessionObject');
 
-        if (!session()->exists('laragento_cart')) {
-            session('laragento_cart', []);
+        session()->forget('laragento_cart');
+
+        if (!$this->quote->getCartId()) {
+            $this->quote->setCartId();
+        }
+        if (Auth::user() && !$this->quote->getCustomerId()) {
+            $this->quote->setCustomerId(Auth::user()['entity_id']);
+        }
+        if (!$this->quote->getRemoteIp()) {
+            $this->quote->setRemoteIp(request()->ip());
         }
 
-        session()->put('laragento_cart', $quote->_toJSON($quote));
+        session()->put('laragento_cart', $this->quote->toArray());
     }
 
     public function getQuote()
@@ -44,7 +50,6 @@ class QuoteSessionObjectRepository
     {
         session()->forget('laragento_cart');
     }
-
 
 
 }

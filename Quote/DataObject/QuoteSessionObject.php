@@ -79,16 +79,6 @@ class QuoteSessionObject
 
     public function __construct()
     {
-        if (!$this->getCartId()) {
-            $this->setCartId($this->generateGUID(true, false));
-        }
-        if (Auth::user() && !$this->getCustomerId()) {
-            $this->setCustomerId(Auth::user()['entity_id']);
-        }
-        if (!$this->getRemoteIp()) {
-            $this->setRemoteIp(request()->ip());
-        }
-        dd($this->toArray());
 
 
     }
@@ -104,8 +94,9 @@ class QuoteSessionObject
     /**
      * @param mixed $cart_id
      */
-    public function setCartId($cart_id): void
+    public function setCartId(): void
     {
+        $cart_id = $this->generateGUID(true, false);
         $this->cart_id = $cart_id;
     }
 
