@@ -3,14 +3,18 @@
 namespace Laragento\Quote\Tests\Feature;
 
 use Illuminate\Support\Facades\Session;
+use Laragento\Quote\Repositories\QuoteSessionItemRepository;
 use Laragento\Quote\Tests\QuoteTestCase;
 
 class ManageQuoteTest extends QuoteTestCase
 {
 
+    protected $quoteItemRepository;
+
     public function setUp()
     {
         parent::setUp();
+        $this->quoteItemRepository = $this->app->make(QuoteSessionItemRepository::class);
     }
 
     /**
@@ -78,6 +82,49 @@ class ManageQuoteTest extends QuoteTestCase
 
         $this->delete('/v1/quote')->assertRedirect('/login');
 
+    }
+
+    /**
+     * @test
+     */
+    public function an_authenticated_user_can_add_a_quote_item()
+    {
+        print_r("\r\n" . __FUNCTION__ . "\r\n*******************\r\n");
+
+        $this->withoutExceptionHandling();
+
+        // We have a signedin customer
+        $this->actingAs($this->customer);
+
+        // We have a cart
+        $this->post('/v1/quote');
+
+        // We have item data
+        $itemData = [
+            'qty' => 5,
+            'product_id' => 1
+        ];
+
+        $this->post('/v1/quote/item', $itemData)->assertStatus(201);
+
+        $this->assertTrue(true);
+
+    }
+
+    /**
+     * @test
+     */
+    public function an_authenticated_user_can_update_a_quote_item()
+    {
+        print_r("\r\n" . __FUNCTION__ . "\r\n*******************\r\n");
+    }
+
+    /**
+     * @test
+     */
+    public function an_authenticated_user_can_delete_a_quote_item()
+    {
+        print_r("\r\n" . __FUNCTION__ . "\r\n*******************\r\n");
     }
 
     public function tearDown()
