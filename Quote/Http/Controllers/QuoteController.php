@@ -5,14 +5,18 @@ namespace Laragento\Quote\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Routing\Controller;
+use Laragento\Quote\Repositories\QuoteSessionObjectRepository;
 
 class QuoteController extends Controller
 {
+    protected $quoteDataRepository;
+
     /**
      * QuoteController constructor.
      */
-    public function __construct()
+    public function __construct(QuoteSessionObjectRepository $quoteDataRepository)
     {
+        $this->quoteDataRepository = $quoteDataRepository;
         $this->middleware('auth')->except([]);
     }
 
@@ -22,16 +26,8 @@ class QuoteController extends Controller
      */
     public function index()
     {
-        return view('quote::index');
-    }
+        //
 
-    /**
-     * Show the form for creating a new resource.
-     * @return Response
-     */
-    public function create()
-    {
-        return view('quote::create');
     }
 
     /**
@@ -41,6 +37,9 @@ class QuoteController extends Controller
      */
     public function store(Request $request)
     {
+        $this->quoteDataRepository->createQuote();
+        $quote = session('laragento_cart');
+        return view('quote::show', compact('quote'));
     }
 
     /**
@@ -49,25 +48,29 @@ class QuoteController extends Controller
      */
     public function show()
     {
-        return view('quote::show');
+        $quote = session('laragento_cart');
+        return view('quote::show', compact('quote'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     * @return Response
-     */
-    public function edit()
-    {
-        return view('quote::edit');
-    }
 
     /**
      * Update the specified resource in storage.
      * @param  Request $request
      * @return Response
      */
-    public function update(Request $request)
+    public function update()
     {
+        $quoteData = request()->all();
+
+        /* Only for Testin purposes */
+        $quoteData['quote_currency_code'] ='EUR';
+        /* Testing end */
+
+        $oldQuote = session('laragento_cart');
+        session()->put('laragento_cart',array_replace($oldQuote, $quoteData));
+        $quote = session('laragento_cart');
+        return view('quote::show', compact('quote'));
+
     }
 
     /**
@@ -76,5 +79,8 @@ class QuoteController extends Controller
      */
     public function destroy()
     {
+        session()->forget('laragento_cart');
+        $quote = session('laragento_cart');
+        return view('quote::show', compact('quote'));
     }
 }
