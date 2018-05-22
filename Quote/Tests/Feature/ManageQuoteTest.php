@@ -105,7 +105,7 @@ class ManageQuoteTest extends QuoteTestCase
             'product_id' => 1
         ];
 
-        $this->post('/v1/quote/item', $itemData)->assertStatus(201);
+        $this->post('/v1/quote/item', $itemData)->assertStatus(201)->getContent();
 
         $this->assertTrue(true);
 
@@ -117,6 +117,27 @@ class ManageQuoteTest extends QuoteTestCase
     public function an_authenticated_user_can_update_a_quote_item()
     {
         print_r("\r\n" . __FUNCTION__ . "\r\n*******************\r\n");
+
+        $this->withoutExceptionHandling();
+
+        // We have a signedin customer
+        $this->actingAs($this->customer);
+
+        // We have a cart
+        $this->post('/v1/quote');
+
+        // We have item data
+        $itemData = [
+            'qty' => 5,
+            'product_id' => 1
+        ];
+        $newItemData = [
+            'qty' => 8
+        ];
+        $item = $this->post('/v1/quote/item', $itemData)->decodeResponseJson();
+        $newItem =  $this->patch('/v1/quote/item/' . $item['item_id'], $newItemData)->decodeResponseJson();
+
+        $this->assertTrue($newItem['qty'] == $newItemData['qty']);
     }
 
     /**

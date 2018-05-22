@@ -15,7 +15,7 @@ class QuoteSessionItemRepository
     public function __construct(QuoteSessionItem $quoteSessionItem)
     {
         $this->quoteItem = $quoteSessionItem;
-        $this->quote = session('laragento_quote');
+        $this->quote = session('laragento_cart');
     }
 
     public function createItem($data)
@@ -40,7 +40,18 @@ class QuoteSessionItemRepository
 
     public function updateItem($id,$data)
     {
-        return [];
+        $items = $this->quote['items'];
+        foreach($items as $i) {
+            if ($i->getItemId() == $id) {
+                $item = $i;
+                break;
+            }
+        }
+        foreach ($data as $key => $value) {
+            $function = 'set' . str_replace(' ','',ucwords(str_replace('_', ' ', $key)));
+            $item->$function($value);
+        }
+        return $item;
     }
 
 

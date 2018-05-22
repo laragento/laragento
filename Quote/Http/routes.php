@@ -14,13 +14,15 @@ Route::group(['middleware' => 'web', 'prefix' => 'quote', 'namespace' => 'Larage
 
 Route::group(['middleware' => 'web', 'prefix' => 'v1/quote', 'namespace' => 'Laragento\Quote\Http\Api'], function()
 {
+    Route::post('/item', 'QuoteItemApi@store');
+    Route::get('/item/{itemId}', 'QuoteItemApi@first');
+    Route::patch('/item/{itemId}', 'QuoteItemApi@update');
+    Route::delete('/item/{itemId}', 'QuoteItemApi@destroy');
+
     Route::post('/', 'QuoteApi@store');
     Route::get('/', 'QuoteApi@first');
     Route::patch('/', 'QuoteApi@update');
     Route::delete('/', 'QuoteApi@destroy');
 
-    Route::post('/item', 'QuoteItemApi@store');
-    Route::get('/item/{itemId}', 'QuoteItemApi@first');
-    Route::patch('/item/{itemId}', 'QuoteItemApi@update');
-    Route::delete('/item/{itemId}', 'QuoteItemApi@destroy');
+
 });

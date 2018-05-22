@@ -33,15 +33,19 @@ class QuoteItemApi extends Controller
     public function store()
     {
         $itemData = request()->all();
+        $lastId = end($this->quote['items']);
+        if ($lastId) {
+            $itemData['item_id'] = $lastId;
+        } else {
+            $itemData['item_id'] = 1;
+        }
         $item = $this->quoteItemRepository->createItem($itemData);
         $this->quote['items'][] = $item;
         $this->quote['items_count'] = count($this->quote['items']);
         $this->quote['items_qty'] = count($this->quote['items']);
         $this->quoteDataRepository->updateQuote($this->quote);
-        print_r($item);
-        print_r($this->quote);
 
-        return response()->json($item,201);
+        return response()->json($item->toArray(),201);
     }
 
     /**
@@ -51,7 +55,7 @@ class QuoteItemApi extends Controller
     public function first($id)
     {
         $item = $this->quoteItemRepository->byId($id);
-        return response()->json($item);
+        return response()->json($item->toArray());
     }
 
     /**
@@ -68,11 +72,11 @@ class QuoteItemApi extends Controller
      * Update the specified resource in storage.
      * @return Response
      */
-    public function update($id)
+    public function update($itemId)
     {
         $itemdata = request()->all();
-        $item = $this->quoteItemRepository->updateItem($id, $itemdata);
-        return response()->json($item);
+        $item = $this->quoteItemRepository->updateItem($itemId, $itemdata);
+        return response()->json($item->toArray());
     }
 
     /**
