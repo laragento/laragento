@@ -4,6 +4,7 @@ namespace Laragento\Quote\Http\Api;
 
 use Illuminate\Http\Response;
 use Illuminate\Routing\Controller;
+use Laragento\Catalog\Repositories\Product\ProductRepository;
 use Laragento\Quote\Repositories\QuoteSessionItemRepository;
 use Laragento\Quote\Repositories\QuoteSessionObjectRepository;
 
@@ -13,14 +14,21 @@ class QuoteItemApi extends Controller
     protected $quoteItemRepository;
     protected $quote;
     protected $quoteDataRepository;
+    protected $productRepository;
 
     /**
      * QuoteController constructor.
      */
-    public function __construct(QuoteSessionItemRepository $quoteItemRepository, QuoteSessionObjectRepository $quoteDataRepository)
+    public function __construct(
+        QuoteSessionItemRepository $quoteItemRepository,
+        QuoteSessionObjectRepository $quoteDataRepository,
+        ProductRepository $productRepository
+    )
     {
+
         $this->quoteItemRepository = $quoteItemRepository;
         $this->quoteDataRepository = $quoteDataRepository;
+        $this->productRepository = $productRepository;
         $this->quote = session('laragento_cart');
         $this->middleware('auth')->except([]);
     }
@@ -50,7 +58,17 @@ class QuoteItemApi extends Controller
      * Show the specified resource.
      * @return Response
      */
-    public function first($id)
+    public function get()
+    {
+        $items = $this->quoteItemRepository->get();
+        return response()->json($items);
+    }
+
+    /**
+     * Show the specified resource.
+     * @return Response
+     */
+    public function find($id)
     {
         $item = $this->quoteItemRepository->byId($id);
         return response()->json($item->toArray());
@@ -60,10 +78,21 @@ class QuoteItemApi extends Controller
      * Show the specified resource.
      * @return Response
      */
-    public function getByProduct($productId)
+    public function byProduct($productId)
     {
         $item = $this->quoteItemRepository->byProductId($productId);
-        return response()->json($item);
+        return response()->json($item->toArray());
+    }
+
+    /**
+     * Show the specified resource.
+     * @return Response
+     */
+    public function productByItem($itemId)
+    {
+        $item = $this->quoteItemRepository->byId($itemId);
+        $product = $this->productRepository->byId($item->getProductId());
+        return response()->json($product);
     }
 
     /**

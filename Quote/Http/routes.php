@@ -15,7 +15,10 @@ Route::group(['middleware' => 'web', 'prefix' => 'quote', 'namespace' => 'Larage
 Route::group(['middleware' => 'web', 'prefix' => 'v1/quote', 'namespace' => 'Laragento\Quote\Http\Api'], function()
 {
     Route::post('/item', 'QuoteItemApi@store');
-    Route::get('/item/{itemId}', 'QuoteItemApi@first');
+    Route::get('/item', 'QuoteItemApi@get');
+    Route::get('/item/{itemId}', 'QuoteItemApi@find');
+    Route::get('/item/product/{productId}', 'QuoteItemApi@byProduct');
+    Route::get('/item/{itemId}/product', 'QuoteItemApi@productByItem');
     Route::patch('/item/{itemId}', 'QuoteItemApi@update');
     Route::delete('/item/{itemId}', 'QuoteItemApi@destroy');
 

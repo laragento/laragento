@@ -28,14 +28,31 @@ class QuoteSessionItemRepository
 
     }
 
+    public function get()
+    {
+        return $this->quote['items'];
+    }
+
     public function byId($id)
     {
-        return [];
+        $items = $this->quote['items'];
+        foreach($items as $i) {
+            if ($i->getItemId() == $id) {
+                return $i;
+            }
+        }
+        return null;
     }
 
     public function byProductId($productId)
     {
-        return [];
+        $items = $this->quote['items'];
+        foreach($items as $i) {
+            if ($i->getProductId() == $productId) {
+                return $i;
+            }
+        }
+        return null;
     }
 
     public function updateItem($id,$data)
