@@ -41,9 +41,7 @@ class QuoteItemApi extends Controller
         }
         $item = $this->quoteItemRepository->createItem($itemData);
         $this->quote['items'][] = $item;
-        $this->quote['items_count'] = count($this->quote['items']);
-        $this->quote['items_qty'] = count($this->quote['items']);
-        $this->quoteDataRepository->updateQuote($this->quote);
+        $this->settingQuoteItemsInfo();
 
         return response()->json($item->toArray(),201);
     }
@@ -85,7 +83,17 @@ class QuoteItemApi extends Controller
      */
     public function destroy($itemId)
     {
-        $this->quoteItemRepository->destroyItem($itemId);
+        $items = $this->quoteItemRepository->destroyItem($itemId);
+        $this->quote['items'] = $items;
+        $this->settingQuoteItemsInfo();
+
         return response()->json([],204);
+    }
+
+    private function settingQuoteItemsInfo()
+    {
+        $this->quote['items_count'] = count($this->quote['items']);
+        $this->quote['items_qty'] = count($this->quote['items']);
+        $this->quoteDataRepository->updateQuote($this->quote);
     }
 }
