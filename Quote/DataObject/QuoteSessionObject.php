@@ -124,6 +124,24 @@ class QuoteSessionObject
     }
 
     /**
+     * @return array
+     */
+    public function getItems(): array
+    {
+        return $this->items;
+    }
+
+    /**
+     * @param array $items
+     */
+    public function setItems(array $items): void
+    {
+        $this->items = $items;
+    }
+
+
+
+    /**
      * @param mixed $items_count
      */
     public function setItemsCount($items_count): void

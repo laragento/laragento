@@ -40,7 +40,7 @@
         <button type="submit">Add Cart Item</button>
     </form>
     <br/>
-    @if(count($quote['items']) > 0)
+{{--    @if(count($quote['items']) > 0)
         <form action="{{route('quote.item.update', ['id' => $quote['items'][0]['item_id']])}}" method="post">
             {{ csrf_field() }}
             {{ method_field('patch') }}
@@ -75,6 +75,6 @@
 
             <button disabled="disabled" type="submit">Delete Cart Item</button>
         </div>
-    @endif
+    @endif--}}
     {!! var_dump($quote) !!}
 @stop

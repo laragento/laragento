@@ -34,14 +34,14 @@ class QuoteSessionItemRepository
 
     public function get()
     {
-        return $this->quote()['items'];
+        return $this->quote()->getItems();
     }
 
     public function byId($id)
     {
         $items = $this->get();
         foreach($items as $i) {
-            if ($i['item_id'] == $id) {
+            if ($i->getItemId() == $id) {
                 return $i;
             }
         }
@@ -52,7 +52,7 @@ class QuoteSessionItemRepository
     {
         $items = $this->get();
         foreach($items as $i) {
-            if ($i['product_id'] == $productId) {
+            if ($i->getProductId() == $productId) {
                 return $i;
             }
         }
@@ -63,13 +63,14 @@ class QuoteSessionItemRepository
     {
         $items = $this->get();
         foreach($items as $i) {
-            if ($i['item_id'] == $id) {
+            if ($i->getItemId() == $id) {
                 $item = $i;
                 break;
             }
         }
         foreach ($data as $key => $value) {
-            $item['key'] = $value;
+            $function = 'set' . str_replace(' ','',ucwords(str_replace('_', ' ', $key)));
+            $item->$function($value);
         }
         return $item;
     }
@@ -80,7 +81,7 @@ class QuoteSessionItemRepository
         $items = $this->get();
         $cnt = 0;
         foreach($items as $i) {
-            if ($i['item_id'] == $id) {
+            if ($i->getItemId() == $id) {
                 unset($items[$cnt]);
                array_values($items);
                 break;

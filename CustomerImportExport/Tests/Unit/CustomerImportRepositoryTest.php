@@ -2,7 +2,7 @@
 
 use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
 use Laragento\Customer\Repositories\CustomerRepository;
-use Laragento\Customer\Transformers\CustomerTransformer;
+use Laragento\Customer\Transformers\QuoteTransformer;
 use Spatie\Fractal\Fractal;
 use Tests\CreatesApplication;
 use Laragento\Customer\Models\Customer;

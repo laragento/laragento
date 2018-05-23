@@ -38,8 +38,7 @@ class QuoteController extends Controller
     public function store(Request $request)
     {
         $this->quoteDataRepository->createQuote();
-        $quote = session('laragento_cart');
-        return view('quote::show', compact('quote'));
+        return redirect(route('quote.show'));
     }
 
     /**
@@ -48,7 +47,7 @@ class QuoteController extends Controller
      */
     public function show()
     {
-        $quote = session('laragento_cart');
+        $quote = $this->quoteDataRepository->getQuote();
         return view('quote::show', compact('quote'));
     }
 
@@ -67,10 +66,9 @@ class QuoteController extends Controller
         $quoteData['quote_currency_code'] ='EUR';
         /* Testing end */
 
-        $oldQuote = session('laragento_cart');
-        session()->put('laragento_cart',array_replace($oldQuote, $quoteData));
-        $quote = session('laragento_cart');
-        return view('quote::show', compact('quote'));
+        $this->quoteDataRepository->updateQuote($quoteData);
+
+        return redirect(route('quote.show'));
 
     }
 
@@ -81,7 +79,6 @@ class QuoteController extends Controller
     public function destroy()
     {
         session()->forget('laragento_cart');
-        $quote = session('laragento_cart');
-        return view('quote::show', compact('quote'));
+        return redirect(route('quote.show'));
     }
 }

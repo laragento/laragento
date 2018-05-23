@@ -31,13 +31,13 @@ class ManageQuoteTest extends QuoteTestCase
         $this->post('/v1/quote');
 
         $quote = Session::get('laragento_cart');
-        $quote['quote_currency_code'] = "EUR";
+        $quote->setQuoteCurrencyCode("EUR");
 
         // we get the shopping cart via API by ID
-        $this->patch('/v1/quote/',$quote);
+        $this->patch('/v1/quote/',$quote->toArray());
 
         $updatedQuote =  Session::get('laragento_cart');
-        $this->assertTrue($updatedQuote['quote_currency_code'] == "EUR");
+        $this->assertTrue($updatedQuote->getQuoteCurrencyCode() == "EUR");
 
     }
 
@@ -103,7 +103,9 @@ class ManageQuoteTest extends QuoteTestCase
             'product_id' => 1
         ];
 
-       $this->post('/v1/quote/item', $itemData)->assertStatus(201)->assertJson($itemData);
+       $result = $this->post('/v1/quote/item', $itemData)->assertStatus(201)->decodeResponseJson();
+
+        $this->assertArraySubset($itemData, $result['data']);
 
     }
 
@@ -124,6 +126,7 @@ class ManageQuoteTest extends QuoteTestCase
     public function an_authenticated_user_can_update_a_quote_item()
     {
         print_r("\r\n" . __FUNCTION__ . "\r\n*******************\r\n");
+        $this->withoutExceptionHandling();
 
         // We have a signedin customer
         $this->actingAs($this->customer);
@@ -140,7 +143,9 @@ class ManageQuoteTest extends QuoteTestCase
             'qty' => 8
         ];
         $item = $this->post('/v1/quote/item', $itemData)->decodeResponseJson();
-        $this->patch('/v1/quote/item/' . $item['item_id'], $newItemData)->assertStatus(200)->assertJson($newItemData);
+        $result = $this->patch('/v1/quote/item/' . $item['data']['item_id'], $newItemData)->assertStatus(200)->decodeResponseJson();
+
+        $this->assertArraySubset($newItemData, $result['data']);
 
     }
 
@@ -162,6 +167,7 @@ class ManageQuoteTest extends QuoteTestCase
     {
         print_r("\r\n" . __FUNCTION__ . "\r\n*******************\r\n");
 
+        $this->withoutExceptionHandling();
         // We have a signedin customer
         $this->actingAs($this->customer);
 
@@ -171,13 +177,14 @@ class ManageQuoteTest extends QuoteTestCase
         // We have an item
         $item = $this->post('/v1/quote/item', ['qty' => 5,'product_id' => 1])->decodeResponseJson();
 
-        $this->delete('/v1/quote/item/' . $item['item_id'])->assertStatus(204);
+        $this->delete('/v1/quote/item/' . $item['data']['item_id'])->assertStatus(204);
 
-        $items = session('laragento_cart')['items'];
+        $items = session('laragento_cart')->getItems();
+
         $assert = true;
-        if (count($items) >0 ) {
+        if (count($items) > 0 ) {
             foreach ($items as $i) {
-                if ($i->getItemId() == $item['item_id']) {
+                if ($i->getItemId() == $item['data']['item_id']) {
                     $assert = false;
                     break;
                 }
