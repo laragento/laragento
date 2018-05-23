@@ -4,8 +4,6 @@
 namespace Laragento\Quote\DataObject;
 
 
-use Illuminate\Support\Facades\Auth;
-
 class QuoteSessionObject
 {
     /* ORIGINAL from DB

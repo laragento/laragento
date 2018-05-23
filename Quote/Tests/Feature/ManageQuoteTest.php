@@ -3,14 +3,18 @@
 namespace Laragento\Quote\Tests\Feature;
 
 use Illuminate\Support\Facades\Session;
+use Laragento\Quote\Repositories\QuoteSessionItemRepository;
 use Laragento\Quote\Tests\QuoteTestCase;
 
 class ManageQuoteTest extends QuoteTestCase
 {
 
+    protected $quoteItemRepository;
+
     public function setUp()
     {
         parent::setUp();
+        $this->quoteItemRepository = $this->app->make(QuoteSessionItemRepository::class);
     }
 
     /**
@@ -77,6 +81,122 @@ class ManageQuoteTest extends QuoteTestCase
         print_r("\r\n".__FUNCTION__ . "\r\n*******************\r\n");
 
         $this->delete('/v1/quote')->assertRedirect('/login');
+
+    }
+
+    /**
+     * @test
+     */
+    public function an_authenticated_user_can_add_a_quote_item()
+    {
+        print_r("\r\n" . __FUNCTION__ . "\r\n*******************\r\n");
+
+        // We have a signedin customer
+        $this->actingAs($this->customer);
+
+        // We have a cart
+        $this->post('/v1/quote');
+
+        // We have item data
+        $itemData = [
+            'qty' => 5,
+            'product_id' => 1
+        ];
+
+       $this->post('/v1/quote/item', $itemData)->assertStatus(201)->assertJson($itemData);
+
+    }
+
+    /**
+     * @test
+     */
+    public function an_unauthenticated_user_cannot_add_a_quote_item()
+    {
+        print_r("\r\n" . __FUNCTION__ . "\r\n*******************\r\n");
+
+        $this->post('/v1/quote/item', [])->assertRedirect('/login');
+
+    }
+
+    /**
+     * @test
+     */
+    public function an_authenticated_user_can_update_a_quote_item()
+    {
+        print_r("\r\n" . __FUNCTION__ . "\r\n*******************\r\n");
+
+        // We have a signedin customer
+        $this->actingAs($this->customer);
+
+        // We have a cart
+        $this->post('/v1/quote');
+
+        // We have item data
+        $itemData = [
+            'qty' => 5,
+            'product_id' => 1
+        ];
+        $newItemData = [
+            'qty' => 8
+        ];
+        $item = $this->post('/v1/quote/item', $itemData)->decodeResponseJson();
+        $this->patch('/v1/quote/item/' . $item['item_id'], $newItemData)->assertStatus(200)->assertJson($newItemData);
+
+    }
+
+    /**
+     * @test
+     */
+    public function an_unauthenticated_user_cannot_update_a_quote_item()
+    {
+        print_r("\r\n" . __FUNCTION__ . "\r\n*******************\r\n");
+
+        $this->patch('/v1/quote/item/99999', [])->assertRedirect('/login');
+
+    }
+
+    /**
+     * @test
+     */
+    public function an_authenticated_user_can_delete_a_quote_item()
+    {
+        print_r("\r\n" . __FUNCTION__ . "\r\n*******************\r\n");
+
+        // We have a signedin customer
+        $this->actingAs($this->customer);
+
+        // We have a cart
+        $this->post('/v1/quote');
+
+        // We have an item
+        $item = $this->post('/v1/quote/item', ['qty' => 5,'product_id' => 1])->decodeResponseJson();
+
+        $this->delete('/v1/quote/item/' . $item['item_id'])->assertStatus(204);
+
+        $items = session('laragento_cart')['items'];
+        $assert = true;
+        if (count($items) >0 ) {
+            foreach ($items as $i) {
+                if ($i->getItemId() == $item['item_id']) {
+                    $assert = false;
+                    break;
+                }
+            }
+        }
+
+        $this->assertTrue($assert == true);
+
+    }
+
+    /**
+     * @test
+     */
+    public function an_unauthenticated_user_cannot_delete_a_quote_item()
+    {
+        print_r("\r\n" . __FUNCTION__ . "\r\n*******************\r\n");
+
+        $this->delete('/v1/quote/item/99999')->assertRedirect('/login');
+
 
     }
 

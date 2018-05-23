@@ -41,9 +41,9 @@ class QuoteSessionObjectRepository
         return session()->get('laragento_cart');
     }
 
-    public function updateQuote($quote)
+    public function updateQuote($quoteData)
     {
-        session()->put('laragento_cart', $quote);
+        session()->put('laragento_cart', $quoteData);
         return session()->get('laragento_cart');
 
     }
