@@ -10,12 +10,16 @@ class QuoteSessionItemRepository
 {
 
     protected $quoteItem;
-    protected $quote;
+    protected $quoteDataRepository;
 
-    public function __construct(QuoteSessionItem $quoteSessionItem)
+    public function __construct(
+        QuoteSessionObjectRepository $quoteDataRepository,
+        QuoteSessionItem $quoteSessionItem
+)
     {
         $this->quoteItem = $quoteSessionItem;
-        $this->quote = session('laragento_cart');
+        $this->quoteDataRepository = $quoteDataRepository;
+
     }
 
     public function createItem($data)
@@ -30,14 +34,14 @@ class QuoteSessionItemRepository
 
     public function get()
     {
-        return $this->quote['items'];
+        return $this->quote()['items'];
     }
 
     public function byId($id)
     {
-        $items = $this->quote['items'];
+        $items = $this->get();
         foreach($items as $i) {
-            if ($i->getItemId() == $id) {
+            if ($i['item_id'] == $id) {
                 return $i;
             }
         }
@@ -46,9 +50,9 @@ class QuoteSessionItemRepository
 
     public function byProductId($productId)
     {
-        $items = $this->quote['items'];
+        $items = $this->get();
         foreach($items as $i) {
-            if ($i->getProductId() == $productId) {
+            if ($i['product_id'] == $productId) {
                 return $i;
             }
         }
@@ -57,16 +61,15 @@ class QuoteSessionItemRepository
 
     public function updateItem($id,$data)
     {
-        $items = $this->quote['items'];
+        $items = $this->get();
         foreach($items as $i) {
-            if ($i->getItemId() == $id) {
+            if ($i['item_id'] == $id) {
                 $item = $i;
                 break;
             }
         }
         foreach ($data as $key => $value) {
-            $function = 'set' . str_replace(' ','',ucwords(str_replace('_', ' ', $key)));
-            $item->$function($value);
+            $item['key'] = $value;
         }
         return $item;
     }
@@ -74,10 +77,10 @@ class QuoteSessionItemRepository
 
     public function destroyItem($id)
     {
-        $items = $this->quote['items'];
+        $items = $this->get();
         $cnt = 0;
         foreach($items as $i) {
-            if ($i->getItemId() == $id) {
+            if ($i['item_id'] == $id) {
                 unset($items[$cnt]);
                array_values($items);
                 break;
@@ -85,5 +88,9 @@ class QuoteSessionItemRepository
             $cnt++;
         }
         return $items;
+    }
+
+    private function quote() {
+        return $this->quoteDataRepository->getQuote();
     }
 }
