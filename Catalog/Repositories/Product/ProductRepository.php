@@ -48,6 +48,21 @@ class ProductRepository implements ProductRepositoryInterface
      * @param $identifier
      * @return \Illuminate\Database\Eloquent\Model|ProductRepository|null
      */
+    public static function byId($id)
+    {
+        //return self::product($identifier);
+        return Product::with([
+            'categories.entities.attribute',
+            'entities.attribute',
+            'children.entities.attribute',
+            //'links',
+        ])->where(['entity_id' => $id])->first();
+    }
+
+    /**
+     * @param $identifier
+     * @return \Illuminate\Database\Eloquent\Model|ProductRepository|null
+     */
     public static function first($identifier)
     {
         return self::product($identifier);
