@@ -5,6 +5,8 @@ namespace Laragento\Quote\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Routing\Controller;
+use Laragento\Quote\DataObject\QuoteSessionItem;
+use Laragento\Quote\DataObject\QuoteSessionObject;
 use Laragento\Quote\Repositories\QuoteSessionItemRepository;
 use Laragento\Quote\Repositories\QuoteSessionObjectRepository;
 
@@ -15,6 +17,8 @@ class QuoteItemController extends Controller
 
     /**
      * QuoteController constructor.
+     * @param QuoteSessionItemRepository $quoteItemRepository
+     * @param QuoteSessionObjectRepository $quoteDataRepository
      */
     public function __construct(
         QuoteSessionItemRepository $quoteItemRepository,
@@ -29,39 +33,49 @@ class QuoteItemController extends Controller
 
     /**
      * Display a listing of the resource.
-     * @return Response
+     * @return void
      */
     public function index()
     {
         //
-
     }
 
     /**
      * Store a newly created resource in storage.
-     * @param  Request $request
      * @return Response
      */
     public function store()
     {
-        $itemData = request()->except(['_method', '_token']);
-        $quote = $this->quoteDataRepository->getQuote();
-        $items = $quote->getItems();
-        $lastId = end($items);
-        $itemData['item_id'] = $lastId ? $lastId : 1;
+        $requestData = request()->except(['_method', '_token']);
+        $items = $this->getQuote()->getItems();
+        $item = null;
 
-        $item = $this->quoteItemRepository->createItem($itemData);
-        $items[] = $item;
+        for ($index = 0;$index < count($items);$index++) {
 
-        $quote->setItems($items);
-        $this->settingQuoteItemsInfo($quote);
+            if ($items[$index]->getProductId() == $requestData['product_id']) {
+                $item = $this->quoteItemRepository->updateItem($items[$index]->getItemId(), $requestData);
+                $items[$index] = $item;
+                break;
+            }
+        }
+
+        if (!$item) {
+            // Set Create new Item
+            $itemData = $this->setItemId($requestData);
+            $item = $this->quoteItemRepository->createItem($itemData);
+
+            // Store item in cart
+            array_push($items, $item);
+        }
+
+        $this->storeItems($items);
 
         return redirect()->route('quote.show');
     }
 
     /**
      * Show the specified resource.
-     * @return Response
+     * @return void
      */
     public function show()
     {
@@ -71,43 +85,97 @@ class QuoteItemController extends Controller
 
     /**
      * Update the specified resource in storage.
-     * @param  Request $request
+     * @param $itemId
      * @return Response
      */
     public function update($itemId)
     {
-        $itemData = request()->except('_method','_token');
-        $item = $this->quoteItemRepository->updateItem($itemId,$itemData);
-        $quote = $this->quoteDataRepository->getQuote();
-        $quote->getitems()[] = $item;
-        $this->settingQuoteItemsInfo($quote);
+        var_dump('Hittin');
+        die();
+        $requestData = request()->except(['_method', '_token']);
+
+        // Update Item Data
+        $items = $this->updateItemData($itemId, $requestData);
+
+        // Store Data in Cart
+        $this->storeItems($items);
         return redirect()->route('quote.show');
 
     }
 
     /**
      * Remove the specified resource from storage.
+     * @param $itemId
      * @return Response
      */
     public function destroy($itemId)
     {
         $items = $this->quoteItemRepository->destroyItem($itemId);
-        $quote = $this->quoteDataRepository->getQuote();
-        $quote->setItems($items);
-        $this->settingQuoteItemsInfo($quote);
+        $this->storeItems($items);
 
         return redirect()->route('quote.show');
     }
 
-    private function settingQuoteItemsInfo($quote)
+    /**
+     * @param QuoteSessionObject $quote
+     */
+    protected function settingQuoteItemsInfo($quote)
     {
         $quote->setItemsCount(count($quote->getItems()));
         $quote->setItemsQty(count($quote->getItems()));
         $this->quoteDataRepository->updateQuote($quote);
     }
 
-    private function quote()
+    /**
+     * @param $itemData
+     * @return array
+     */
+    protected function setItemId($itemData): array
+    {
+        $items = $this->getQuote()->getItems();
+        $lastItem = end($items);
+        $itemData['item_id'] = $lastItem ? $lastItem->getItemId() + 1 : 1;
+
+        return $itemData;
+    }
+
+    /**
+     * @return mixed
+     */
+    protected function getQuote()
     {
         return $this->quoteDataRepository->getQuote();
     }
+
+    /**
+     *
+     * @param $itemId
+     * @param $requestData
+     * @return array
+     */
+    protected function updateItemData($itemId, $requestData): array
+    {
+        $items = $this->getQuote()->getItems();
+        $index = 0;
+        foreach ($items as $item) {
+
+            /** @var QuoteSessionItem $item */
+            if ($item->getItemId() == $itemId) {
+                $items[$index] = $this->quoteItemRepository->updateItem($itemId, $requestData);
+            }
+            $index++;
+        }
+        return $items;
+    }
+
+    /**
+     * @param $items
+     */
+    protected function storeItems($items): void
+    {
+        $quote = $this->getQuote();
+        $quote->setItems($items);
+        $this->settingQuoteItemsInfo($quote);
+    }
+
 }

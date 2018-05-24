@@ -83,12 +83,11 @@ class QuoteSessionItemRepository
         foreach($items as $i) {
             if ($i->getItemId() == $id) {
                 unset($items[$cnt]);
-               array_values($items);
                 break;
             }
             $cnt++;
         }
-        return $items;
+        return array_values($items);
     }
 
     private function quote() {
