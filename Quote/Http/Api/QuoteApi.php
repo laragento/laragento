@@ -31,8 +31,9 @@ class QuoteApi extends Controller
     public function store()
     {
         $quote = $this->quoteDataRepository->createQuote();
-        $fractal = Fractal::create($quote, new QuoteTransformer());
-        return response()->json($fractal,201);
+        $response = Fractal::create($quote, new QuoteTransformer());
+
+        return response()->json($response, 201);
     }
 
     /**
@@ -42,8 +43,9 @@ class QuoteApi extends Controller
     public function first()
     {
         $quote = $this->quoteDataRepository->getQuote();
-        $fractal = Fractal::create($quote, new QuoteTransformer());
-        return response()->json($fractal, 200);
+        $response = Fractal::create($quote, new QuoteTransformer());
+
+        return response()->json($response, 200);
     }
 
     /**
@@ -54,8 +56,9 @@ class QuoteApi extends Controller
     {
         $quoteData = request()->all();
         $quote = $this->quoteDataRepository->updateQuote($quoteData);
-        $fractal = Fractal::create($quote, new QuoteTransformer());
-        return response()->json($fractal, 200);
+        $response = Fractal::create($quote, new QuoteTransformer());
+
+        return response()->json($response, 200);
     }
 
     /**
@@ -65,6 +68,6 @@ class QuoteApi extends Controller
     public function destroy()
     {
         $this->quoteDataRepository->destroyQuote();
-        return response()->json([],204);
+        return response()->json([], 204);
     }
 }
