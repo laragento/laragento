@@ -46,14 +46,14 @@ class QuoteItemController extends Controller
     {
         $itemData = request()->except(['_method', '_token']);
         $quote = $this->quoteDataRepository->getQuote();
-        $items = $quote['items'];
+        $items = $quote->getItems();
         $lastId = end($items);
         $itemData['item_id'] = $lastId ? $lastId : 1;
 
         $item = $this->quoteItemRepository->createItem($itemData);
-        $items[] = $item->toArray();
+        $items[] = $item;
 
-        $quote['items'] = $items;
+        $quote->setItems($items);
         $this->settingQuoteItemsInfo($quote);
 
         return redirect()->route('quote.show');
@@ -77,8 +77,10 @@ class QuoteItemController extends Controller
     public function update($itemId)
     {
         $itemData = request()->except('_method','_token');
-        $this->quoteItemRepository->updateItem($itemId,$itemData);
-        $this->settingQuoteItemsInfo();
+        $item = $this->quoteItemRepository->updateItem($itemId,$itemData);
+        $quote = $this->quoteDataRepository->getQuote();
+        $quote->getitems()[] = $item;
+        $this->settingQuoteItemsInfo($quote);
         return redirect()->route('quote.show');
 
     }
@@ -89,14 +91,18 @@ class QuoteItemController extends Controller
      */
     public function destroy($itemId)
     {
-        $this->quoteItemRepository->destroyItem($itemId);
+        $items = $this->quoteItemRepository->destroyItem($itemId);
+        $quote = $this->quoteDataRepository->getQuote();
+        $quote->setItems($items);
+        $this->settingQuoteItemsInfo($quote);
+
         return redirect()->route('quote.show');
     }
 
     private function settingQuoteItemsInfo($quote)
     {
-        $quote['items_count'] = count($quote['items']);
-        $quote['items_qty'] = count($quote['items']);
+        $quote->setItemsCount(count($quote->getItems()));
+        $quote->setItemsQty(count($quote->getItems()));
         $this->quoteDataRepository->updateQuote($quote);
     }
 
