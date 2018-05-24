@@ -72,7 +72,7 @@ class QuoteSessionItemRepository
             $function = 'set' . str_replace(' ','',ucwords(str_replace('_', ' ', $key)));
             $item->$function($value);
         }
-        return $item;
+        return $items;
     }
 
 
