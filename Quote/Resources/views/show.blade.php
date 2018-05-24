@@ -40,8 +40,8 @@
         <button type="submit">Add Cart Item</button>
     </form>
     <br/>
-    @if(count($quote['items']) > 0)
-        <form action="{{route('quote.item.update', ['id' => $quote['items'][0]['item_id']])}}" method="post">
+ @if($quote && count($quote->getItems()) > 0)
+        <form action="{{route('quote.item.update',  ['id' => $quote->getItems()[0]->getItemId()])}}" method="post">
             {{ csrf_field() }}
             {{ method_field('patch') }}
             <p>Updates the first Item</p>
@@ -59,8 +59,8 @@
         </div>
     @endif
     <br/>
-    @if(count($quote['items']) > 0)
-        <form action="{{route('quote.item.destroy', ['id' => $quote['items'][0]['item_id']])}}" method="post">
+    @if($quote && count($quote->getItems()) > 0)
+        <form action="{{route('quote.item.destroy', ['id' => $quote->getItems()[0]->getItemId()])}}" method="post">
             {{ csrf_field() }}
             {{ method_field('delete') }}
             <p>Destroys the first Item</p>

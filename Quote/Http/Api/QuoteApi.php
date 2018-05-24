@@ -4,7 +4,9 @@ namespace Laragento\Quote\Http\Api;
 
 use Illuminate\Http\Response;
 use Illuminate\Routing\Controller;
+use Laragento\Quote\Transformers\QuoteTransformer;
 use Laragento\Quote\Repositories\QuoteSessionObjectRepository;
+use Spatie\Fractal\Fractal;
 
 class QuoteApi extends Controller
 {
@@ -29,7 +31,8 @@ class QuoteApi extends Controller
     public function store()
     {
         $quote = $this->quoteDataRepository->createQuote();
-        return response()->json($quote,201);
+        $fractal = Fractal::create($quote, new QuoteTransformer());
+        return response()->json($fractal,201);
     }
 
     /**
@@ -39,7 +42,8 @@ class QuoteApi extends Controller
     public function first()
     {
         $quote = $this->quoteDataRepository->getQuote();
-        return response()->json($quote);
+        $fractal = Fractal::create($quote, new QuoteTransformer());
+        return response()->json($fractal, 200);
     }
 
     /**
@@ -50,7 +54,8 @@ class QuoteApi extends Controller
     {
         $quoteData = request()->all();
         $quote = $this->quoteDataRepository->updateQuote($quoteData);
-        return response()->json($quote);
+        $fractal = Fractal::create($quote, new QuoteTransformer());
+        return response()->json($fractal, 200);
     }
 
     /**

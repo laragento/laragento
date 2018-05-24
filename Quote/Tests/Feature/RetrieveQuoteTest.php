@@ -26,7 +26,8 @@ class RetrieveQuoteTest extends QuoteTestCase
         $this->post('/v1/quote');
 
         // we get the shopping cart via API by ID
-        $this->get('/v1/quote')->assertJson(['customer_id' => $this->customer['entity_id']]);
+        $result = $this->get('/v1/quote')->decodeResponseJson();
+        $this->assertArraySubset(['customer_id' => $this->customer['entity_id']], $result['data']);
 
     }
 
@@ -69,7 +70,8 @@ class RetrieveQuoteTest extends QuoteTestCase
         $item = $this->post('/v1/quote/item', $itemData)->decodeResponseJson();
 
         // we get the shopping cart via API by ID
-        $this->get('/v1/quote/item/'.$item['item_id'])->assertJson($itemData);
+        $result = $this->get('/v1/quote/item/'.$item['data']['item_id'])->decodeResponseJson();
+        $this->assertArraySubset($itemData, $result['data']);
     }
 
     /**
@@ -90,7 +92,9 @@ class RetrieveQuoteTest extends QuoteTestCase
         $item = $this->post('/v1/quote/item', $itemData)->decodeResponseJson();
 
         // we get the shopping cart via API by ID
-        $this->get('/v1/quote/item/product/'.$item['product_id'])->assertJson($itemData);
+        $result = $this->get('/v1/quote/item/product/'.$item['data']['product_id'])->decodeResponseJson();
+        $this->assertArraySubset($itemData, $result['data']);
+
     }
 
     /**
@@ -128,7 +132,8 @@ class RetrieveQuoteTest extends QuoteTestCase
         $item = $this->post('/v1/quote/item', $itemData)->decodeResponseJson();
 
         // we get the shopping cart via API by ID
-        $this->get('/v1/quote/item/'.$item['item_id'].'/product')->assertJson(['entity_id' => $itemData['product_id']]);
+        $result = $this->get('/v1/quote/item/'.$item['data']['item_id'].'/product')->decodeResponseJson();
+        $this->assertArraySubset(['id' => $itemData['product_id']], $result['data']);
     }
 
     /**

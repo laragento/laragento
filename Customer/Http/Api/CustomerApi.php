@@ -7,6 +7,7 @@ use Laragento\Customer\Http\Requests\StoreCustomer;
 use Laragento\Customer\Repositories\CustomerRepositoryInterface;
 use Laragento\Customer\Transformers\AddressTransformer;
 use Laragento\Customer\Transformers\CustomerTransformer;
+use Laragento\Customer\Transformers\QuoteTransformer;
 use Laragento\Customer\Transformers\GroupTransformer;
 use Spatie\Fractal\Fractal;
 
@@ -43,7 +44,7 @@ class CustomerApi extends Controller implements CustomerApiInterface
     public function forceFirst($identifier)
     {
         $customer = $this->customerRepository->forceFirst($identifier);
-        $fractal = Fractal::create($customer, new CustomerTransformer());
+        $fractal = Fractal::create($customer, new QuoteTransformer());
         return response()->json($fractal, 200);
     }
 
@@ -53,7 +54,7 @@ class CustomerApi extends Controller implements CustomerApiInterface
     public function get()
     {
         $customers = $this->customerRepository->get();
-        $fractal = Fractal::create($customers, new CustomerTransformer());
+        $fractal = Fractal::create($customers, new QuoteTransformer());
         return response()->json($fractal, 200);
     }
 
@@ -63,7 +64,7 @@ class CustomerApi extends Controller implements CustomerApiInterface
     public function all()
     {
         $customers = $this->customerRepository->all();
-        $fractal = Fractal::create($customers, new CustomerTransformer());
+        $fractal = Fractal::create($customers, new QuoteTransformer());
         return response()->json($fractal, 200);
     }
 
@@ -73,7 +74,7 @@ class CustomerApi extends Controller implements CustomerApiInterface
     public function find()
     {
         $customers = $this->customerRepository->find();
-        $fractal = Fractal::create($customers, new CustomerTransformer());
+        $fractal = Fractal::create($customers, new QuoteTransformer());
         return response()->json($fractal, 200);
     }
 
@@ -83,7 +84,7 @@ class CustomerApi extends Controller implements CustomerApiInterface
     public function store(StoreCustomer $request)
     {
         $customer = $this->customerRepository->store($request->all());
-        $fractal = Fractal::create($customer, new CustomerTransformer());
+        $fractal = Fractal::create($customer, new QuoteTransformer());
         return response()->json($fractal, 200);
     }
 

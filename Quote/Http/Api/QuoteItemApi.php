@@ -5,14 +5,17 @@ namespace Laragento\Quote\Http\Api;
 use Illuminate\Http\Response;
 use Illuminate\Routing\Controller;
 use Laragento\Catalog\Repositories\Product\ProductRepository;
+use Laragento\Catalog\Transformers\ChildProductTransformer;
+use Laragento\Quote\DataObject\QuoteSessionObject;
 use Laragento\Quote\Repositories\QuoteSessionItemRepository;
 use Laragento\Quote\Repositories\QuoteSessionObjectRepository;
+use Laragento\Quote\Transformers\QuoteItemTransformer;
+use Spatie\Fractal\Fractal;
 
 class QuoteItemApi extends Controller
 {
 
     protected $quoteItemRepository;
-    protected $quote;
     protected $quoteDataRepository;
     protected $productRepository;
 
@@ -29,7 +32,6 @@ class QuoteItemApi extends Controller
         $this->quoteItemRepository = $quoteItemRepository;
         $this->quoteDataRepository = $quoteDataRepository;
         $this->productRepository = $productRepository;
-        $this->quote = session('laragento_cart');
         $this->middleware('auth')->except([]);
     }
 
@@ -41,17 +43,18 @@ class QuoteItemApi extends Controller
     public function store()
     {
         $itemData = request()->all();
-        $lastId = end($this->quote['items']);
-        if ($lastId) {
-            $itemData['item_id'] = $lastId;
+        $quote = $this->quoteDataRepository->getQuote();
+        $items = $quote->getItems();
+        $lastItem = end($items);
+        if ($lastItem) {
+            $itemData['item_id'] = $lastItem->getItemId() + 1;
         } else {
             $itemData['item_id'] = 1;
         }
-        $item = $this->quoteItemRepository->createItem($itemData);
-        $this->quote['items'][] = $item;
-        $this->settingQuoteItemsInfo();
-
-        return response()->json($item->toArray(),201);
+        $items[] = $this->quoteItemRepository->createItem($itemData);
+        $this->settingQuoteItemsInfo($quote,$items);
+        $fractal = Fractal::create(end($items), new QuoteItemTransformer());
+        return response()->json($fractal,201);
     }
 
     /**
@@ -60,8 +63,8 @@ class QuoteItemApi extends Controller
      */
     public function get()
     {
-        $items = $this->quoteItemRepository->get();
-        return response()->json($items);
+        return $this->quoteItemRepository->get();
+
     }
 
     /**
@@ -71,7 +74,8 @@ class QuoteItemApi extends Controller
     public function find($id)
     {
         $item = $this->quoteItemRepository->byId($id);
-        return response()->json($item->toArray());
+        $fractal = Fractal::create($item, new QuoteItemTransformer());
+        return response()->json($fractal,200);
     }
 
     /**
@@ -81,7 +85,8 @@ class QuoteItemApi extends Controller
     public function byProduct($productId)
     {
         $item = $this->quoteItemRepository->byProductId($productId);
-        return response()->json($item->toArray());
+        $fractal = Fractal::create($item, new QuoteItemTransformer());
+        return response()->json($fractal,200);
     }
 
     /**
@@ -92,7 +97,8 @@ class QuoteItemApi extends Controller
     {
         $item = $this->quoteItemRepository->byId($itemId);
         $product = $this->productRepository->byId($item->getProductId());
-        return response()->json($product);
+        $fractal = Fractal::create($product, new ChildProductTransformer());
+        return response()->json($fractal,200);
     }
 
     /**
@@ -103,7 +109,8 @@ class QuoteItemApi extends Controller
     {
         $itemdata = request()->all();
         $item = $this->quoteItemRepository->updateItem($itemId, $itemdata);
-        return response()->json($item->toArray());
+        $fractal = Fractal::create($item, new QuoteItemTransformer());
+        return response()->json($fractal,200);
     }
 
     /**
@@ -113,16 +120,22 @@ class QuoteItemApi extends Controller
     public function destroy($itemId)
     {
         $items = $this->quoteItemRepository->destroyItem($itemId);
-        $this->quote['items'] = $items;
-        $this->settingQuoteItemsInfo();
+        $this->settingQuoteItemsInfo($this->quoteDataRepository->getQuote(), $items);
 
         return response()->json([],204);
     }
 
-    private function settingQuoteItemsInfo()
+
+    /**
+     * @param QuoteSessionObject $quote
+     * @param $items
+     */
+    private function settingQuoteItemsInfo($quote,$items)
     {
-        $this->quote['items_count'] = count($this->quote['items']);
-        $this->quote['items_qty'] = count($this->quote['items']);
-        $this->quoteDataRepository->updateQuote($this->quote);
+        $quote->setItems($items);
+        $quote->setItemsCount(count($items));
+        $quote->setItemsQty(count($items));
+
+        $this->quoteDataRepository->updateQuote($quote);
     }
 }

@@ -18,8 +18,7 @@ class QuoteSessionObjectRepository
 
     public function createQuote()
     {
-
-        session()->forget('laragento_cart');
+        $this->destroyQuote();
 
         if (!$this->quote->getCartId()) {
             $this->quote->setCartId();
@@ -31,8 +30,8 @@ class QuoteSessionObjectRepository
             $this->quote->setRemoteIp(request()->ip());
         }
 
-        session()->put('laragento_cart', $this->quote->toArray());
-        return session()->get('laragento_cart');
+        session()->put('laragento_cart', $this->quote);
+        return $this->getQuote();
 
     }
 
@@ -43,8 +42,13 @@ class QuoteSessionObjectRepository
 
     public function updateQuote($quoteData)
     {
-        session()->put('laragento_cart', $quoteData);
-        return session()->get('laragento_cart');
+        $quote = $this->getQuote();
+        foreach ($quoteData as $key => $value) {
+            $function = 'set' . str_replace(' ','',ucwords(str_replace('_', ' ', $key)));
+            $quote->$function($value);
+        }
+        session()->put('laragento_cart', $quote);
+        return $quote;
 
     }
 
