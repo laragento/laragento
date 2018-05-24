@@ -13,6 +13,7 @@ class QuoteController extends Controller
 
     /**
      * QuoteController constructor.
+     * @param QuoteSessionObjectRepository $quoteDataRepository
      */
     public function __construct(QuoteSessionObjectRepository $quoteDataRepository)
     {
@@ -22,7 +23,7 @@ class QuoteController extends Controller
 
     /**
      * Display a listing of the resource.
-     * @return Response
+     * @return void
      */
     public function index()
     {
@@ -32,10 +33,9 @@ class QuoteController extends Controller
 
     /**
      * Store a newly created resource in storage.
-     * @param  Request $request
      * @return Response
      */
-    public function store(Request $request)
+    public function store()
     {
         $this->quoteDataRepository->createQuote();
         return redirect(route('quote.show'));
@@ -54,18 +54,11 @@ class QuoteController extends Controller
 
     /**
      * Update the specified resource in storage.
-     * @param  Request $request
      * @return Response
      */
     public function update()
     {
         $quoteData = request()->except('_method','_token');
-
-
-        /* Only for Testin purposes */
-        $quoteData['quote_currency_code'] ='EUR';
-        /* Testing end */
-
         $this->quoteDataRepository->updateQuote($quoteData);
 
         return redirect(route('quote.show'));
@@ -78,7 +71,7 @@ class QuoteController extends Controller
      */
     public function destroy()
     {
-        session()->forget('laragento_cart');
+        $this->quoteDataRepository->destroyQuote();
         return redirect(route('quote.show'));
     }
 }

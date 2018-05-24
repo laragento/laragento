@@ -15,6 +15,7 @@
     <form action="{{route('quote.update')}}" method="post" style="display: inline-block">
         {{ csrf_field() }}
         {{ method_field('PATCH') }}
+        <input type="hidden" name="quote_currency_code" value="EUR"/>
         <p>Updates the Currency for demo purpose to EUR</p>
         <button type="submit">Update Cart</button>
     </form>
