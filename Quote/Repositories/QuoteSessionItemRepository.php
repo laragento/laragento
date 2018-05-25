@@ -24,6 +24,7 @@ class QuoteSessionItemRepository
 
     public function createItem($data)
     {
+        $this->quoteItem = new QuoteSessionItem();
         foreach ($data as $key => $value) {
             $function = 'set' . str_replace(' ','',ucwords(str_replace('_', ' ', $key)));
             $this->quoteItem->$function($value);
