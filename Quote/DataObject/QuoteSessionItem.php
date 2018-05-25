@@ -66,6 +66,7 @@ protected $base_weee_tax_row_disposition
     protected $product_id;
     protected $qty;
     protected $price;
+    protected $sku;
     protected $base_price;
     protected $custom_price;
     protected $discount_percent;
@@ -111,6 +112,24 @@ protected $base_weee_tax_row_disposition
     {
         $this->product_id = $product_id;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getSku()
+    {
+        return $this->sku;
+    }
+
+    /**
+     * @param mixed $sku
+     */
+    public function setSku($sku): void
+    {
+        $this->sku = $sku;
+    }
+
+
 
     /**
      * @return mixed

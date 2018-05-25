@@ -16,6 +16,7 @@ class QuoteItemTransformer extends Fractal\TransformerAbstract
             'item_id' => (int)$quoteItem->getItemId(),
             'product_id' => (int)$quoteItem->getProductId(),
             'qty' => (int)$quoteItem->getQty(),
+            'sku' => (string)$quoteItem->getSku(),
             'price' => (float)$quoteItem->getPrice(),
             'base_price' => (float)$quoteItem->getBasePrice(),
             'custom_price' => (float)$quoteItem->getCustomPrice(),
