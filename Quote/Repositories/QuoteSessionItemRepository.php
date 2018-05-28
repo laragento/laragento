@@ -3,33 +3,36 @@
 namespace Laragento\Quote\Repositories;
 
 use Illuminate\Support\Facades\Auth;
+use Laragento\Catalog\Repositories\Product\ProductRepositoryInterface;
 use Laragento\Quote\DataObject\QuoteSessionItem;
 use Laragento\Quote\DataObject\QuoteSessionObject;
 
 class QuoteSessionItemRepository
 {
-
-    protected $quoteItem;
     protected $quoteDataRepository;
+    protected $productRepository;
 
     public function __construct(
         QuoteSessionObjectRepository $quoteDataRepository,
-        QuoteSessionItem $quoteSessionItem
+        ProductRepositoryInterface $productRepository
 )
     {
-        $this->quoteItem = $quoteSessionItem;
         $this->quoteDataRepository = $quoteDataRepository;
+        $this->productRepository = $productRepository;
 
     }
 
     public function createItem($data)
     {
-        $this->quoteItem = new QuoteSessionItem();
+        $quoteItem = new QuoteSessionItem();
+        $product = $this->productRepository->productBySku($data['sku']);
+        $data['product'] = $product;
+        $data['product_id'] = $product['entity_id'];
         foreach ($data as $key => $value) {
             $function = 'set' . str_replace(' ','',ucwords(str_replace('_', ' ', $key)));
-            $this->quoteItem->$function($value);
+            $quoteItem->$function($value);
         }
-        return $this->quoteItem;
+        return $quoteItem;
 
     }
 

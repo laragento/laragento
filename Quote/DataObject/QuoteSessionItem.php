@@ -4,6 +4,8 @@
 namespace Laragento\Quote\DataObject;
 
 
+use Laragento\Catalog\Repositories\Product\ProductRepository;
+
 class QuoteSessionItem
 {
     /*
@@ -77,8 +79,7 @@ protected $gift_message_id
     protected $row_total_incl_tax;
     protected $discount_tax_compensation_amount;
     protected $free_shipping;
-    protected $subtotal;
-    protected $subtotal_with_discount;
+    protected $product;
 
     /**
      * @return mixed
@@ -127,7 +128,6 @@ protected $gift_message_id
     {
         $this->sku = $sku;
     }
-
 
 
     /**
@@ -370,13 +370,31 @@ protected $gift_message_id
         $this->free_shipping = $free_shipping;
     }
 
+    /**
+     * @return mixed
+     */
+    public function getProduct()
+    {
+        return $this->product;
+    }
+
+    /**
+     * @param mixed $product
+     */
+    public function setProduct($product): void
+    {
+        $this->product = $product;
+    }
+
+
+
     public function toArray()
     {
         $serialized = (array)$this;
         $search = "\x00*\x00";
         $replacedKeys = str_replace($search, '', array_keys($serialized));
 
-        return array_combine($replacedKeys,$serialized);
+        return array_combine($replacedKeys, $serialized);
 
     }
 
