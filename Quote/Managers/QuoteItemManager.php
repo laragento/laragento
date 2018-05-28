@@ -88,7 +88,6 @@ class QuoteItemManager
 
     public function storeItemData($data,$item)
     {
-        dd($data);
         /** @var QuoteSessionItem $item */
         if (!$item) {
             $items = $this->getQuote()->getItems();
