@@ -32,10 +32,10 @@
         <label for="item_qty">Menge</label>
         <input type="number" id="item_qty" name="qty">
         <fieldset style="display: inline-block; border-style: dotted">
-            <label for="item_product_id_1">Produkt 1</label>
-            <input type="radio" id="item_product_id_1" name="product_id" value="1">
-            <label for="item_product_id_2">Produkt 2</label>
-            <input type="radio" id="item_product_id_2" name="product_id" value="2">
+            <label for="item_sku_1">Produkt 1</label>
+            <input type="radio" id="item_sku_1" name="sku" value="1">
+            <label for="item_sku_2">Produkt 2</label>
+            <input type="radio" id="item_sku_2" name="sku" value="2">
         </fieldset>
 
         <button type="submit">Add Cart Item</button>

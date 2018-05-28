@@ -66,7 +66,7 @@ class QuoteItemManager
      */
     public function storeItems($data, $item = null): void
     {
-        if (isset($data['product_id'])) {
+        if (isset($data['sku'])) {
             $data = $this->storeItemData($data, $item);
         }
         $quote = $this->getQuote();
@@ -88,6 +88,7 @@ class QuoteItemManager
 
     public function storeItemData($data,$item)
     {
+        dd($data);
         /** @var QuoteSessionItem $item */
         if (!$item) {
             $items = $this->getQuote()->getItems();

@@ -44,7 +44,7 @@ class QuoteItemController extends Controller
     {
         $requestData = request()->except(['_method', '_token']);
 
-        $item = $this->quoteItemRepository->byProductId($requestData['product_id']);;
+        $item = $this->quoteItemRepository->bySku($requestData['sku']);;
 
         $this->manager->storeItems($requestData,$item);
 

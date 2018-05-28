@@ -60,6 +60,17 @@ class QuoteSessionItemRepository
         return null;
     }
 
+    public function bySku($sku)
+    {
+        $items = $this->get();
+        foreach($items as $i) {
+            if ($i->getSku() == $sku) {
+                return $i;
+            }
+        }
+        return null;
+    }
+
     public function updateItem($id,$data)
     {
         $items = $this->get();
