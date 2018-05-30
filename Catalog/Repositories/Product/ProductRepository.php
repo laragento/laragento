@@ -194,10 +194,11 @@ class ProductRepository implements ProductRepositoryInterface
                 }
             }
 
-            //$productData = $this->saveImage($productData, $product->entity_id, $config); //TODO refactor
+
             if(isset($productData['categories'])) {
                 $this->saveCategories($productData['categories'], $product->entity_id);
             }
+            $this->saveImage($productData, $product->entity_id);
             $this->saveAttributes($productData, $product);
             $this->saveTierPrices($productData, $product->entity_id);
 
@@ -215,18 +216,10 @@ class ProductRepository implements ProductRepositoryInterface
     /**
      * @param $productData
      * @param $productId
-     * @param $config
      * @return mixed
      */
-    protected function saveImage($productData, $productId, $config)
+    protected function saveImage($productData, $productId)
     {
-        // @ToDo No ImportThings here
-        $storeMedia = isset($config[ImportInterface::CONFIG_STORE_MEDIADATA_ON_IMPORT]) ? $config[ImportInterface::CONFIG_STORE_MEDIADATA_ON_IMPORT] : true;
-
-        if (!$storeMedia) {
-            return $productData;
-        }
-
         // @ToDo Replace config keys with constants?
         $links = [
             'sourcepath' => $config['productimport-media-sourcepath'],
@@ -235,7 +228,7 @@ class ProductRepository implements ProductRepositoryInterface
 
         $image = false;
         $imageName = '';
-        //print_r($product);
+
         if (isset($productData['name'])) {
             $imageName = $productData['name'];
         }
