@@ -18,37 +18,22 @@ class Image implements ImageInterface
     }
 
     /**
-     * @param $image
-     * @return string
-     */
-    public function storeSubPath($image)
-    {
-        return strtolower($image{0}) . '/' . strtolower($image{1});
-    }
-
-    /**
-     * @param $image
-     * @return string
-     */
-    public function imagePathToStore($image)
-    {
-        return '/' . $this->storeSubPath($image) . '/' . $image;
-    }
-
-    /**
      * @param $imageData
      * @return string|null
      */
     public function save($imageData)
     {
+        $dir = dirname($imageData['target_path']);
+        if(!File::exists($dir)) {
+            File::makeDirectory($dir, 0775, true);
+        }
+
         if(!File::copy($imageData['source_path'], $imageData['target_path'])) {
             print_r('could not copy file ' . $imageData['source_path'] . ' to path ' . $imageData['target_path']);
             return false;
         }
 
-        dd($this->imagePathToStore($imageData['name']));
-
-        return $this->imagePathToStore($imageData['name']);
+        return true;
     }
 
 }

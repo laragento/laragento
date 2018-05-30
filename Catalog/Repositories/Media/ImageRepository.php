@@ -23,82 +23,70 @@ class ImageRepository implements ImageRepositoryInterface
         }
 
         $imageManager = new Image();
-        $image = $imageManager->save($imageData);
-        /*
-        if ($image) {
-            $this->storeGallery($image, $productId, $label);
-        }*/
+        if(!$imageManager->save($imageData)) {
+            return false;
+        }
 
-        return $image;
+        $imageStorePath = $this->imagePathToStore($imageData['name']);
+
+        $this->storeGallery($imageData, $productId, $imageStorePath);
+
+        return true;
     }
 
     /**
-     * @param $image
+     * @param $imageData
      * @param $productId
-     * @param $label
-     * @param int $position
-     * @todo handle store id
-     * @todo refactor this method!
+     * @param $imageStorePath
      */
-    protected function storeGallery($image, $productId, $label, $position = 2)
+    protected function storeGallery($imageData, $productId, $imageStorePath)
     {
-        $mgvte = MediaGalleryValueToEntity::where('entity_id', $productId)->get();
+        $mediaGallery = MediaGallery::where([
+            'attribute_id' => 90,
+            'media_type' => 'image',
+            'value' => $imageStorePath,
+        ])->first();
 
-        //ToDo we have to configure behavior for empty Image Value
-        if ($image !== null) {
-        //if ($mgvte->isEmpty()) {
-            $mediaGalleryData = [
+        if(!$mediaGallery) {
+            //create new entry
+            $mediaGallery = new MediaGallery([
                 'attribute_id' => 90,
-                'value' => $image,
+                'value' => $imageStorePath,
                 'media_type' => 'image',
                 'disabled' => 0,
-            ];
-
-            //print_r($mediaGalleryData);
-
-            $mediaGallery = MediaGallery::where(
-                [
-                    'attribute_id' => 90,
-                    'media_type' => 'image',
-                    'value' => $image,
-                ]
-            )->first();
-
-            if (!$mediaGallery) {
-                print_r($image. 'Im new');
-                $mediaGallery = new MediaGallery($mediaGalleryData);
-                $mediaGallery->save();
-            } else {
-                print_r('Im updateing');
-                $mediaGalleryData['value'] = $image;
-                $mediaGallery->update($mediaGalleryData);
-            }
-
-            MediaGalleryValue::firstOrCreate([
-                'value_id' => $mediaGallery->value_id,
-                'store_id' => 0,
-                'entity_id' => $productId,
-                'label' => $label,
-                'position' => 2,
-                'disabled' => 0,
             ]);
-
-            MediaGalleryValueToEntity::firstOrCreate([
-                'value_id' => $mediaGallery->value_id,
-                'entity_id' => $productId,
-            ]);
-
-            $this->saveThumbnail($productId, $image, 'image');
-            $this->saveThumbnail($productId, $image, 'small_image');
-            $this->saveThumbnail($productId, $image, 'thumbnail');
+        } else {
+            //update existing entry
+            $mediaGallery->value = $imageStorePath;
+            $mediaGallery->disabled = 0;
         }
+        $mediaGallery->save();
 
-        //} else {
-            //@todo implement gallery update
-        //}
+        MediaGalleryValue::firstOrCreate([
+            'value_id' => $mediaGallery->value_id,
+            'store_id' => $imageData['store_id'],
+            'entity_id' => $productId,
+            'label' => $imageData['name'],
+            'position' => 2,
+            'disabled' => 0,
+        ]);
+
+        MediaGalleryValueToEntity::firstOrCreate([
+            'value_id' => $mediaGallery->value_id,
+            'entity_id' => $productId,
+        ]);
+
+        $this->saveThumbnail($productId, $imageData, 'image');
+        $this->saveThumbnail($productId, $imageData, 'small_image');
+        $this->saveThumbnail($productId, $imageData, 'thumbnail');
     }
 
-    public function saveThumbnail($productId, $image, $type)
+    /**
+     * @param $productId
+     * @param $imageData
+     * @param $type
+     */
+    public function saveThumbnail($productId, $imageData, $type)
     {
         $attribute_id = null;
 
@@ -116,12 +104,29 @@ class ImageRepository implements ImageRepositoryInterface
         if (!$varchar) {
             Varchar::create([
                 'attribute_id' => $attribute_id,
-                'store_id' => 0,
+                'store_id' => $imageData['store_id'],
                 'entity_id' => $productId,
-                'value' => $image,
+                'value' => $imageData['name'],
             ]);
         }
     }
 
+    /**
+     * @param $image
+     * @return string
+     */
+    protected function storeSubPath($image)
+    {
+        return strtolower($image{0}) . '/' . strtolower($image{1});
+    }
+
+    /**
+     * @param $image
+     * @return string
+     */
+    protected function imagePathToStore($image)
+    {
+        return '/' . $this->storeSubPath($image) . '/' . $image;
+    }
 
 }
