@@ -11,49 +11,25 @@ use Laragento\Catalog\Models\Product\Entity\Varchar;
 class ImageRepository implements ImageRepositoryInterface
 {
     /**
-     * @param $fileName
+     * @param $imageData
      * @param $productId
-     * @param string $label
      * @return bool|null|string
      */
-    public function saveImage($fileName, $productId, $label = '', $links = null)
+    public function saveImage($imageData, $productId)
     {
-        $image = false;
-
-        if ($fileName) {
-            $imageManager = new Image();
-            $image = $imageManager->save($fileName, $links);
-            if ($image) {
-                $this->storeGallery($image, $productId, $label);
-            }
+        //only save image if required params are set
+        if(!isset($imageData['name']) || !isset($imageData['source_path']) || !isset($imageData['target_path'])) {
+            return false;
         }
-        return $image;
-    }
 
-
-    /**
-     * @param $fileNames
-     * @param $productId
-     * @param string $label
-     * @return bool|null|string
-     */
-    public function saveImages($fileNames, $productId, $label = '', $links = null)
-    {
         $imageManager = new Image();
-        $firstImage = false;
+        $image = $imageManager->save($imageData);
+        /*
+        if ($image) {
+            $this->storeGallery($image, $productId, $label);
+        }*/
 
-        $position = 2;
-        foreach ($fileNames['data'] as $fileName) {
-            $image = $imageManager->save($fileName, $links);
-            if (!$firstImage) {
-                $firstImage = $image;
-            }
-            $this->storeGallery($image, $productId, $label, $position);
-            $position++;
-        }
-
-        //dd();
-        return $firstImage;
+        return $image;
     }
 
     /**

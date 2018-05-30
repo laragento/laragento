@@ -209,11 +209,14 @@ class ProductRepository implements ProductRepositoryInterface
                 }
             }
 
-
             if(isset($productData['categories'])) {
                 $this->saveCategories($productData['categories'], $product->entity_id);
             }
-            $this->saveImage($productData, $product->entity_id);
+
+            if(isset($productData['images'])) {
+                $this->saveImages($productData, $product->entity_id);
+            }
+
             $this->saveAttributes($productData, $product);
             $this->saveTierPrices($productData, $product->entity_id);
 
@@ -231,37 +234,14 @@ class ProductRepository implements ProductRepositoryInterface
     /**
      * @param $productData
      * @param $productId
-     * @return mixed
      */
-    protected function saveImage($productData, $productId)
+    protected function saveImages($productData, $productId)
     {
-        // @ToDo Replace config keys with constants?
-        $links = [
-            'sourcepath' => $config['productimport-media-sourcepath'],
-            'targetpath' => $config['productimport-media-targetpath']
-        ];
+        $images = $productData['images'];
 
-        $image = false;
-        $imageName = '';
-
-        if (isset($productData['name'])) {
-            $imageName = $productData['name'];
+        foreach($images as $image) {
+            $this->imageRepository->saveImage($image, $productId);
         }
-
-        if (isset($productData['image'])) {
-            $image = $this->imageRepository->saveImage($productData['image'], $productId, $imageName, $links);
-        }
-        if (isset($productData['images'])) {
-            $image = $this->imageRepository->saveImages($productData['images'], $productId, $imageName, $links);
-        }
-
-        if ($image) {
-            $productData['image'] = $image;
-            $productData['small_image'] = $image;
-            $productData['thumbnail'] = $image;
-            $productData['image_label'] = $imageName;
-        }
-        return $productData;
     }
 
 

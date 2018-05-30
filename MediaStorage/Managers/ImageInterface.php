@@ -4,6 +4,5 @@ namespace Laragento\MediaStorage\Managers;
 
 interface ImageInterface
 {
-
-    public function save($image);
+    public function save($imageData);
 }

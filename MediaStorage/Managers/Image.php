@@ -124,15 +124,16 @@ class Image implements ImageInterface
 
 
     /**
-     * @param $image
+     * @param $imageData
      * @return string|null
      */
-    public function save($image, $links = null)
+    public function save($imageData)
     {
-        if ($links) {
-            $this->setSourcePath($links['sourcepath']);
-            $this->setTargetPath($links['targetpath']);
-        }
+        //set paths
+        $this->setSourcePath($imageData['source_path']);
+        $this->setTargetPath($imageData['target_path']);
+
+        dd($this->sourcePath($imageData));
 
         if ($image) {
 
