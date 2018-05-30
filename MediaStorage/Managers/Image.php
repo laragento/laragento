@@ -133,7 +133,7 @@ class Image implements ImageInterface
         $this->setSourcePath($imageData['source_path']);
         $this->setTargetPath($imageData['target_path']);
 
-        dd($this->sourcePath($imageData));
+        dd($this->sourcePath($imageData['name']));
 
         if ($image) {
 
