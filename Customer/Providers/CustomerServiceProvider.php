@@ -16,7 +16,8 @@ class CustomerServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->loadMigrationsFrom(__DIR__.'/../Database/Migrations');
-        config(['auth.providers.users.model' => Laragento\Customer\Models\Customer::class ]);
+        $this->loadRoutesFrom(__DIR__.'/../Http/routes.php');
+        //config(['auth.providers.users.model' => Customer::class ]);
     }
 
     /**
@@ -32,34 +33,6 @@ class CustomerServiceProvider extends ServiceProvider
         $this->app->bind('Laragento\Customer\Repositories\AddressRepositoryInterface',
             'Laragento\Customer\Repositories\AddressRepository');
 
-        $customerApi = 'Laragento\Customer\Http\Api\CustomerApi';
 
-        $this->app->make($customerApi);
-
-        $methods = [
-            'get' => [
-                'v1/customer/get' => $customerApi . '@get',
-                'v1/customer/all' => $customerApi . '@all',
-                'v1/customer/{customer_id}' => $customerApi . '@first',
-                'v1/customer/{customer_id}/addresses' => $customerApi . '@addresses',
-                'v1/customer/addresses/{address_id}' => $customerApi . '@address',
-                'v1/customer/{customer_id}/group/' => $customerApi . '@group',
-                'v1/customer/{customer_id}/shipping/' => $customerApi . '@defaultShipping',
-                'v1/customer/{customer_id}/billing/' => $customerApi . '@defaultBilling',
-            ],
-            'post' => [
-                'v1/customer/store' => $customerApi . '@store',
-                'v1/customer/address/store' => $customerApi . '@store',
-            ],
-            'delete' => [
-                'v1/customers{customer_id}' => $customerApi . '@destroy',
-            ]
-        ];
-
-        foreach ($methods as $method => $routes) {
-            foreach ($routes AS $route => $controller) {
-                Route::$method($route, $controller);
-            }
-        }
     }
 }

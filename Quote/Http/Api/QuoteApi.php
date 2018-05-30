@@ -1,35 +1,28 @@
 <?php
 
-namespace Laragento\Quote\Http\Controllers;
+namespace Laragento\Quote\Http\Api;
 
-use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Routing\Controller;
+use Laragento\Quote\Transformers\QuoteTransformer;
 use Laragento\Quote\Repositories\QuoteSessionObjectRepository;
+use Spatie\Fractal\Fractal;
 
-class QuoteController extends Controller
+class QuoteApi extends Controller
 {
+
     protected $quoteDataRepository;
 
     /**
-     * QuoteController constructor.
+     * QuoteApi constructor.
      * @param QuoteSessionObjectRepository $quoteDataRepository
      */
     public function __construct(QuoteSessionObjectRepository $quoteDataRepository)
     {
-        $this->quoteDataRepository = $quoteDataRepository;
         $this->middleware('auth')->except([]);
+        $this->quoteDataRepository = $quoteDataRepository;
     }
 
-    /**
-     * Display a listing of the resource.
-     * @return void
-     */
-    public function index()
-    {
-        //
-
-    }
 
     /**
      * Store a newly created resource in storage.
@@ -37,20 +30,23 @@ class QuoteController extends Controller
      */
     public function store()
     {
-        $this->quoteDataRepository->createQuote();
-        return redirect(route('quote.show'));
+        $quote = $this->quoteDataRepository->createQuote();
+        $response = Fractal::create($quote, new QuoteTransformer());
+
+        return response()->json($response, 201);
     }
 
     /**
      * Show the specified resource.
      * @return Response
      */
-    public function show()
+    public function first()
     {
         $quote = $this->quoteDataRepository->getQuote();
-        return view('quote::show', compact('quote'));
-    }
+        $response = Fractal::create($quote, new QuoteTransformer());
 
+        return response()->json($response, 200);
+    }
 
     /**
      * Update the specified resource in storage.
@@ -58,11 +54,11 @@ class QuoteController extends Controller
      */
     public function update()
     {
-        $quoteData = request()->except('_method','_token');
-        $this->quoteDataRepository->updateQuote($quoteData);
+        $quoteData = request()->all();
+        $quote = $this->quoteDataRepository->updateQuote($quoteData);
+        $response = Fractal::create($quote, new QuoteTransformer());
 
-        return redirect(route('quote.show'));
-
+        return response()->json($response, 200);
     }
 
     /**
@@ -72,6 +68,6 @@ class QuoteController extends Controller
     public function destroy()
     {
         $this->quoteDataRepository->destroyQuote();
-        return redirect(route('quote.show'));
+        return response()->json([], 204);
     }
 }
