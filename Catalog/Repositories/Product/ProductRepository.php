@@ -172,6 +172,15 @@ class ProductRepository implements ProductRepositoryInterface
     }
 
     /**
+     * @param $productId
+     * @return mixed
+     */
+    public static function categoriesByProductId($productId) {
+        return CategoryProduct::whereProductId($productId)
+            ->get();
+    }
+
+    /**
      * @param $productData
      * @return Product
      * @internal param $behavior
