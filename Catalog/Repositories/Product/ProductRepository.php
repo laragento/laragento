@@ -126,16 +126,11 @@ class ProductRepository implements ProductRepositoryInterface
 
     /**
      * @param $sku
-     * @return \Illuminate\Database\Eloquent\Model|null|static
+     * @return mixed
      */
     public static function productBySku($sku)
     {
-        return Product::with(
-            'categories.entities',
-            'entities.attribute',
-            'children.entities.attribute')
-            ->where('sku', $sku)
-            ->first();
+        return Product::whereSku($sku)->first();
     }
 
     /**
