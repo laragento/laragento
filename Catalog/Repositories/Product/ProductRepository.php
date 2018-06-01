@@ -181,6 +181,15 @@ class ProductRepository implements ProductRepositoryInterface
     }
 
     /**
+     * @param $productId
+     * @param $websiteId
+     * @return bool
+     */
+    public static function checkProductInWebsite($productId, $websiteId) {
+        return ProductWebsite::whereProductId($productId)->whereWebsiteId($websiteId)->first() ? true : false;
+    }
+
+    /**
      * @param $productData
      * @return Product
      * @internal param $behavior
