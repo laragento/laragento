@@ -48,10 +48,9 @@ class CategoryRepository implements CategoryRepositoryInterface
     {
         return Category::with(
             'parent',
-            'products.entities.attribute',
-            'children.entities.attribute',
-            'entities.attribute')
-            ->whereEntityId($categoryId)->first();
+            'products',
+            'children'
+        )->whereEntityId($categoryId)->first();
     }
 
     /**

@@ -22,4 +22,8 @@ interface ProductRepositoryInterface
     public static function productBySku($sku);
 
     public static function stockByProductId($productId, $stockId = 1);
+
+    public static function categoriesByProductId($productId);
+
+    public static function checkProductInWebsite($productId, $websiteId);
 }

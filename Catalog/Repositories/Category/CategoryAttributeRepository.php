@@ -87,7 +87,7 @@ class CategoryAttributeRepository implements CategoryAttributeRepositoryInterfac
      * @return mixed
      *
      */
-    public function dataByAttribute($attribute,$where){
+    public function dataByAttribute($attribute, $where) {
         switch ($attribute->backend_type) {
             case 'varchar':
                 return Varchar::where($where)->first();
@@ -102,6 +102,8 @@ class CategoryAttributeRepository implements CategoryAttributeRepositoryInterfac
             default :
                 $this->errors[] = 'backend_type' . $attribute->backend_type . 'is missing';
         }
+
+        return null;
     }
 
     /**

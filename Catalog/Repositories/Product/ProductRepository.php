@@ -126,16 +126,11 @@ class ProductRepository implements ProductRepositoryInterface
 
     /**
      * @param $sku
-     * @return \Illuminate\Database\Eloquent\Model|null|static
+     * @return mixed
      */
     public static function productBySku($sku)
     {
-        return Product::with(
-            'categories.entities',
-            'entities.attribute',
-            'children.entities.attribute')
-            ->where('sku', $sku)
-            ->first();
+        return Product::whereSku($sku)->first();
     }
 
     /**
@@ -174,6 +169,24 @@ class ProductRepository implements ProductRepositoryInterface
         return StockItem::whereProductId($productId)
             ->whereStockId($stockId)
             ->first();
+    }
+
+    /**
+     * @param $productId
+     * @return mixed
+     */
+    public static function categoriesByProductId($productId) {
+        return CategoryProduct::whereProductId($productId)
+            ->get();
+    }
+
+    /**
+     * @param $productId
+     * @param $websiteId
+     * @return bool
+     */
+    public static function checkProductInWebsite($productId, $websiteId) {
+        return ProductWebsite::whereProductId($productId)->whereWebsiteId($websiteId)->first() ? true : false;
     }
 
     /**
