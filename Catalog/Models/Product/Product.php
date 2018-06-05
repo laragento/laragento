@@ -4,6 +4,7 @@ namespace Laragento\Catalog\Models\Product;
 
 use Illuminate\Database\Eloquent\Model;
 use Laragento\Catalog\Models\Category\Category;
+use Laragento\Catalog\Models\Inventory\StockItem;
 use Laragento\Catalog\Models\Product\Entity\Datetime;
 use Laragento\Catalog\Models\Product\Entity\Decimal;
 use Laragento\Catalog\Models\Product\Entity\Integer;
@@ -109,6 +110,16 @@ class Product extends Model
     public function galleries()
     {
 
+    }
+
+    public function websites()
+    {
+        return $this->hasMany(ProductWebsite::class, 'product_id', 'entity_id');
+    }
+
+    public function stockItem()
+    {
+        return $this->belongsTo(StockItem::class, 'product_id', 'entity_id');
     }
 
     public function tierprices()

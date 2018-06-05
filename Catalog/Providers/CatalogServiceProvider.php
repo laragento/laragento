@@ -68,6 +68,7 @@ class CatalogServiceProvider extends ServiceProvider
 //        }
         $this->app->make($controller);
 
+
         $methods = [
             'get' => [
                 //ToDo can these routes be removed??
