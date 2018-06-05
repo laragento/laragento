@@ -205,7 +205,7 @@ class ProductRepository implements ProductRepositoryInterface
 
                 if(isset($productData['stock'])) {
                     //update product stock
-                    $this->saveStock($product, $productData['stock'], $productData['websites']);
+                    $this->saveStock($product, $productData['stock']);
                 }
             }
 
@@ -359,15 +359,14 @@ class ProductRepository implements ProductRepositoryInterface
      *
      * @param $product
      * @param $stock
-     * @param $websites
      */
-    public function saveStock($product, $stock, $websites) {
+    public function saveStock($product, $stock) {
         $stockItem = StockItem::firstOrNew([
             'product_id' => $product->entity_id,
             'stock_id' => isset($stock['stock_id']) ? $stock['stock_id'] : 1
         ]);
 
-        $stockItem->website_id = isset($websites[0]) ? $websites[0] : 1;
+        $stockItem->website_id = 0; //stock is global for all websites
         $stockItem->qty = isset($stock['qty']) ? $stock['qty'] : 0;
         $stockItem->min_qty = isset($stock['min_qty']) ? $stock['min_qty'] : 0;
         $stockItem->use_config_min_qty = isset($stock['use_config_min_qty']) ? $stock['use_config_min_qty'] : 1;
