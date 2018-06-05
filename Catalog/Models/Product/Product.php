@@ -119,7 +119,7 @@ class Product extends Model
 
     public function stockItem()
     {
-        return $this->belongsTo(StockItem::class, 'product_id', 'entity_id');
+        return $this->hasOne(StockItem::class, 'product_id', 'entity_id');
     }
 
     public function tierprices()
