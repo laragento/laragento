@@ -30,11 +30,19 @@ class QuoteSessionItemRepository
 
         $quoteItem = new QuoteSessionItem();
         $product = $this->productRepository->product($data['sku']);
-        //ToDo Hardcoded StoreID
-        $data['price'] = ($val = $this->productAttributeRepository->data('price', $product->entity_id)) ? $val->value : 0;
+        $data['base_price'] = ($val = $this->productAttributeRepository->data('price', $product->entity_id, $this->quote()->getStoreId())) ? $val->value : 0;
+        $data['price'] = $data['base_price'];
 
-        $data['product'] = $product;
+        $base_row_total = $data['qty'] * $data['base_price'];
+        $data['base_row_total'] = number_format(round((($base_row_total + 0.000001) * 100) / 100, 2), 4);
+        $data['row_total'] = $data['base_row_total'];
+
         $data['product_id'] = $product['entity_id'];
+        // ToDo hardcoded Values
+
+
+        // ToDo Don't like the full product here
+        $data['product'] = $product;
         foreach ($data as $key => $value) {
             $function = 'set' . str_replace(' ', '', ucwords(str_replace('_', ' ', $key)));
             $quoteItem->$function($value);

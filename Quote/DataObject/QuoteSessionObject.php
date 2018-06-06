@@ -7,26 +7,10 @@ namespace Laragento\Quote\DataObject;
 class QuoteSessionObject
 {
     /* ORIGINAL from DB
-    protected $entity_id;
-    protected $store_id;
     protected $created_at;
     protected $updated_at;
     protected $converted_at;
-    protected $is_active;
-    protected $is_virtual;
-    protected $is_multi_shipping;
-    protected $items_count;
-    protected $items_qty;
-    protected $orig_order_id;
-    protected $store_to_base_rate;
-    protected $store_to_quote_rate;
-    protected $base_currency_code;
-    protected $store_currency_code;
-    protected $quote_currency_code;
-    protected $grand_total;
-    protected $base_grand_total;
     protected $checkout_method;
-    protected $customer_id;
     protected $customer_tax_class_id;
     protected $customer_group_id;
     protected $customer_email;
@@ -39,20 +23,11 @@ class QuoteSessionObject
     protected $customer_note;
     protected $customer_note_notify;
     protected $customer_is_guest;
-    protected $remote_ip;
     protected $applied_rule_ids;
     protected $reserved_order_id;
     protected $password_hash;
-    protected $coupon_code;
-    protected $global_currency_code;
-    protected $base_to_global_rate;
-    protected $base_to_quote_rate;
     protected $customer_taxvat;
     protected $customer_gender;
-    protected $subtotal;
-    protected $base_subtotal;
-    protected $subtotal_with_discount;
-    protected $base_subtotal_with_discount;
     protected $is_changed;
     protected $trigger_recollect;
     protected $ext_shipping_info;
@@ -60,25 +35,42 @@ class QuoteSessionObject
     protected $gift_message_id;
     */
 
-    protected $cart_id;
-    protected $store_id = 1;
-    protected $items_count = 0;
-    protected $items_qty = 0;
-    protected $items = [];
-    protected $quote_currency_code = 'CHF';
+    protected $created_at;
+    protected $updated_at;
+    protected $converted_at;
+    protected $is_active = 1;
+    protected $is_virtual = 0;
+    protected $is_multi_shipping = 0;
+    protected $items_count;
+    protected $items_qty;
+    protected $orig_order_id;
+    protected $store_to_base_rate;
+    protected $store_to_quote_rate;
+    protected $base_currency_code = "CHF";
+    protected $store_currency_code = "CHF";
+    protected $quote_currency_code = "CHF";
+    protected $grand_total = 0.0000;
+    protected $base_grand_total = 0.0000;
     protected $customer_id;
     protected $remote_ip;
     protected $coupon_code;
-    protected $grand_total = 0.0000;
+    protected $global_currency_code = "CHF";
+    protected $base_to_global_rate = 1.0000;
+    protected $base_to_quote_rate = 1.0000;
     protected $subtotal = 0.0000;
     protected $base_subtotal = 0.0000;
     protected $subtotal_with_discount = 0.0000;
     protected $base_subtotal_with_discount = 0.0000;
 
+
     // From Sales:
     protected $shipping_amount = 0.0000;
     protected $shipping_tax_amount = 0.0000;
     protected $tax_amount = 0.0000;
+
+    // Object only:
+    protected $items = [];
+    protected $cart_id;
 
     public function __construct()
     {
@@ -103,21 +95,100 @@ class QuoteSessionObject
         $this->cart_id = $cart_id;
     }
 
+    /**
+     * @return mixed
+     */
+    public function getCreatedAt()
+    {
+        return $this->created_at;
+    }
+
+    /**
+     * @param mixed $created_at
+     */
+    public function setCreatedAt($created_at): void
+    {
+        $this->created_at = $created_at;
+    }
 
     /**
      * @return mixed
      */
-    public function getStoreId()
+    public function getUpdatedAt()
     {
-        return $this->store_id;
+        return $this->updated_at;
     }
 
     /**
-     * @param mixed $store_id
+     * @param mixed $updated_at
      */
-    public function setStoreId($store_id): void
+    public function setUpdatedAt($updated_at): void
     {
-        $this->store_id = $store_id;
+        $this->updated_at = $updated_at;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getConvertedAt()
+    {
+        return $this->converted_at;
+    }
+
+    /**
+     * @param mixed $converted_at
+     */
+    public function setConvertedAt($converted_at): void
+    {
+        $this->converted_at = $converted_at;
+    }
+
+    /**
+     * @return int
+     */
+    public function getisActive(): int
+    {
+        return $this->is_active;
+    }
+
+    /**
+     * @param int $is_active
+     */
+    public function setIsActive(int $is_active): void
+    {
+        $this->is_active = $is_active;
+    }
+
+    /**
+     * @return int
+     */
+    public function getisVirtual(): int
+    {
+        return $this->is_virtual;
+    }
+
+    /**
+     * @param int $is_virtual
+     */
+    public function setIsVirtual(int $is_virtual): void
+    {
+        $this->is_virtual = $is_virtual;
+    }
+
+    /**
+     * @return int
+     */
+    public function getisMultiShipping(): int
+    {
+        return $this->is_multi_shipping;
+    }
+
+    /**
+     * @param int $is_multi_shipping
+     */
+    public function setIsMultiShipping(int $is_multi_shipping): void
+    {
+        $this->is_multi_shipping = $is_multi_shipping;
     }
 
     /**
@@ -127,24 +198,6 @@ class QuoteSessionObject
     {
         return $this->items_count;
     }
-
-    /**
-     * @return array
-     */
-    public function getItems(): array
-    {
-        return $this->items;
-    }
-
-    /**
-     * @param array $items
-     */
-    public function setItems(array $items): void
-    {
-        $this->items = $items;
-    }
-
-
 
     /**
      * @param mixed $items_count
@@ -173,17 +226,129 @@ class QuoteSessionObject
     /**
      * @return mixed
      */
-    public function getQuoteCurrencyCode()
+    public function getOrigOrderId()
+    {
+        return $this->orig_order_id;
+    }
+
+    /**
+     * @param mixed $orig_order_id
+     */
+    public function setOrigOrderId($orig_order_id): void
+    {
+        $this->orig_order_id = $orig_order_id;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getStoreToBaseRate()
+    {
+        return $this->store_to_base_rate;
+    }
+
+    /**
+     * @param mixed $store_to_base_rate
+     */
+    public function setStoreToBaseRate($store_to_base_rate): void
+    {
+        $this->store_to_base_rate = $store_to_base_rate;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getStoreToQuoteRate()
+    {
+        return $this->store_to_quote_rate;
+    }
+
+    /**
+     * @param mixed $store_to_quote_rate
+     */
+    public function setStoreToQuoteRate($store_to_quote_rate): void
+    {
+        $this->store_to_quote_rate = $store_to_quote_rate;
+    }
+
+    /**
+     * @return string
+     */
+    public function getBaseCurrencyCode(): string
+    {
+        return $this->base_currency_code;
+    }
+
+    /**
+     * @param string $base_currency_code
+     */
+    public function setBaseCurrencyCode(string $base_currency_code): void
+    {
+        $this->base_currency_code = $base_currency_code;
+    }
+
+    /**
+     * @return string
+     */
+    public function getStoreCurrencyCode(): string
+    {
+        return $this->store_currency_code;
+    }
+
+    /**
+     * @param string $store_currency_code
+     */
+    public function setStoreCurrencyCode(string $store_currency_code): void
+    {
+        $this->store_currency_code = $store_currency_code;
+    }
+
+    /**
+     * @return string
+     */
+    public function getQuoteCurrencyCode(): string
     {
         return $this->quote_currency_code;
     }
 
     /**
-     * @param mixed $quote_currency_code
+     * @param string $quote_currency_code
      */
-    public function setQuoteCurrencyCode($quote_currency_code): void
+    public function setQuoteCurrencyCode(string $quote_currency_code): void
     {
         $this->quote_currency_code = $quote_currency_code;
+    }
+
+    /**
+     * @return float
+     */
+    public function getGrandTotal(): float
+    {
+        return $this->grand_total;
+    }
+
+    /**
+     * @param float $grand_total
+     */
+    public function setGrandTotal(float $grand_total): void
+    {
+        $this->grand_total = $grand_total;
+    }
+
+    /**
+     * @return float
+     */
+    public function getBaseGrandTotal(): float
+    {
+        return $this->base_grand_total;
+    }
+
+    /**
+     * @param float $base_grand_total
+     */
+    public function setBaseGrandTotal(float $base_grand_total): void
+    {
+        $this->base_grand_total = $base_grand_total;
     }
 
     /**
@@ -235,81 +400,113 @@ class QuoteSessionObject
     }
 
     /**
-     * @return mixed
+     * @return string
      */
-    public function getGrandTotal()
+    public function getGlobalCurrencyCode(): string
     {
-        return $this->grand_total;
+        return $this->global_currency_code;
     }
 
     /**
-     * @param mixed $grand_total
+     * @param string $global_currency_code
      */
-    public function setGrandTotal($grand_total): void
+    public function setGlobalCurrencyCode(string $global_currency_code): void
     {
-        $this->grand_total = $grand_total;
+        $this->global_currency_code = $global_currency_code;
     }
 
     /**
-     * @return mixed
+     * @return float
      */
-    public function getSubtotal()
+    public function getBaseToGlobalRate(): float
+    {
+        return $this->base_to_global_rate;
+    }
+
+    /**
+     * @param float $base_to_global_rate
+     */
+    public function setBaseToGlobalRate(float $base_to_global_rate): void
+    {
+        $this->base_to_global_rate = $base_to_global_rate;
+    }
+
+    /**
+     * @return float
+     */
+    public function getBaseToQuoteRate(): float
+    {
+        return $this->base_to_quote_rate;
+    }
+
+    /**
+     * @param float $base_to_quote_rate
+     */
+    public function setBaseToQuoteRate(float $base_to_quote_rate): void
+    {
+        $this->base_to_quote_rate = $base_to_quote_rate;
+    }
+
+    /**
+     * @return float
+     */
+    public function getSubtotal(): float
     {
         return $this->subtotal;
     }
 
     /**
-     * @param mixed $subtotal
+     * @param float $subtotal
      */
-    public function setSubtotal($subtotal): void
+    public function setSubtotal(float $subtotal): void
     {
         $this->subtotal = $subtotal;
     }
 
     /**
-     * @return mixed
+     * @return float
      */
-    public function getBaseSubtotal()
+    public function getBaseSubtotal(): float
     {
         return $this->base_subtotal;
     }
 
     /**
-     * @param mixed $base_subtotal
+     * @param float $base_subtotal
      */
-    public function setBaseSubtotal($base_subtotal): void
+    public function setBaseSubtotal(float $base_subtotal): void
     {
         $this->base_subtotal = $base_subtotal;
     }
 
     /**
-     * @return mixed
+     * @return float
      */
-    public function getSubtotalWithDiscount()
+    public function getSubtotalWithDiscount(): float
     {
         return $this->subtotal_with_discount;
     }
 
     /**
-     * @param mixed $subtotal_with_discount
+     * @param float $subtotal_with_discount
      */
-    public function setSubtotalWithDiscount($subtotal_with_discount): void
+    public function setSubtotalWithDiscount(float $subtotal_with_discount): void
     {
         $this->subtotal_with_discount = $subtotal_with_discount;
     }
 
     /**
-     * @return mixed
+     * @return float
      */
-    public function getBaseSubtotalWithDiscount()
+    public function getBaseSubtotalWithDiscount(): float
     {
         return $this->base_subtotal_with_discount;
     }
 
     /**
-     * @param mixed $base_subtotal_with_discount
+     * @param float $base_subtotal_with_discount
      */
-    public function setBaseSubtotalWithDiscount($base_subtotal_with_discount): void
+    public function setBaseSubtotalWithDiscount(float $base_subtotal_with_discount): void
     {
         $this->base_subtotal_with_discount = $base_subtotal_with_discount;
     }
@@ -361,6 +558,24 @@ class QuoteSessionObject
     {
         $this->tax_amount = $tax_amount;
     }
+
+    /**
+     * @return array
+     */
+    public function getItems(): array
+    {
+        return $this->items;
+    }
+
+    /**
+     * @param array $items
+     */
+    public function setItems(array $items): void
+    {
+        $this->items = $items;
+    }
+
+
 
     public function toArray()
     {

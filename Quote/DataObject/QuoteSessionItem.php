@@ -8,78 +8,64 @@ use Laragento\Catalog\Repositories\Product\ProductRepository;
 
 class QuoteSessionItem
 {
-    /*
-protected $entity_id
-protected $store_id
-protected $created_at
-protected $updated_at
-protected $converted_at
-protected $is_active
-protected $is_virtual
-protected $is_multi_shipping
-protected $items_count
-protected $items_qty
-protected $orig_order_id
-protected $store_to_base_rate
-protected $store_to_quote_rate
-protected $base_currency_code
-protected $store_currency_code
-protected $quote_currency_code
-protected $grand_total
-protected $base_grand_total
-protected $checkout_method
-protected $customer_id
-protected $customer_tax_class_id
-protected $customer_group_id
-protected $customer_email
-protected $customer_prefix
-protected $customer_firstname
-protected $customer_middlename
-protected $customer_lastname
-protected $customer_suffix
-protected $customer_dob
-protected $customer_note
-protected $customer_note_notify
-protected $customer_is_guest
-protected $remote_ip
-protected $applied_rule_ids
-protected $reserved_order_id
-protected $password_hash
-protected $coupon_code
-protected $global_currency_code
-protected $base_to_global_rate
-protected $base_to_quote_rate
-protected $customer_taxvat
-protected $customer_gender
-protected $subtotal
-protected $base_subtotal
-protected $subtotal_with_discount
-protected $base_subtotal_with_discount
-protected $is_changed
-protected $trigger_recollect
-protected $ext_shipping_info
-protected $is_persistent
-protected $gift_message_id
+    /**
+     * ORIGINAL DB FIELDS
+    protected $created_at;
+    protected $updated_at;
+    protected $parent_item_id;
+    protected $applied_rule_ids;
+    protected $additional_data;
+    protected $is_qty_decimal;
+    protected $no_discount;
+    protected $product_type;
+    protected $base_tax_before_discount;
+    protected $tax_before_discount;
+    protected $base_cost;
+    protected $gift_message_id;
+    protected $weee_tax_applied;
+    protected $weee_tax_applied_amount;
+    protected $weee_tax_applied_row_amount;
+    protected $weee_tax_disposition;
+    protected $weee_tax_row_disposition;
+    protected $base_weee_tax_applied_amount;
+    protected $base_weee_tax_applied_row_amnt;
+    protected $base_weee_tax_disposition;
+    protected $base_weee_tax_row_disposition;
      */
+
     protected $item_id;
+    protected $quote_id;
     protected $product_id;
+    protected $store_id;
+    protected $is_virtual;
+    protected $sku;
+    protected $name;
+    protected $description;
+    protected $weight;
     protected $qty;
     protected $price;
-    protected $sku;
     protected $base_price;
     protected $custom_price;
     protected $discount_percent;
     protected $discount_amount;
+    protected $base_discount_amount;
     protected $tax_percent;
     protected $tax_amount;
+    protected $base_tax_amount;
     protected $row_total;
+    protected $base_row_total;
     protected $row_total_with_discount;
-    protected $tax_before_discount;
+    protected $row_weight;
+    protected $original_custom_price;
+    protected $redirect_url;
     protected $price_incl_tax;
+    protected $base_price_incl_tax;
     protected $row_total_incl_tax;
+    protected $base_row_total_incl_tax;
     protected $discount_tax_compensation_amount;
+    protected $base_discount_tax_compensation_amount;
     protected $free_shipping;
-    protected $product;
+    protected $gift_message_id;
 
     /**
      * @return mixed
@@ -95,6 +81,22 @@ protected $gift_message_id
     public function setItemId($item_id): void
     {
         $this->item_id = $item_id;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getQuoteId()
+    {
+        return $this->quote_id;
+    }
+
+    /**
+     * @param mixed $quote_id
+     */
+    public function setQuoteId($quote_id): void
+    {
+        $this->quote_id = $quote_id;
     }
 
     /**
@@ -116,6 +118,38 @@ protected $gift_message_id
     /**
      * @return mixed
      */
+    public function getStoreId()
+    {
+        return $this->store_id;
+    }
+
+    /**
+     * @param mixed $store_id
+     */
+    public function setStoreId($store_id): void
+    {
+        $this->store_id = $store_id;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getisVirtual()
+    {
+        return $this->is_virtual;
+    }
+
+    /**
+     * @param mixed $is_virtual
+     */
+    public function setIsVirtual($is_virtual): void
+    {
+        $this->is_virtual = $is_virtual;
+    }
+
+    /**
+     * @return mixed
+     */
     public function getSku()
     {
         return $this->sku;
@@ -129,6 +163,53 @@ protected $gift_message_id
         $this->sku = $sku;
     }
 
+    /**
+     * @return mixed
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    /**
+     * @param mixed $name
+     */
+    public function setName($name): void
+    {
+        $this->name = $name;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getDescription()
+    {
+        return $this->description;
+    }
+
+    /**
+     * @param mixed $description
+     */
+    public function setDescription($description): void
+    {
+        $this->description = $description;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getWeight()
+    {
+        return $this->weight;
+    }
+
+    /**
+     * @param mixed $weight
+     */
+    public function setWeight($weight): void
+    {
+        $this->weight = $weight;
+    }
 
     /**
      * @return mixed
@@ -229,6 +310,22 @@ protected $gift_message_id
     /**
      * @return mixed
      */
+    public function getBaseDiscountAmount()
+    {
+        return $this->base_discount_amount;
+    }
+
+    /**
+     * @param mixed $base_discount_amount
+     */
+    public function setBaseDiscountAmount($base_discount_amount): void
+    {
+        $this->base_discount_amount = $base_discount_amount;
+    }
+
+    /**
+     * @return mixed
+     */
     public function getTaxPercent()
     {
         return $this->tax_percent;
@@ -261,6 +358,22 @@ protected $gift_message_id
     /**
      * @return mixed
      */
+    public function getBaseTaxAmount()
+    {
+        return $this->base_tax_amount;
+    }
+
+    /**
+     * @param mixed $base_tax_amount
+     */
+    public function setBaseTaxAmount($base_tax_amount): void
+    {
+        $this->base_tax_amount = $base_tax_amount;
+    }
+
+    /**
+     * @return mixed
+     */
     public function getRowTotal()
     {
         return $this->row_total;
@@ -272,6 +385,22 @@ protected $gift_message_id
     public function setRowTotal($row_total): void
     {
         $this->row_total = $row_total;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getBaseRowTotal()
+    {
+        return $this->base_row_total;
+    }
+
+    /**
+     * @param mixed $base_row_total
+     */
+    public function setBaseRowTotal($base_row_total): void
+    {
+        $this->base_row_total = $base_row_total;
     }
 
     /**
@@ -293,17 +422,49 @@ protected $gift_message_id
     /**
      * @return mixed
      */
-    public function getTaxBeforeDiscount()
+    public function getRowWeight()
     {
-        return $this->tax_before_discount;
+        return $this->row_weight;
     }
 
     /**
-     * @param mixed $tax_before_discount
+     * @param mixed $row_weight
      */
-    public function setTaxBeforeDiscount($tax_before_discount): void
+    public function setRowWeight($row_weight): void
     {
-        $this->tax_before_discount = $tax_before_discount;
+        $this->row_weight = $row_weight;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getOriginalCustomPrice()
+    {
+        return $this->original_custom_price;
+    }
+
+    /**
+     * @param mixed $original_custom_price
+     */
+    public function setOriginalCustomPrice($original_custom_price): void
+    {
+        $this->original_custom_price = $original_custom_price;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getRedirectUrl()
+    {
+        return $this->redirect_url;
+    }
+
+    /**
+     * @param mixed $redirect_url
+     */
+    public function setRedirectUrl($redirect_url): void
+    {
+        $this->redirect_url = $redirect_url;
     }
 
     /**
@@ -325,6 +486,22 @@ protected $gift_message_id
     /**
      * @return mixed
      */
+    public function getBasePriceInclTax()
+    {
+        return $this->base_price_incl_tax;
+    }
+
+    /**
+     * @param mixed $base_price_incl_tax
+     */
+    public function setBasePriceInclTax($base_price_incl_tax): void
+    {
+        $this->base_price_incl_tax = $base_price_incl_tax;
+    }
+
+    /**
+     * @return mixed
+     */
     public function getRowTotalInclTax()
     {
         return $this->row_total_incl_tax;
@@ -336,6 +513,22 @@ protected $gift_message_id
     public function setRowTotalInclTax($row_total_incl_tax): void
     {
         $this->row_total_incl_tax = $row_total_incl_tax;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getBaseRowTotalInclTax()
+    {
+        return $this->base_row_total_incl_tax;
+    }
+
+    /**
+     * @param mixed $base_row_total_incl_tax
+     */
+    public function setBaseRowTotalInclTax($base_row_total_incl_tax): void
+    {
+        $this->base_row_total_incl_tax = $base_row_total_incl_tax;
     }
 
     /**
@@ -357,6 +550,22 @@ protected $gift_message_id
     /**
      * @return mixed
      */
+    public function getBaseDiscountTaxCompensationAmount()
+    {
+        return $this->base_discount_tax_compensation_amount;
+    }
+
+    /**
+     * @param mixed $base_discount_tax_compensation_amount
+     */
+    public function setBaseDiscountTaxCompensationAmount($base_discount_tax_compensation_amount): void
+    {
+        $this->base_discount_tax_compensation_amount = $base_discount_tax_compensation_amount;
+    }
+
+    /**
+     * @return mixed
+     */
     public function getFreeShipping()
     {
         return $this->free_shipping;
@@ -373,20 +582,18 @@ protected $gift_message_id
     /**
      * @return mixed
      */
-    public function getProduct()
+    public function getGiftMessageId()
     {
-        return $this->product;
+        return $this->gift_message_id;
     }
 
     /**
-     * @param mixed $product
+     * @param mixed $gift_message_id
      */
-    public function setProduct($product): void
+    public function setGiftMessageId($gift_message_id): void
     {
-        $this->product = $product;
+        $this->gift_message_id = $gift_message_id;
     }
-
-
 
     public function toArray()
     {

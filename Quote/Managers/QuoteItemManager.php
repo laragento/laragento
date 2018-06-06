@@ -70,11 +70,13 @@ class QuoteItemManager
             array_push($prices, $item->getPrice());
         }
         $grandTotalFull = array_sum($prices);
+
+        //ToDo get TaxByProduct
         $taxAmountFull = $grandTotalFull * 0.077;
         $subTotalFull = $grandTotalFull - $taxAmountFull;
-        $grandTotal = number_format(round((($grandTotalFull +  0.000001) * 100 ) / 100 , 2));
-        $taxAmount = number_format(round((($taxAmountFull +  0.000001) * 100 ) / 100 , 2));
-        $subTotal = number_format(round((($subTotalFull +  0.000001) * 100 ) / 100 , 2));
+        $grandTotal = number_format(round((($grandTotalFull +  0.000001) * 100 ) / 100 , 2),4);
+        $taxAmount = number_format(round((($taxAmountFull +  0.000001) * 100 ) / 100 , 2),4);
+        $subTotal = number_format(round((($subTotalFull +  0.000001) * 100 ) / 100 , 2),4);
 
         // ToDo if 5Rp round is needed
         //var_dump(round(($var + 0.000001) * 20) / 20,2);

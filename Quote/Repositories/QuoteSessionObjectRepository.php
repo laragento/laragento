@@ -16,7 +16,7 @@ class QuoteSessionObjectRepository
     }
 
 
-    public function createQuote()
+    public function createQuote($storeId = 0)
     {
         $this->destroyQuote();
 
@@ -28,6 +28,9 @@ class QuoteSessionObjectRepository
         }
         if (!$this->quote->getRemoteIp()) {
             $this->quote->setRemoteIp(request()->ip());
+        }
+        if (!$this->quote->getStoreId()) {
+            $this->quote->setStoreId($storeId);
         }
 
         session()->put('laragento_cart', $this->quote);
