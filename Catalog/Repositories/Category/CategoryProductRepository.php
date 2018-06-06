@@ -51,30 +51,29 @@ class CategoryProductRepository implements CategoryProductRepositoryInterface
     /**
      * @param $categoryData
      * @param $productId
-     * @param bool $create
      * @return mixed
      */
-    public function storeByPath($categoryData, $productId, $create = true)
+    public function storeByPath($categoryData, $productId)
     {
         $categories = explode("/", $categoryData['path']);
 
         //parent ID is AdminStore 0
         $parentId = $this->getStoreRootCategoryId($this->storeRepository->getAdminStoreId());
 
-        $categoryPath = isset($categories[0]) ? $categories[0] : '';
+        $categoryPath = '';
 
         foreach ($categories as $categoryName) {
             $categoryName = trim($categoryName);
 
+            if($categoryPath == '') {
+                $categoryPath = $categoryName;
+            } else {
+                $categoryPath .= '/' . $categoryName;
+            }
+
             $categoryId = CategoryRepository::getCategoryIdByName($categoryName, $this->storeRepository->getAdminStoreId(), $parentId);
 
-            if (!$categoryId) {
-                if (!$create) {
-                    print_r('    CATEGORY #>' . $categoryData['path'] . '<# not found    ');
-                    return null;
-                }
-
-                $categoryPath .= '/' . $categoryName;
+            if(!isset($categoryId)) {
 
                 //set values extracted from path
                 $categoryData['path'] = $categoryPath;
