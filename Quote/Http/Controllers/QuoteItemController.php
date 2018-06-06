@@ -88,7 +88,6 @@ class QuoteItemController extends Controller
     {
         $items = $this->quoteItemRepository->destroyItem($itemId);
         $this->manager->storeItems($items);
-
-        return redirect()->route('quote.show');
+        return redirect()->back();
     }
 }

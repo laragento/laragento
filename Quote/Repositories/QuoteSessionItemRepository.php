@@ -3,6 +3,7 @@
 namespace Laragento\Quote\Repositories;
 
 use Illuminate\Support\Facades\Auth;
+use Laragento\Catalog\Repositories\Product\ProductAttributeRepositoryInterface;
 use Laragento\Catalog\Repositories\Product\ProductRepositoryInterface;
 use Laragento\Quote\DataObject\QuoteSessionItem;
 use Laragento\Quote\DataObject\QuoteSessionObject;
@@ -11,25 +12,31 @@ class QuoteSessionItemRepository
 {
     protected $quoteDataRepository;
     protected $productRepository;
+    protected $productAttributeRepository;
 
     public function __construct(
         QuoteSessionObjectRepository $quoteDataRepository,
-        ProductRepositoryInterface $productRepository
-)
-    {
+        ProductRepositoryInterface $productRepository,
+        ProductAttributeRepositoryInterface $productAttributeRepository
+    ) {
         $this->quoteDataRepository = $quoteDataRepository;
         $this->productRepository = $productRepository;
+        $this->productAttributeRepository = $productAttributeRepository;
 
     }
 
     public function createItem($data)
     {
+
         $quoteItem = new QuoteSessionItem();
-        $product = $this->productRepository->productBySku($data['sku']);
+        $product = $this->productRepository->product($data['sku']);
+        //ToDo Hardcoded StoreID
+        $data['price'] = ($val = $this->productAttributeRepository->data('price', $product->entity_id)) ? $val->value : 0;
+
         $data['product'] = $product;
         $data['product_id'] = $product['entity_id'];
         foreach ($data as $key => $value) {
-            $function = 'set' . str_replace(' ','',ucwords(str_replace('_', ' ', $key)));
+            $function = 'set' . str_replace(' ', '', ucwords(str_replace('_', ' ', $key)));
             $quoteItem->$function($value);
         }
         return $quoteItem;
@@ -44,7 +51,7 @@ class QuoteSessionItemRepository
     public function byId($id)
     {
         $items = $this->get();
-        foreach($items as $i) {
+        foreach ($items as $i) {
             if ($i->getItemId() == $id) {
                 return $i;
             }
@@ -55,7 +62,7 @@ class QuoteSessionItemRepository
     public function byProductId($productId)
     {
         $items = $this->get();
-        foreach($items as $i) {
+        foreach ($items as $i) {
             if ($i->getProductId() == $productId) {
                 return $i;
             }
@@ -66,7 +73,7 @@ class QuoteSessionItemRepository
     public function bySku($sku)
     {
         $items = $this->get();
-        foreach($items as $i) {
+        foreach ($items as $i) {
             if ($i->getSku() == $sku) {
                 return $i;
             }
@@ -74,17 +81,17 @@ class QuoteSessionItemRepository
         return null;
     }
 
-    public function updateItem($id,$data)
+    public function updateItem($id, $data)
     {
         $items = $this->get();
-        foreach($items as $i) {
+        foreach ($items as $i) {
             if ($i->getItemId() == $id) {
                 $item = $i;
                 break;
             }
         }
         foreach ($data as $key => $value) {
-            $function = 'set' . str_replace(' ','',ucwords(str_replace('_', ' ', $key)));
+            $function = 'set' . str_replace(' ', '', ucwords(str_replace('_', ' ', $key)));
             $item->$function($value);
         }
         return $items;
@@ -95,7 +102,7 @@ class QuoteSessionItemRepository
     {
         $items = $this->get();
         $cnt = 0;
-        foreach($items as $i) {
+        foreach ($items as $i) {
             if ($i->getItemId() == $id) {
                 unset($items[$cnt]);
                 break;
@@ -105,7 +112,8 @@ class QuoteSessionItemRepository
         return array_values($items);
     }
 
-    private function quote() {
+    private function quote()
+    {
         return $this->quoteDataRepository->getQuote();
     }
 }

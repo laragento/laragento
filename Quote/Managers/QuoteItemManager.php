@@ -61,6 +61,36 @@ class QuoteItemManager
     }
 
     /**
+     * @param QuoteSessionObject $quote
+     */
+    public function calculateTotals($quote)
+    {
+        $prices = [];
+        foreach ($quote->getItems() as $item) {
+            array_push($prices, $item->getPrice());
+        }
+        $grandTotalFull = array_sum($prices);
+        $taxAmountFull = $grandTotalFull * 0.077;
+        $subTotalFull = $grandTotalFull - $taxAmountFull;
+        $grandTotal = number_format(round((($grandTotalFull +  0.000001) * 100 ) / 100 , 2));
+        $taxAmount = number_format(round((($taxAmountFull +  0.000001) * 100 ) / 100 , 2));
+        $subTotal = number_format(round((($subTotalFull +  0.000001) * 100 ) / 100 , 2));
+
+        // ToDo if 5Rp round is needed
+        //var_dump(round(($var + 0.000001) * 20) / 20,2);
+
+        $quote->setGrandTotal($grandTotal);
+        $quote->setSubtotal($subTotal);
+        $quote->setSubtotalWithDiscount($subTotal);
+        $quote->setBaseSubtotal($subTotal);
+        $quote->setBaseSubtotalWithDiscount($subTotal);
+        $quote->setTaxAmount($taxAmount);
+
+
+        $this->quoteDataRepository->updateQuote($quote);
+    }
+
+    /**
      * @param $data
      * @param null $item
      */
@@ -72,7 +102,7 @@ class QuoteItemManager
         $quote = $this->getQuote();
         $quote->setItems($data);
         $this->settingQuoteItemsInfo($quote);
-
+        $this->calculateTotals($quote);
     }
 
     /**

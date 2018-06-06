@@ -75,6 +75,11 @@ class QuoteSessionObject
     protected $subtotal_with_discount = 0.0000;
     protected $base_subtotal_with_discount = 0.0000;
 
+    // From Sales:
+    protected $shipping_amount = 0.0000;
+    protected $shipping_tax_amount = 0.0000;
+    protected $tax_amount = 0.0000;
+
     public function __construct()
     {
 
@@ -307,6 +312,54 @@ class QuoteSessionObject
     public function setBaseSubtotalWithDiscount($base_subtotal_with_discount): void
     {
         $this->base_subtotal_with_discount = $base_subtotal_with_discount;
+    }
+
+    /**
+     * @return float
+     */
+    public function getShippingAmount(): float
+    {
+        return $this->shipping_amount;
+    }
+
+    /**
+     * @param float $shipping_amount
+     */
+    public function setShippingAmount(float $shipping_amount): void
+    {
+        $this->shipping_amount = $shipping_amount;
+    }
+
+    /**
+     * @return float
+     */
+    public function getShippingTaxAmount(): float
+    {
+        return $this->shipping_tax_amount;
+    }
+
+    /**
+     * @param float $shipping_tax_amount
+     */
+    public function setShippingTaxAmount(float $shipping_tax_amount): void
+    {
+        $this->shipping_tax_amount = $shipping_tax_amount;
+    }
+
+    /**
+     * @return float
+     */
+    public function getTaxAmount(): float
+    {
+        return $this->tax_amount;
+    }
+
+    /**
+     * @param float $tax_amount
+     */
+    public function setTaxAmount(float $tax_amount): void
+    {
+        $this->tax_amount = $tax_amount;
     }
 
     public function toArray()
