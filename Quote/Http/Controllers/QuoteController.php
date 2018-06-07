@@ -35,12 +35,8 @@ class QuoteController extends Controller
      * Store a newly created resource in storage.
      * @return Response
      */
-    public function store()
+    public function store($storeId)
     {
-        //ToDo hardcoded bachmann Keys
-            $storeKey = request()->get('store');
-            $storeId = $storeKey == 'b2b' ? 1 : 2;
-
         $this->quoteDataRepository->createQuote($storeId);
         return redirect(route('quote.show'));
     }
@@ -60,13 +56,11 @@ class QuoteController extends Controller
      * Update the specified resource in storage.
      * @return Response
      */
-    public function update()
+    public function update($storeId)
     {
         $quoteData = request()->except('_method','_token');
 
-        //ToDo hardcoded bachmann Keys
-        $storeKey = request()->get('store');
-        $quoteData['store_id'] = $storeKey == 'b2b' ? 1 : 2;
+        $quoteData['store_id'] = $storeId;
 
         $this->quoteDataRepository->updateQuote($quoteData);
 

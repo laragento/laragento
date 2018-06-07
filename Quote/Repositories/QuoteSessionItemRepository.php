@@ -36,11 +36,9 @@ class QuoteSessionItemRepository
         $product = $this->productRepository::productBySku($data['sku']);
         $data['product_id'] = $product['entity_id'];
 
-        //ToDo hardcoded getting StoreId from Quote
-        $data['store_id'] = $this->quote()->getStoreId();
 
         // Set Price Information
-        $totals = $this->setTotals($product->entity_id, $data['qty']);
+        $totals = $this->setTotals($product->entity_id, $data['qty'], $data['store_id']);
         $data = array_merge($data, $totals);
 
         // Populate Item
@@ -111,7 +109,7 @@ class QuoteSessionItemRepository
             }
         }
         // Set Price Information
-        $totals = $this->setTotals($item->getProductId(),$data['qty']);
+        $totals = $this->setTotals($item->getProductId(),$data['qty'],$data['store_id']);
         $data = array_merge($data, $totals);
 
         foreach ($data as $key => $value) {
@@ -147,7 +145,7 @@ class QuoteSessionItemRepository
      * @param $product
      * @return mixed
      */
-    protected function setTotals($productId, $qty)
+    protected function setTotals($productId, $qty, $storeId)
     {
         $data = [];
         //ToDo Getting Tax from Config File: Must come from backend/Different TaxGroups
@@ -155,7 +153,7 @@ class QuoteSessionItemRepository
 
 
         $data['base_price_incl_tax'] = ($val = $this->productAttributeRepository->data('price', $productId,
-            $this->quote()->getStoreId())) ? $val->value : 0;
+            $storeId)) ? $val->value : 0;
         $data['price_incl_tax'] = $data['base_price_incl_tax'];
 
         $taxAmount = $data['base_price_incl_tax'] * $data['tax_percent'] / 100;

@@ -44,20 +44,18 @@ class QuoteItemController extends Controller
      * Store a newly created resource in storage.
      * @return Response
      */
-    public function store()
+    public function store($storeId)
     {
         $requestData = request()->except(['_method', '_token']);
         if (!$this->quoteDataRepository->getQuote()) {
-            //ToDo hardcoded bachmann Keys
-            $storeKey = request()->get('store');
-            $storeId = $storeKey == 'b2b' ? 1 : 2;
             $this->quoteDataRepository->createQuote($storeId);
         }
+        $requestData['store_id'] = $storeId;
         $item = $this->quoteItemRepository->bySku($requestData['sku']);;
 
         $this->manager->storeItems($requestData,$item);
 
-        return redirect()->route('quote.show');
+        return redirect()->back();
     }
 
     /**
@@ -75,16 +73,17 @@ class QuoteItemController extends Controller
      * @param $itemId
      * @return Response
      */
-    public function update($itemId)
+    public function update($storeId, $itemId)
     {
         $requestData = request()->except(['_method', '_token']);
+        $requestData['store_id'] = $storeId;
 
         // Update Item Data
         $items = $this->quoteItemRepository->updateItem($itemId, $requestData);
 
         // Store Data in Cart
         $this->manager->storeItems($items);
-        return redirect()->route('quote.show');
+        return redirect()->back();
 
     }
 
