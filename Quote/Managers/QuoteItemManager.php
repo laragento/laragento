@@ -49,11 +49,6 @@ class QuoteItemManager
         return $itemData;
     }
 
-    public function setItemTotals($itemdata)
-    {
-
-    }
-
     /**
      * @param QuoteSessionObject $quote
      */
@@ -127,6 +122,7 @@ class QuoteItemManager
         $quote = $this->getQuote();
         $quote->setItems($items);
         $this->settingQuoteItemsInfo($quote);
+        $this->calculateTotals($quote);
 
     }
 
