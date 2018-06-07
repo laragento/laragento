@@ -6,7 +6,8 @@ namespace Laragento\Quote\DataObject;
 
 class QuoteSessionObject
 {
-    /* ORIGINAL from DB
+    /* ORIGINAL from DB, actually not used
+
     protected $created_at;
     protected $updated_at;
     protected $converted_at;
@@ -35,9 +36,7 @@ class QuoteSessionObject
     protected $gift_message_id;
     */
 
-    protected $created_at;
-    protected $updated_at;
-    protected $converted_at;
+    protected $store_id = 0;
     protected $is_active = 1;
     protected $is_virtual = 0;
     protected $is_multi_shipping = 0;
@@ -68,7 +67,7 @@ class QuoteSessionObject
     protected $shipping_tax_amount = 0.0000;
     protected $tax_amount = 0.0000;
 
-    // Object only:
+    // Object only without corresponding DB-Entry:
     protected $items = [];
     protected $cart_id;
 
@@ -96,51 +95,19 @@ class QuoteSessionObject
     }
 
     /**
-     * @return mixed
+     * @return int
      */
-    public function getCreatedAt()
+    public function getStoreId(): int
     {
-        return $this->created_at;
+        return $this->store_id;
     }
 
     /**
-     * @param mixed $created_at
+     * @param int $store_id
      */
-    public function setCreatedAt($created_at): void
+    public function setStoreId(int $store_id): void
     {
-        $this->created_at = $created_at;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getUpdatedAt()
-    {
-        return $this->updated_at;
-    }
-
-    /**
-     * @param mixed $updated_at
-     */
-    public function setUpdatedAt($updated_at): void
-    {
-        $this->updated_at = $updated_at;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getConvertedAt()
-    {
-        return $this->converted_at;
-    }
-
-    /**
-     * @param mixed $converted_at
-     */
-    public function setConvertedAt($converted_at): void
-    {
-        $this->converted_at = $converted_at;
+        $this->store_id = $store_id;
     }
 
     /**

@@ -49,6 +49,11 @@ class QuoteItemManager
         return $itemData;
     }
 
+    public function setItemTotals($itemdata)
+    {
+
+    }
+
     /**
      * @param QuoteSessionObject $quote
      */

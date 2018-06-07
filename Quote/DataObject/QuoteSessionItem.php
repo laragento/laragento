@@ -8,8 +8,8 @@ use Laragento\Catalog\Repositories\Product\ProductRepository;
 
 class QuoteSessionItem
 {
-    /**
-     * ORIGINAL DB FIELDS
+    /* ORIGINAL from DB, actually not used
+
     protected $created_at;
     protected $updated_at;
     protected $parent_item_id;
@@ -43,29 +43,28 @@ class QuoteSessionItem
     protected $description;
     protected $weight;
     protected $qty;
-    protected $price;
-    protected $base_price;
-    protected $custom_price;
-    protected $discount_percent;
-    protected $discount_amount;
-    protected $base_discount_amount;
-    protected $tax_percent;
-    protected $tax_amount;
-    protected $base_tax_amount;
-    protected $row_total;
-    protected $base_row_total;
-    protected $row_total_with_discount;
+    protected $price = 0.0000;
+    protected $base_price = 0.0000;
+    protected $custom_price = 0.0000;
+    protected $discount_percent = 0.0000;
+    protected $discount_amount = 0.0000;
+    protected $base_discount_amount = 0.0000;
+    protected $tax_percent = 0.0000;
+    protected $tax_amount = 0.0000;
+    protected $base_tax_amount = 0.0000;
+    protected $row_total = 0.0000;
+    protected $base_row_total = 0.0000;
+    protected $row_total_with_discount = 0.0000;
     protected $row_weight;
     protected $original_custom_price;
     protected $redirect_url;
-    protected $price_incl_tax;
-    protected $base_price_incl_tax;
-    protected $row_total_incl_tax;
-    protected $base_row_total_incl_tax;
-    protected $discount_tax_compensation_amount;
-    protected $base_discount_tax_compensation_amount;
-    protected $free_shipping;
-    protected $gift_message_id;
+    protected $price_incl_tax = 0.0000;
+    protected $base_price_incl_tax = 0.0000;
+    protected $row_total_incl_tax = 0.0000;
+    protected $base_row_total_incl_tax = 0.0000;
+    protected $discount_tax_compensation_amount = 0.0000;
+    protected $base_discount_tax_compensation_amount = 0.0000;
+    protected $free_shipping = 0;
 
     /**
      * @return mixed
@@ -577,22 +576,6 @@ class QuoteSessionItem
     public function setFreeShipping($free_shipping): void
     {
         $this->free_shipping = $free_shipping;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getGiftMessageId()
-    {
-        return $this->gift_message_id;
-    }
-
-    /**
-     * @param mixed $gift_message_id
-     */
-    public function setGiftMessageId($gift_message_id): void
-    {
-        $this->gift_message_id = $gift_message_id;
     }
 
     public function toArray()

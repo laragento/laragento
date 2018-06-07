@@ -2,11 +2,9 @@
 
 namespace Laragento\Quote\Repositories;
 
-use Illuminate\Support\Facades\Auth;
 use Laragento\Catalog\Repositories\Product\ProductAttributeRepositoryInterface;
 use Laragento\Catalog\Repositories\Product\ProductRepositoryInterface;
 use Laragento\Quote\DataObject\QuoteSessionItem;
-use Laragento\Quote\DataObject\QuoteSessionObject;
 
 class QuoteSessionItemRepository
 {
@@ -25,24 +23,40 @@ class QuoteSessionItemRepository
 
     }
 
+    /**
+     * @ToDo Bases and Amounts are not regarding conversions
+     *
+     * @param $data
+     * @return QuoteSessionItem
+     *
+     */
     public function createItem($data)
     {
 
         $quoteItem = new QuoteSessionItem();
         $product = $this->productRepository->product($data['sku']);
-        $data['base_price'] = ($val = $this->productAttributeRepository->data('price', $product->entity_id, $this->quote()->getStoreId())) ? $val->value : 0;
-        $data['price'] = $data['base_price'];
 
-        $base_row_total = $data['qty'] * $data['base_price'];
+        // Set Price Information
+        // ToDo Hardcoded Bachmann-Only Tax
+        $data['tax_percent'] = 7.7000;
+
+        $data['base_price_incl_tax'] = ($val = $this->productAttributeRepository->data('price', $product->entity_id, $this->quote()->getStoreId())) ? $val->value : 0;
+        $data['price_incl_tax'] = $data['base_price_incl_tax'];
+
+        $taxAmount = $data['base_price_incl_tax'] * $data['tax_percent'] / 100;
+        $data['base_tax_amount'] = number_format(round((($taxAmount +  0.000001) * 100 ) / 100 , 2),4);
+        $data['tax_amount'] = $data['base_tax_amount'];
+
+        $base_row_total = $data['qty'] * $data['base_price_incl_tax'];
         $data['base_row_total'] = number_format(round((($base_row_total + 0.000001) * 100) / 100, 2), 4);
         $data['row_total'] = $data['base_row_total'];
 
+        $base_price = $data['base_price_incl_tax'] - $data['tax_amount'];
+        $data['base_price'] = number_format(round((($base_price + 0.000001) * 100) / 100, 2), 4);
+        $data['price'] = $data['base_price'];
+
         $data['product_id'] = $product['entity_id'];
-        // ToDo hardcoded Values
 
-
-        // ToDo Don't like the full product here
-        $data['product'] = $product;
         foreach ($data as $key => $value) {
             $function = 'set' . str_replace(' ', '', ucwords(str_replace('_', ' ', $key)));
             $quoteItem->$function($value);
@@ -56,12 +70,18 @@ class QuoteSessionItemRepository
         return $this->quote()->getItems();
     }
 
+    /**
+     * @param $id
+     * @return null
+     */
     public function byId($id)
     {
         $items = $this->get();
-        foreach ($items as $i) {
-            if ($i->getItemId() == $id) {
-                return $i;
+
+        /** @var QuoteSessionItem $item */
+        foreach ($items as $item) {
+            if ($item->getItemId() == $id) {
+                return $item;
             }
         }
         return null;
@@ -70,9 +90,10 @@ class QuoteSessionItemRepository
     public function byProductId($productId)
     {
         $items = $this->get();
-        foreach ($items as $i) {
-            if ($i->getProductId() == $productId) {
-                return $i;
+        /** @var QuoteSessionItem $item */
+        foreach ($items as $item) {
+            if ($item->getProductId() == $productId) {
+                return $item;
             }
         }
         return null;
@@ -81,9 +102,10 @@ class QuoteSessionItemRepository
     public function bySku($sku)
     {
         $items = $this->get();
-        foreach ($items as $i) {
-            if ($i->getSku() == $sku) {
-                return $i;
+        /** @var QuoteSessionItem $item */
+        foreach ($items as $item) {
+            if ($item->getSku() == $sku) {
+                return $item;
             }
         }
         return null;
@@ -92,15 +114,17 @@ class QuoteSessionItemRepository
     public function updateItem($id, $data)
     {
         $items = $this->get();
-        foreach ($items as $i) {
-            if ($i->getItemId() == $id) {
-                $item = $i;
+        /** @var QuoteSessionItem $item */
+        foreach ($items as $item) {
+            if ($item->getItemId() == $id) {
+                $newItem =  $item;
                 break;
             }
         }
+
         foreach ($data as $key => $value) {
             $function = 'set' . str_replace(' ', '', ucwords(str_replace('_', ' ', $key)));
-            $item->$function($value);
+            $newItem->$function($value);
         }
         return $items;
     }
@@ -109,13 +133,14 @@ class QuoteSessionItemRepository
     public function destroyItem($id)
     {
         $items = $this->get();
-        $cnt = 0;
-        foreach ($items as $i) {
-            if ($i->getItemId() == $id) {
-                unset($items[$cnt]);
+        $index = 0;
+        /** @var QuoteSessionItem $item */
+        foreach ($items as $item) {
+            if ($item->getItemId() == $id) {
+                unset($items[$index]);
                 break;
             }
-            $cnt++;
+            $index++;
         }
         return array_values($items);
     }
