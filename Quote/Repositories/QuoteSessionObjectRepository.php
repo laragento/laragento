@@ -16,15 +16,9 @@ class QuoteSessionObjectRepository
     }
 
 
-    public function createQuote($storeId = null)
+    public function createQuote($storeId = 0)
 
     {
-        //ToDo hardcoded bachmann Keys
-        if (!$storeId) {
-            $storeKey = request()->get('store');
-            $storeId = $storeKey == 'b2b' ? 1 : 2;
-        }
-
         $this->destroyQuote();
 
         if (!$this->quote->getCartId()) {

@@ -37,7 +37,11 @@ class QuoteController extends Controller
      */
     public function store()
     {
-        $this->quoteDataRepository->createQuote();
+        //ToDo hardcoded bachmann Keys
+            $storeKey = request()->get('store');
+            $storeId = $storeKey == 'b2b' ? 1 : 2;
+
+        $this->quoteDataRepository->createQuote($storeId);
         return redirect(route('quote.show'));
     }
 
@@ -59,6 +63,11 @@ class QuoteController extends Controller
     public function update()
     {
         $quoteData = request()->except('_method','_token');
+
+        //ToDo hardcoded bachmann Keys
+        $storeKey = request()->get('store');
+        $quoteData['store_id'] = $storeKey == 'b2b' ? 1 : 2;
+
         $this->quoteDataRepository->updateQuote($quoteData);
 
         return redirect(route('quote.show'));

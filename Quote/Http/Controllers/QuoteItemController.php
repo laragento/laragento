@@ -6,11 +6,13 @@ use Illuminate\Http\Response;
 use Illuminate\Routing\Controller;
 use Laragento\Quote\Managers\QuoteItemManager;
 use Laragento\Quote\Repositories\QuoteSessionItemRepository;
+use Laragento\Quote\Repositories\QuoteSessionObjectRepository;
 
 class QuoteItemController extends Controller
 {
     protected $quoteItemRepository;
     protected $manager;
+    protected $quoteDataRepository;
 
     /**
      * QuoteController constructor.
@@ -18,9 +20,11 @@ class QuoteItemController extends Controller
      * @param QuoteItemManager $quoteItemManager
      */
     public function __construct(
+        QuoteSessionObjectRepository $quoteDataRepository,
         QuoteSessionItemRepository $quoteItemRepository,
         QuoteItemManager $quoteItemManager
     ) {
+        $this->quoteDataRepository = $quoteDataRepository;
         $this->quoteItemRepository = $quoteItemRepository;
         $this->manager = $quoteItemManager;
 
@@ -43,7 +47,12 @@ class QuoteItemController extends Controller
     public function store()
     {
         $requestData = request()->except(['_method', '_token']);
-
+        if (!$this->quoteDataRepository->getQuote()) {
+            //ToDo hardcoded bachmann Keys
+            $storeKey = request()->get('store');
+            $storeId = $storeKey == 'b2b' ? 1 : 2;
+            $this->quoteDataRepository->createQuote($storeId);
+        }
         $item = $this->quoteItemRepository->bySku($requestData['sku']);;
 
         $this->manager->storeItems($requestData,$item);
