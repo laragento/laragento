@@ -20,6 +20,7 @@ use Laragento\MediaStorage\Providers\MediaStorageServiceProvider;
 use Laragento\Quote\Providers\QuoteServiceProvider;
 use Laragento\Rating\Providers\RatingServiceProvider;
 use Laragento\Review\Providers\ReviewServiceProvider;
+use Laragento\Sales\Providers\SalesServiceProvider;
 use Laragento\Store\Providers\StoreServiceProvider;
 use Laragento\XmlChunk\Providers\XmlChunkServiceProvider;
 
@@ -45,6 +46,7 @@ class LaragentoServiceProvider extends ServiceProvider
         $this->app->register(CatalogServiceProvider::class);
         $this->app->register(CatalogImportExportServiceProvider::class);
         $this->app->register(CatalogUrlRewriteServiceProvider::class);
+        $this->app->register(SalesServiceProvider::class);
         $this->app->register(CheckoutServiceProvider::class);
         $this->app->register(CoreServiceProvider::class);
         $this->app->register(CustomerServiceProvider::class);
