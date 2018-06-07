@@ -1,5 +1,8 @@
 <?php
 
 return [
-    'name' => 'Quote'
+    'name' => 'Quote',
+    'totals' => [
+        'tax_percent' => '7.7000'
+    ]
 ];
