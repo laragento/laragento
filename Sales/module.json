@@ -6,7 +6,7 @@
     "active": 1,
     "order": 0,
     "providers": [
-        "Modules\\Sales\\Providers\\SalesServiceProvider"
+        "Laragento\\Sales\\Providers\\SalesServiceProvider"
     ],
     "aliases": {},
     "files": [

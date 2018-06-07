@@ -2,7 +2,7 @@
 
 namespace Laragento\Sales\Providers;
 
-use Modules\Sales\Models\Order;
+use Laragento\Sales\Models\Order;
 
 class SalesRepository
 {

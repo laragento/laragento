@@ -10,7 +10,7 @@
     "extra": {
         "laravel": {
             "providers": [
-                "Modules\\Sales\\Providers\\SalesServiceProvider"
+                "Laragento\\Sales\\Providers\\SalesServiceProvider"
             ],
             "aliases": {
                 
@@ -19,7 +19,7 @@
     },
     "autoload": {
         "psr-4": {
-            "Modules\\Sales\\": ""
+            "Laragento\\Sales\\": ""
         }
     }
 }

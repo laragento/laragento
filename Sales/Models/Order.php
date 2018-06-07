@@ -1,6 +1,6 @@
 <?php
 
-namespace Modules\Sales\Models;
+namespace Laragento\Sales\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Laragento\Customer\Models\Customer;
