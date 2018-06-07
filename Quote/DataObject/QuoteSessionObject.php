@@ -4,6 +4,10 @@
 namespace Laragento\Quote\DataObject;
 
 
+/**
+ * Class QuoteSessionObject
+ * @package Laragento\Quote\DataObject
+ */
 class QuoteSessionObject
 {
     /* ORIGINAL from DB, actually not used
@@ -36,62 +40,135 @@ class QuoteSessionObject
     protected $gift_message_id;
     */
 
+    /**
+     * @var int
+     */
     protected $store_id = 0;
-    protected $is_active = 1;
-    protected $is_virtual = 0;
-    protected $is_multi_shipping = 0;
-    protected $items_count;
-    protected $items_qty;
+    /**
+     * @var bool
+     */
+    protected $is_active = true;
+    /**
+     * @var bool
+     */
+    protected $is_virtual = false;
+    /**
+     * @var bool
+     */
+    protected $is_multi_shipping = false;
+    /**
+     * @var int
+     */
+    protected $items_count = 0;
+    /**
+     * @var int
+     */
+    protected $items_qty = 0;
+    /**
+     * @var int|null
+     */
     protected $orig_order_id;
-    protected $store_to_base_rate;
-    protected $store_to_quote_rate;
+    /**
+     * @var float
+     */
+    protected $store_to_base_rate = 1;
+    /**
+     * @var float
+     */
+    protected $store_to_quote_rate = 1;
+    /**
+     * @var string
+     */
     protected $base_currency_code = "CHF";
+    /**
+     * @var string
+     */
     protected $store_currency_code = "CHF";
+    /**
+     * @var string
+     */
     protected $quote_currency_code = "CHF";
-    protected $grand_total = 0.0000;
-    protected $base_grand_total = 0.0000;
+    /**
+     * @var string
+     */
+    protected $grand_total = "0.0000";
+    /**
+     * @var string
+     */
+    protected $base_grand_total = "0.0000";
+    /**
+     * @var int|null
+     */
     protected $customer_id;
+    /**
+     * @var string|null
+     */
     protected $remote_ip;
+    /**
+     * @var string|null
+     */
     protected $coupon_code;
+    /**
+     * @var string
+     */
     protected $global_currency_code = "CHF";
-    protected $base_to_global_rate = 1.0000;
-    protected $base_to_quote_rate = 1.0000;
-    protected $subtotal = 0.0000;
-    protected $base_subtotal = 0.0000;
-    protected $subtotal_with_discount = 0.0000;
-    protected $base_subtotal_with_discount = 0.0000;
+    /**
+     * @var string
+     */
+    protected $base_to_global_rate = "1.0000";
+    /**
+     * @var string
+     */
+    protected $base_to_quote_rate = "1.0000";
+    /**
+     * @var string
+     */
+    protected $subtotal = "0.0000";
+    /**
+     * @var string
+     */
+    protected $base_subtotal = "0.0000";
+    /**
+     * @var string
+     */
+    protected $subtotal_with_discount = "0.0000";
+    /**
+     * @var string
+     */
+    protected $base_subtotal_with_discount = "0.0000";
 
 
     // From Sales:
-    protected $shipping_amount = 0.0000;
-    protected $shipping_tax_amount = 0.0000;
-    protected $tax_amount = 0.0000;
+    /**
+     * @var string
+     */
+    protected $shipping_amount = "0.0000";
+    /**
+     * @var string
+     */
+    protected $shipping_tax_amount = "0.0000";
+    /**
+     * @var string
+     */
+    protected $tax_amount = "0.0000";
 
     // Object only without corresponding DB-Entry:
+    /**
+     * @var array
+     */
     protected $items = [];
+    /**
+     * @var string|null
+     */
     protected $cart_id;
 
+    /**
+     * QuoteSessionObject constructor.
+     */
     public function __construct()
     {
 
 
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getCartId()
-    {
-        return $this->cart_id;
-    }
-
-    /**
-     * @param mixed $cart_id
-     */
-    public function setCartId(): void
-    {
-        $cart_id = $this->generateGUID(true, false);
-        $this->cart_id = $cart_id;
     }
 
     /**
@@ -111,129 +188,129 @@ class QuoteSessionObject
     }
 
     /**
-     * @return int
+     * @return bool
      */
-    public function getisActive(): int
+    public function isActive(): bool
     {
         return $this->is_active;
     }
 
     /**
-     * @param int $is_active
+     * @param bool $is_active
      */
-    public function setIsActive(int $is_active): void
+    public function setIsActive(bool $is_active): void
     {
         $this->is_active = $is_active;
     }
 
     /**
-     * @return int
+     * @return bool
      */
-    public function getisVirtual(): int
+    public function isVirtual(): bool
     {
         return $this->is_virtual;
     }
 
     /**
-     * @param int $is_virtual
+     * @param bool $is_virtual
      */
-    public function setIsVirtual(int $is_virtual): void
+    public function setIsVirtual(bool $is_virtual): void
     {
         $this->is_virtual = $is_virtual;
     }
 
     /**
-     * @return int
+     * @return bool
      */
-    public function getisMultiShipping(): int
+    public function isMultiShipping(): bool
     {
         return $this->is_multi_shipping;
     }
 
     /**
-     * @param int $is_multi_shipping
+     * @param bool $is_multi_shipping
      */
-    public function setIsMultiShipping(int $is_multi_shipping): void
+    public function setIsMultiShipping(bool $is_multi_shipping): void
     {
         $this->is_multi_shipping = $is_multi_shipping;
     }
 
     /**
-     * @return mixed
+     * @return int
      */
-    public function getItemsCount()
+    public function getItemsCount(): int
     {
         return $this->items_count;
     }
 
     /**
-     * @param mixed $items_count
+     * @param int $items_count
      */
-    public function setItemsCount($items_count): void
+    public function setItemsCount(int $items_count): void
     {
         $this->items_count = $items_count;
     }
 
     /**
-     * @return mixed
+     * @return int
      */
-    public function getItemsQty()
+    public function getItemsQty(): int
     {
         return $this->items_qty;
     }
 
     /**
-     * @param mixed $items_qty
+     * @param int $items_qty
      */
-    public function setItemsQty($items_qty): void
+    public function setItemsQty(int $items_qty): void
     {
         $this->items_qty = $items_qty;
     }
 
     /**
-     * @return mixed
+     * @return int|null
      */
-    public function getOrigOrderId()
+    public function getOrigOrderId(): ?int
     {
         return $this->orig_order_id;
     }
 
     /**
-     * @param mixed $orig_order_id
+     * @param int|null $orig_order_id
      */
-    public function setOrigOrderId($orig_order_id): void
+    public function setOrigOrderId(?int $orig_order_id): void
     {
         $this->orig_order_id = $orig_order_id;
     }
 
     /**
-     * @return mixed
+     * @return float
      */
-    public function getStoreToBaseRate()
+    public function getStoreToBaseRate(): float
     {
         return $this->store_to_base_rate;
     }
 
     /**
-     * @param mixed $store_to_base_rate
+     * @param float $store_to_base_rate
      */
-    public function setStoreToBaseRate($store_to_base_rate): void
+    public function setStoreToBaseRate(float $store_to_base_rate): void
     {
         $this->store_to_base_rate = $store_to_base_rate;
     }
 
     /**
-     * @return mixed
+     * @return float
      */
-    public function getStoreToQuoteRate()
+    public function getStoreToQuoteRate(): float
     {
         return $this->store_to_quote_rate;
     }
 
     /**
-     * @param mixed $store_to_quote_rate
+     * @param float $store_to_quote_rate
      */
-    public function setStoreToQuoteRate($store_to_quote_rate): void
+    public function setStoreToQuoteRate(float $store_to_quote_rate): void
     {
         $this->store_to_quote_rate = $store_to_quote_rate;
     }
@@ -287,81 +364,81 @@ class QuoteSessionObject
     }
 
     /**
-     * @return float
+     * @return string
      */
-    public function getGrandTotal(): float
+    public function getGrandTotal(): string
     {
         return $this->grand_total;
     }
 
     /**
-     * @param float $grand_total
+     * @param string $grand_total
      */
-    public function setGrandTotal(float $grand_total): void
+    public function setGrandTotal(string $grand_total): void
     {
         $this->grand_total = $grand_total;
     }
 
     /**
-     * @return float
+     * @return string
      */
-    public function getBaseGrandTotal(): float
+    public function getBaseGrandTotal(): string
     {
         return $this->base_grand_total;
     }
 
     /**
-     * @param float $base_grand_total
+     * @param string $base_grand_total
      */
-    public function setBaseGrandTotal(float $base_grand_total): void
+    public function setBaseGrandTotal(string $base_grand_total): void
     {
         $this->base_grand_total = $base_grand_total;
     }
 
     /**
-     * @return mixed
+     * @return int|null
      */
-    public function getCustomerId()
+    public function getCustomerId(): ?int
     {
         return $this->customer_id;
     }
 
     /**
-     * @param mixed $customer_id
+     * @param int|null $customer_id
      */
-    public function setCustomerId($customer_id): void
+    public function setCustomerId(?int $customer_id): void
     {
         $this->customer_id = $customer_id;
     }
 
     /**
-     * @return mixed
+     * @return null|string
      */
-    public function getRemoteIp()
+    public function getRemoteIp(): ?string
     {
         return $this->remote_ip;
     }
 
     /**
-     * @param mixed $remote_ip
+     * @param null|string $remote_ip
      */
-    public function setRemoteIp($remote_ip): void
+    public function setRemoteIp(?string $remote_ip): void
     {
         $this->remote_ip = $remote_ip;
     }
 
     /**
-     * @return mixed
+     * @return null|string
      */
-    public function getCouponCode()
+    public function getCouponCode(): ?string
     {
         return $this->coupon_code;
     }
 
     /**
-     * @param mixed $coupon_code
+     * @param null|string $coupon_code
      */
-    public function setCouponCode($coupon_code): void
+    public function setCouponCode(?string $coupon_code): void
     {
         $this->coupon_code = $coupon_code;
     }
@@ -383,145 +460,145 @@ class QuoteSessionObject
     }
 
     /**
-     * @return float
+     * @return string
      */
-    public function getBaseToGlobalRate(): float
+    public function getBaseToGlobalRate(): string
     {
         return $this->base_to_global_rate;
     }
 
     /**
-     * @param float $base_to_global_rate
+     * @param string $base_to_global_rate
      */
-    public function setBaseToGlobalRate(float $base_to_global_rate): void
+    public function setBaseToGlobalRate(string $base_to_global_rate): void
     {
         $this->base_to_global_rate = $base_to_global_rate;
     }
 
     /**
-     * @return float
+     * @return string
      */
-    public function getBaseToQuoteRate(): float
+    public function getBaseToQuoteRate(): string
     {
         return $this->base_to_quote_rate;
     }
 
     /**
-     * @param float $base_to_quote_rate
+     * @param string $base_to_quote_rate
      */
-    public function setBaseToQuoteRate(float $base_to_quote_rate): void
+    public function setBaseToQuoteRate(string $base_to_quote_rate): void
     {
         $this->base_to_quote_rate = $base_to_quote_rate;
     }
 
     /**
-     * @return float
+     * @return string
      */
-    public function getSubtotal(): float
+    public function getSubtotal(): string
     {
         return $this->subtotal;
     }
 
     /**
-     * @param float $subtotal
+     * @param string $subtotal
      */
-    public function setSubtotal(float $subtotal): void
+    public function setSubtotal(string $subtotal): void
     {
         $this->subtotal = $subtotal;
     }
 
     /**
-     * @return float
+     * @return string
      */
-    public function getBaseSubtotal(): float
+    public function getBaseSubtotal(): string
     {
         return $this->base_subtotal;
     }
 
     /**
-     * @param float $base_subtotal
+     * @param string $base_subtotal
      */
-    public function setBaseSubtotal(float $base_subtotal): void
+    public function setBaseSubtotal(string $base_subtotal): void
     {
         $this->base_subtotal = $base_subtotal;
     }
 
     /**
-     * @return float
+     * @return string
      */
-    public function getSubtotalWithDiscount(): float
+    public function getSubtotalWithDiscount(): string
     {
         return $this->subtotal_with_discount;
     }
 
     /**
-     * @param float $subtotal_with_discount
+     * @param string $subtotal_with_discount
      */
-    public function setSubtotalWithDiscount(float $subtotal_with_discount): void
+    public function setSubtotalWithDiscount(string $subtotal_with_discount): void
     {
         $this->subtotal_with_discount = $subtotal_with_discount;
     }
 
     /**
-     * @return float
+     * @return string
      */
-    public function getBaseSubtotalWithDiscount(): float
+    public function getBaseSubtotalWithDiscount(): string
     {
         return $this->base_subtotal_with_discount;
     }
 
     /**
-     * @param float $base_subtotal_with_discount
+     * @param string $base_subtotal_with_discount
      */
-    public function setBaseSubtotalWithDiscount(float $base_subtotal_with_discount): void
+    public function setBaseSubtotalWithDiscount(string $base_subtotal_with_discount): void
     {
         $this->base_subtotal_with_discount = $base_subtotal_with_discount;
     }
 
     /**
-     * @return float
+     * @return string
      */
-    public function getShippingAmount(): float
+    public function getShippingAmount(): string
     {
         return $this->shipping_amount;
     }
 
     /**
-     * @param float $shipping_amount
+     * @param string $shipping_amount
      */
-    public function setShippingAmount(float $shipping_amount): void
+    public function setShippingAmount(string $shipping_amount): void
     {
         $this->shipping_amount = $shipping_amount;
     }
 
     /**
-     * @return float
+     * @return string
      */
-    public function getShippingTaxAmount(): float
+    public function getShippingTaxAmount(): string
     {
         return $this->shipping_tax_amount;
     }
 
     /**
-     * @param float $shipping_tax_amount
+     * @param string $shipping_tax_amount
      */
-    public function setShippingTaxAmount(float $shipping_tax_amount): void
+    public function setShippingTaxAmount(string $shipping_tax_amount): void
     {
         $this->shipping_tax_amount = $shipping_tax_amount;
     }
 
     /**
-     * @return float
+     * @return string
      */
-    public function getTaxAmount(): float
+    public function getTaxAmount(): string
     {
         return $this->tax_amount;
     }
 
     /**
-     * @param float $tax_amount
+     * @param string $tax_amount
      */
-    public function setTaxAmount(float $tax_amount): void
+    public function setTaxAmount(string $tax_amount): void
     {
         $this->tax_amount = $tax_amount;
     }
@@ -542,8 +619,38 @@ class QuoteSessionObject
         $this->items = $items;
     }
 
+    /**
+     * @return null|string
+     */
+    public function getCartId(): ?string
+    {
+        return $this->cart_id;
+    }
+
+    /**
+     * @param null|string $cart_id
+     */
+    public function setCartId(?string $cart_id = null): void
+    {
+        if (!$cart_id) {
+            $cart_id = $this->generateGUID(true, true);
+        }
+        $this->cart_id = $cart_id;
+    }
+
+    /**
+     *
+     */
+    public function setBAKCartId(): void
+    {
+        $id = $this->generateGUID(true, true);
+        $this->cart_id = $id;
+    }
 
 
+    /**
+     * @return array
+     */
     public function toArray()
     {
         $serialized = (array)$this;
@@ -554,6 +661,12 @@ class QuoteSessionObject
 
     }
 
+    /**
+     * @param $trim
+     * @param $upper
+     * @param null $hyphen
+     * @return string
+     */
     private function generateGUID($trim, $upper, $hyphen = null)
     {
         mt_srand((double)microtime() * 10000);

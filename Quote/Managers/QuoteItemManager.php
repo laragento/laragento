@@ -71,8 +71,9 @@ class QuoteItemManager
     public function calculateTotals($quote)
     {
         $prices = [];
+        /** @var QuoteSessionItem $item */
         foreach ($quote->getItems() as $item) {
-            array_push($prices, $item->getPrice());
+            array_push($prices, $item->getBaseRowTotalInclTax());
         }
         $grandTotalFull = array_sum($prices);
 

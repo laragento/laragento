@@ -47,13 +47,19 @@ class QuoteSessionItemRepository
         $data['base_tax_amount'] = number_format(round((($taxAmount +  0.000001) * 100 ) / 100 , 2),4);
         $data['tax_amount'] = $data['base_tax_amount'];
 
-        $base_row_total = $data['qty'] * $data['base_price_incl_tax'];
-        $data['base_row_total'] = number_format(round((($base_row_total + 0.000001) * 100) / 100, 2), 4);
-        $data['row_total'] = $data['base_row_total'];
+        $base_row_total_incl_tax = $data['qty'] * $data['base_price_incl_tax'];
+        $data['base_row_total_incl_tax'] = number_format(round((($base_row_total_incl_tax + 0.000001) * 100) / 100, 2), 4);
+        $data['row_total_incl_tax'] = $data['base_row_total_incl_tax'];
 
         $base_price = $data['base_price_incl_tax'] - $data['tax_amount'];
         $data['base_price'] = number_format(round((($base_price + 0.000001) * 100) / 100, 2), 4);
         $data['price'] = $data['base_price'];
+
+        $base_row_total = $data['qty'] * $data['base_price'];
+        $data['base_row_total'] = number_format(round((($base_row_total + 0.000001) * 100) / 100, 2), 4);
+        $data['row_total'] = $data['base_row_total'];
+
+
 
         $data['product_id'] = $product['entity_id'];
 
