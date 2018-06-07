@@ -37,8 +37,8 @@ class QuoteSessionItemRepository
         $data['product_id'] = $product['entity_id'];
 
         // Set Price Information
-        $totals = $this->setTotals($product->entity_id);
-        array_merge($data, $totals);
+        $totals = $this->setTotals($product->entity_id, $data['qty']);
+        $data = array_merge($data, $totals);
 
         // Populate Item
         $quoteItem = new QuoteSessionItem();
@@ -108,8 +108,8 @@ class QuoteSessionItemRepository
             }
         }
         // Set Price Information
-        $totals = $this->setTotals($data['product_id']);
-        array_merge($data, $totals);
+        $totals = $this->setTotals($item->getProductId(),$data['qty']);
+        $data = array_merge($data, $totals);
 
         foreach ($data as $key => $value) {
             $function = 'set' . str_replace(' ', '', ucwords(str_replace('_', ' ', $key)));
@@ -144,7 +144,7 @@ class QuoteSessionItemRepository
      * @param $product
      * @return mixed
      */
-    protected function setTotals($productId)
+    protected function setTotals($productId, $qty)
     {
         $data = [];
         //ToDo Getting Tax from Config File: Must come from backend/Different TaxGroups
@@ -159,7 +159,7 @@ class QuoteSessionItemRepository
         $data['base_tax_amount'] = number_format(round((($taxAmount + 0.000001) * 100) / 100, 2), 4);
         $data['tax_amount'] = $data['base_tax_amount'];
 
-        $base_row_total_incl_tax = $data['qty'] * $data['base_price_incl_tax'];
+        $base_row_total_incl_tax = $qty * $data['base_price_incl_tax'];
         $data['base_row_total_incl_tax'] = number_format(round((($base_row_total_incl_tax + 0.000001) * 100) / 100, 2),
             4);
         $data['row_total_incl_tax'] = $data['base_row_total_incl_tax'];
@@ -168,7 +168,7 @@ class QuoteSessionItemRepository
         $data['base_price'] = number_format(round((($base_price + 0.000001) * 100) / 100, 2), 4);
         $data['price'] = $data['base_price'];
 
-        $base_row_total = $data['qty'] * $base_price;
+        $base_row_total = $qty * $base_price;
         $data['base_row_total'] = number_format(round((($base_row_total + 0.000001) * 100) / 100, 2), 4);
         $data['row_total'] = $data['base_row_total'];
         return $data;
