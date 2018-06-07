@@ -71,14 +71,20 @@ class QuoteItemManager
     public function calculateTotals($quote)
     {
         $prices = [];
+        $taxes = [
+            'total' => []
+        ];
         /** @var QuoteSessionItem $item */
         foreach ($quote->getItems() as $item) {
             array_push($prices, $item->getBaseRowTotalInclTax());
+            $tax = $item->getBaseRowTotalInclTax() - $item->getBaseRowTotal();
+            $strIndex = str_replace('.', '_', $item->getTaxPercent());
+            $val = isset($taxes[$strIndex]) ? $taxes[$strIndex] : 0;
+            $taxes[$item->getTaxPercent()] = $val + $tax;
+            array_push($taxes['total'], $tax);
         }
         $grandTotalFull = array_sum($prices);
-
-        //ToDo get TaxByProduct
-        $taxAmountFull = $grandTotalFull * 0.077;
+        $taxAmountFull = array_sum($taxes['total']);
         $subTotalFull = $grandTotalFull - $taxAmountFull;
         $grandTotal = number_format(round((($grandTotalFull +  0.000001) * 100 ) / 100 , 2),4);
         $taxAmount = number_format(round((($taxAmountFull +  0.000001) * 100 ) / 100 , 2),4);
