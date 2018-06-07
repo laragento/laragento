@@ -32,37 +32,16 @@ class QuoteSessionItemRepository
      */
     public function createItem($data)
     {
-
-        $quoteItem = new QuoteSessionItem();
+        // Get and set Product
         $product = $this->productRepository->product($data['sku']);
-
-        // Set Price Information
-        // ToDo Hardcoded Bachmann-Only Tax
-        $data['tax_percent'] = 7.7000;
-
-        $data['base_price_incl_tax'] = ($val = $this->productAttributeRepository->data('price', $product->entity_id, $this->quote()->getStoreId())) ? $val->value : 0;
-        $data['price_incl_tax'] = $data['base_price_incl_tax'];
-
-        $taxAmount = $data['base_price_incl_tax'] * $data['tax_percent'] / 100;
-        $data['base_tax_amount'] = number_format(round((($taxAmount +  0.000001) * 100 ) / 100 , 2),4);
-        $data['tax_amount'] = $data['base_tax_amount'];
-
-        $base_row_total_incl_tax = $data['qty'] * $data['base_price_incl_tax'];
-        $data['base_row_total_incl_tax'] = number_format(round((($base_row_total_incl_tax + 0.000001) * 100) / 100, 2), 4);
-        $data['row_total_incl_tax'] = $data['base_row_total_incl_tax'];
-
-        $base_price = $data['base_price_incl_tax'] - $data['tax_amount'];
-        $data['base_price'] = number_format(round((($base_price + 0.000001) * 100) / 100, 2), 4);
-        $data['price'] = $data['base_price'];
-
-        $base_row_total = $data['qty'] * $data['base_price'];
-        $data['base_row_total'] = number_format(round((($base_row_total + 0.000001) * 100) / 100, 2), 4);
-        $data['row_total'] = $data['base_row_total'];
-
-
-
         $data['product_id'] = $product['entity_id'];
 
+        // Set Price Information
+        $totals = $this->setTotals($product->entity_id);
+        array_merge($data, $totals);
+
+        // Populate Item
+        $quoteItem = new QuoteSessionItem();
         foreach ($data as $key => $value) {
             $function = 'set' . str_replace(' ', '', ucwords(str_replace('_', ' ', $key)));
             $quoteItem->$function($value);
@@ -119,14 +98,18 @@ class QuoteSessionItemRepository
 
     public function updateItem($id, $data)
     {
+        $newItem = null;
         $items = $this->get();
         /** @var QuoteSessionItem $item */
         foreach ($items as $item) {
             if ($item->getItemId() == $id) {
-                $newItem =  $item;
+                $newItem = $item;
                 break;
             }
         }
+        // Set Price Information
+        $totals = $this->setTotals($data['product_id']);
+        array_merge($data, $totals);
 
         foreach ($data as $key => $value) {
             $function = 'set' . str_replace(' ', '', ucwords(str_replace('_', ' ', $key)));
@@ -154,5 +137,40 @@ class QuoteSessionItemRepository
     private function quote()
     {
         return $this->quoteDataRepository->getQuote();
+    }
+
+    /**
+     * @param $data
+     * @param $product
+     * @return mixed
+     */
+    protected function setTotals($productId)
+    {
+        $data = [];
+        //ToDo Getting Tax from Config File: Must come from backend/Different TaxGroups
+        $data['tax_percent'] = config('quote.totals.tax_percent');
+
+
+        $data['base_price_incl_tax'] = ($val = $this->productAttributeRepository->data('price', $productId,
+            $this->quote()->getStoreId())) ? $val->value : 0;
+        $data['price_incl_tax'] = $data['base_price_incl_tax'];
+
+        $taxAmount = $data['base_price_incl_tax'] * $data['tax_percent'] / 100;
+        $data['base_tax_amount'] = number_format(round((($taxAmount + 0.000001) * 100) / 100, 2), 4);
+        $data['tax_amount'] = $data['base_tax_amount'];
+
+        $base_row_total_incl_tax = $data['qty'] * $data['base_price_incl_tax'];
+        $data['base_row_total_incl_tax'] = number_format(round((($base_row_total_incl_tax + 0.000001) * 100) / 100, 2),
+            4);
+        $data['row_total_incl_tax'] = $data['base_row_total_incl_tax'];
+
+        $base_price = $data['base_price_incl_tax'] - $taxAmount;
+        $data['base_price'] = number_format(round((($base_price + 0.000001) * 100) / 100, 2), 4);
+        $data['price'] = $data['base_price'];
+
+        $base_row_total = $data['qty'] * $base_price;
+        $data['base_row_total'] = number_format(round((($base_row_total + 0.000001) * 100) / 100, 2), 4);
+        $data['row_total'] = $data['base_row_total'];
+        return $data;
     }
 }
