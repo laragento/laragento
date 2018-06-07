@@ -33,7 +33,7 @@ class QuoteSessionItemRepository
     public function createItem($data)
     {
         // Get and set Product
-        $product = $this->productRepository->product($data['sku']);
+        $product = $this->productRepository::productBySku($data['sku']);
         $data['product_id'] = $product['entity_id'];
 
         //ToDo hardcoded getting StoreId from Quote
