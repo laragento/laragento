@@ -36,6 +36,9 @@ class QuoteSessionItemRepository
         $product = $this->productRepository->product($data['sku']);
         $data['product_id'] = $product['entity_id'];
 
+        //ToDo hardcoded getting StoreId from Quote
+        $data['store_id'] = $this->quote()->getStoreId();
+
         // Set Price Information
         $totals = $this->setTotals($product->entity_id, $data['qty']);
         $data = array_merge($data, $totals);
