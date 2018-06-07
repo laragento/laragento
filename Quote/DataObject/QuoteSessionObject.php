@@ -137,26 +137,16 @@ class QuoteSessionObject
      */
     protected $base_subtotal_with_discount = "0.0000";
 
-
-    // From Sales:
-    /**
-     * @var string
-     */
-    protected $shipping_amount = "0.0000";
-    /**
-     * @var string
-     */
-    protected $shipping_tax_amount = "0.0000";
-    /**
-     * @var string
-     */
-    protected $tax_amount = "0.0000";
-
     // Object only without corresponding DB-Entry:
     /**
      * @var array
      */
     protected $items = [];
+
+    /**
+     * @var array
+     */
+    protected $taxGroups = [];
     /**
      * @var string|null
      */
@@ -556,54 +546,6 @@ class QuoteSessionObject
     }
 
     /**
-     * @return string
-     */
-    public function getShippingAmount(): string
-    {
-        return $this->shipping_amount;
-    }
-
-    /**
-     * @param string $shipping_amount
-     */
-    public function setShippingAmount(string $shipping_amount): void
-    {
-        $this->shipping_amount = $shipping_amount;
-    }
-
-    /**
-     * @return string
-     */
-    public function getShippingTaxAmount(): string
-    {
-        return $this->shipping_tax_amount;
-    }
-
-    /**
-     * @param string $shipping_tax_amount
-     */
-    public function setShippingTaxAmount(string $shipping_tax_amount): void
-    {
-        $this->shipping_tax_amount = $shipping_tax_amount;
-    }
-
-    /**
-     * @return string
-     */
-    public function getTaxAmount(): string
-    {
-        return $this->tax_amount;
-    }
-
-    /**
-     * @param string $tax_amount
-     */
-    public function setTaxAmount(string $tax_amount): void
-    {
-        $this->tax_amount = $tax_amount;
-    }
-
-    /**
      * @return array
      */
     public function getItems(): array
@@ -618,6 +560,24 @@ class QuoteSessionObject
     {
         $this->items = $items;
     }
+
+    /**
+     * @return array
+     */
+    public function getTaxGroups(): array
+    {
+        return $this->taxGroups;
+    }
+
+    /**
+     * @param array $taxGroups
+     */
+    public function setTaxGroups(array $taxGroups): void
+    {
+        $this->taxGroups = $taxGroups;
+    }
+
+
 
     /**
      * @return null|string
@@ -636,15 +596,6 @@ class QuoteSessionObject
             $cart_id = $this->generateGUID(true, true);
         }
         $this->cart_id = $cart_id;
-    }
-
-    /**
-     *
-     */
-    public function setBAKCartId(): void
-    {
-        $id = $this->generateGUID(true, true);
-        $this->cart_id = $id;
     }
 
 

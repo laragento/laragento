@@ -78,7 +78,7 @@ class QuoteItemManager
         foreach ($quote->getItems() as $item) {
             array_push($prices, $item->getBaseRowTotalInclTax());
             $tax = $item->getBaseRowTotalInclTax() - $item->getBaseRowTotal();
-            $strIndex = str_replace('.', '_', $item->getTaxPercent());
+            $strIndex = str_replace('.', '_', number_format($item->getTaxPercent(),2));
             $val = isset($taxes[$strIndex]) ? $taxes[$strIndex] : 0;
             $taxes[$item->getTaxPercent()] = $val + $tax;
             array_push($taxes['total'], $tax);
@@ -87,7 +87,7 @@ class QuoteItemManager
         $taxAmountFull = array_sum($taxes['total']);
         $subTotalFull = $grandTotalFull - $taxAmountFull;
         $grandTotal = number_format(round((($grandTotalFull +  0.000001) * 100 ) / 100 , 2),4);
-        $taxAmount = number_format(round((($taxAmountFull +  0.000001) * 100 ) / 100 , 2),4);
+        $taxes['total'] = number_format(round((($taxAmountFull +  0.000001) * 100 ) / 100 , 2),4);
         $subTotal = number_format(round((($subTotalFull +  0.000001) * 100 ) / 100 , 2),4);
 
         // ToDo if 5Rp round is needed
@@ -98,7 +98,7 @@ class QuoteItemManager
         $quote->setSubtotalWithDiscount($subTotal);
         $quote->setBaseSubtotal($subTotal);
         $quote->setBaseSubtotalWithDiscount($subTotal);
-        $quote->setTaxAmount($taxAmount);
+        $quote->setTaxGroups($taxes);
 
 
         $this->quoteDataRepository->updateQuote($quote);
