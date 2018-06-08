@@ -36,7 +36,8 @@ class QuoteServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //
+        $this->app->bind('Laragento\Quote\Repositories\QuoteSessionItemRepositoryInterface',
+            'Laragento\Quote\Repositories\QuoteSessionItemRepository');
     }
 
     /**

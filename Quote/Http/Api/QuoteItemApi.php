@@ -9,6 +9,7 @@ use Laragento\Catalog\Transformers\ChildProductTransformer;
 use Laragento\Quote\DataObject\QuoteSessionItem;
 use Laragento\Quote\Managers\QuoteItemManager;
 use Laragento\Quote\Repositories\QuoteSessionItemRepository;
+use Laragento\Quote\Repositories\QuoteSessionItemRepositoryInterface;
 use Laragento\Quote\Transformers\QuoteItemTransformer;
 use Spatie\Fractal\Fractal;
 
@@ -21,12 +22,12 @@ class QuoteItemApi extends Controller
 
     /**
      * QuoteController constructor.
-     * @param QuoteSessionItemRepository $quoteItemRepository
+     * @param QuoteSessionItemRepositoryInterface $quoteItemRepository
      * @param QuoteItemManager $quoteItemManager
      * @param ProductRepository $productRepository
      */
     public function __construct(
-        QuoteSessionItemRepository $quoteItemRepository,
+        QuoteSessionItemRepositoryInterface $quoteItemRepository,
         QuoteItemManager $quoteItemManager,
         ProductRepository $productRepository
     )

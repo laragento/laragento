@@ -6,6 +6,7 @@ use Illuminate\Http\Response;
 use Illuminate\Routing\Controller;
 use Laragento\Quote\Managers\QuoteItemManager;
 use Laragento\Quote\Repositories\QuoteSessionItemRepository;
+use Laragento\Quote\Repositories\QuoteSessionItemRepositoryInterface;
 use Laragento\Quote\Repositories\QuoteSessionObjectRepository;
 
 class QuoteItemController extends Controller
@@ -16,12 +17,12 @@ class QuoteItemController extends Controller
 
     /**
      * QuoteController constructor.
-     * @param QuoteSessionItemRepository $quoteItemRepository
+     * @param QuoteSessionItemRepositoryInterface $quoteItemRepository
      * @param QuoteItemManager $quoteItemManager
      */
     public function __construct(
         QuoteSessionObjectRepository $quoteDataRepository,
-        QuoteSessionItemRepository $quoteItemRepository,
+        QuoteSessionItemRepositoryInterface $quoteItemRepository,
         QuoteItemManager $quoteItemManager
     ) {
         $this->quoteDataRepository = $quoteDataRepository;
