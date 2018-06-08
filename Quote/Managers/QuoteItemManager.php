@@ -24,8 +24,7 @@ class QuoteItemManager
     public function __construct(
         QuoteSessionObjectRepositoryInterface $quoteDataRepository,
         QuoteSessionItemRepositoryInterface $quoteItemRepository
-    )
-    {
+    ) {
         $this->quoteDataRepository = $quoteDataRepository;
         $this->quoteItemRepository = $quoteItemRepository;
     }
@@ -57,7 +56,12 @@ class QuoteItemManager
     public function settingQuoteItemsInfo($quote)
     {
         $quote->setItemsCount(count($quote->getItems()));
-        $quote->setItemsQty(count($quote->getItems()));
+        if (count($quote->getItems()) > 0) {
+            $quote->setItemsQty(array_sum(array_column($quote->getItems(), 'qty')));
+        } else {
+            $quote->setItemsQty(0);
+        }
+
 
         $this->quoteDataRepository->updateQuote($quote);
     }
@@ -75,7 +79,7 @@ class QuoteItemManager
         foreach ($quote->getItems() as $item) {
             array_push($prices, $item->getBaseRowTotalInclTax());
             $tax = $item->getBaseRowTotalInclTax() - $item->getBaseRowTotal();
-            $strIndex = str_replace('.', '_', number_format($item->getTaxPercent(),2));
+            $strIndex = str_replace('.', '_', number_format($item->getTaxPercent(), 2));
             $val = isset($taxes[$strIndex]) ? $taxes[$strIndex] : 0;
             $taxes[$item->getTaxPercent()] = $val + $tax;
             array_push($taxes['total'], $tax);
@@ -83,9 +87,9 @@ class QuoteItemManager
         $grandTotalFull = array_sum($prices);
         $taxAmountFull = array_sum($taxes['total']);
         $subTotalFull = $grandTotalFull - $taxAmountFull;
-        $grandTotal = number_format(round((($grandTotalFull +  0.000001) * 100 ) / 100 , 2),4);
-        $taxes['total'] = number_format(round((($taxAmountFull +  0.000001) * 100 ) / 100 , 2),4);
-        $subTotal = number_format(round((($subTotalFull +  0.000001) * 100 ) / 100 , 2),4);
+        $grandTotal = number_format(round((($grandTotalFull + 0.000001) * 100) / 100, 2), 4);
+        $taxes['total'] = number_format(round((($taxAmountFull + 0.000001) * 100) / 100, 2), 4);
+        $subTotal = number_format(round((($subTotalFull + 0.000001) * 100) / 100, 2), 4);
 
         // ToDo if 5Rp round is needed
         //var_dump(round(($var + 0.000001) * 20) / 20,2);
@@ -128,7 +132,7 @@ class QuoteItemManager
 
     }
 
-    public function storeItemData($data,$item)
+    public function storeItemData($data, $item)
     {
         /** @var QuoteSessionItem $item */
         if (!$item) {

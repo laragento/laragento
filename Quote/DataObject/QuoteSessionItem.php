@@ -66,6 +66,16 @@ class QuoteSessionItem
     protected $base_discount_tax_compensation_amount = 0.0000;
     protected $free_shipping = 0;
 
+    public function __get($prop)
+    {
+        return $this->$prop;
+    }
+
+    public function __isset($prop) : bool
+    {
+        return isset($this->$prop);
+    }
+
     /**
      * @return mixed
      */
