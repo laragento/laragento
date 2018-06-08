@@ -5,6 +5,7 @@ namespace Laragento\Catalog\Providers;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
 use Laragento\Catalog\Repositories\Product\ProductRepository;
+use Illuminate\Database\Eloquent\Factory;
 
 class CatalogServiceProvider extends ServiceProvider
 {
