@@ -10,7 +10,7 @@ use Laragento\Quote\DataObject\QuoteSessionObject;
 class QuoteSessionItemRepository implements QuoteSessionItemRepositoryInterface
 {
     /**
-     * @var QuoteSessionObjectRepository
+     * @var QuoteSessionObjectRepositoryInterface
      */
     protected $quoteDataRepository;
 
@@ -27,12 +27,12 @@ class QuoteSessionItemRepository implements QuoteSessionItemRepositoryInterface
     /**
      * QuoteSessionItemRepository constructor.
      *
-     * @param QuoteSessionObjectRepository $quoteDataRepository
+     * @param QuoteSessionObjectRepositoryInterface $quoteDataRepository
      * @param ProductRepositoryInterface $productRepository
      * @param ProductAttributeRepositoryInterface $productAttributeRepository
      */
     public function __construct(
-        QuoteSessionObjectRepository $quoteDataRepository,
+        QuoteSessionObjectRepositoryInterface $quoteDataRepository,
         ProductRepositoryInterface $productRepository,
         ProductAttributeRepositoryInterface $productAttributeRepository
     ) {

@@ -8,6 +8,7 @@ use Laragento\Quote\Managers\QuoteItemManager;
 use Laragento\Quote\Repositories\QuoteSessionItemRepository;
 use Laragento\Quote\Repositories\QuoteSessionItemRepositoryInterface;
 use Laragento\Quote\Repositories\QuoteSessionObjectRepository;
+use Laragento\Quote\Repositories\QuoteSessionObjectRepositoryInterface;
 
 class QuoteItemController extends Controller
 {
@@ -21,7 +22,7 @@ class QuoteItemController extends Controller
      * @param QuoteItemManager $quoteItemManager
      */
     public function __construct(
-        QuoteSessionObjectRepository $quoteDataRepository,
+        QuoteSessionObjectRepositoryInterface $quoteDataRepository,
         QuoteSessionItemRepositoryInterface $quoteItemRepository,
         QuoteItemManager $quoteItemManager
     ) {
