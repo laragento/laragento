@@ -5,19 +5,28 @@ namespace Laragento\Quote\Repositories;
 use Illuminate\Support\Facades\Auth;
 use Laragento\Quote\DataObject\QuoteSessionObject;
 
-class QuoteSessionObjectRepository
+class QuoteSessionObjectRepository implements QuoteSessionObjectRepositoryInterface
 {
 
+    /**
+     * @var QuoteSessionObject
+     */
     protected $quote;
 
+    /**
+     * QuoteSessionObjectRepository constructor.
+     *
+     * @param QuoteSessionObject $quoteSessionObject
+     */
     public function __construct(QuoteSessionObject $quoteSessionObject)
     {
         $this->quote = $quoteSessionObject;
     }
 
-
+    /**
+     * @inheritdoc
+     */
     public function createQuote($storeId = 0)
-
     {
         $this->destroyQuote();
 
@@ -39,23 +48,31 @@ class QuoteSessionObjectRepository
 
     }
 
+    /**
+     * @inheritdoc
+     */
     public function getQuote()
     {
         return session()->get('laragento_cart');
     }
 
+    /**
+     * @inheritdoc
+     */
     public function updateQuote($quoteData)
     {
         $quote = $this->getQuote();
         foreach ($quoteData as $key => $value) {
-            $function = 'set' . str_replace(' ','',ucwords(str_replace('_', ' ', $key)));
+            $function = 'set' . str_replace(' ', '', ucwords(str_replace('_', ' ', $key)));
             $quote->$function($value);
         }
         session()->put('laragento_cart', $quote);
         return $quote;
-
     }
 
+    /**
+     * @inheritdoc
+     */
     public function destroyQuote()
     {
         session()->forget('laragento_cart');

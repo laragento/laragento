@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Routing\Controller;
 use Laragento\Quote\Repositories\QuoteSessionObjectRepository;
+use Laragento\Quote\Repositories\QuoteSessionObjectRepositoryInterface;
 
 class QuoteController extends Controller
 {
@@ -13,9 +14,9 @@ class QuoteController extends Controller
 
     /**
      * QuoteController constructor.
-     * @param QuoteSessionObjectRepository $quoteDataRepository
+     * @param QuoteSessionObjectRepositoryInterface $quoteDataRepository
      */
-    public function __construct(QuoteSessionObjectRepository $quoteDataRepository)
+    public function __construct(QuoteSessionObjectRepositoryInterface $quoteDataRepository)
     {
         $this->quoteDataRepository = $quoteDataRepository;
         $this->middleware('auth')->except([]);

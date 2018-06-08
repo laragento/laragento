@@ -5,8 +5,8 @@ namespace Laragento\Quote\Http\Controllers;
 use Illuminate\Http\Response;
 use Illuminate\Routing\Controller;
 use Laragento\Quote\Managers\QuoteItemManager;
-use Laragento\Quote\Repositories\QuoteSessionItemRepository;
-use Laragento\Quote\Repositories\QuoteSessionObjectRepository;
+use Laragento\Quote\Repositories\QuoteSessionItemRepositoryInterface;
+use Laragento\Quote\Repositories\QuoteSessionObjectRepositoryInterface;
 
 class QuoteItemController extends Controller
 {
@@ -16,12 +16,14 @@ class QuoteItemController extends Controller
 
     /**
      * QuoteController constructor.
-     * @param QuoteSessionItemRepository $quoteItemRepository
+     *
+     * @param QuoteSessionObjectRepositoryInterface $quoteDataRepository
+     * @param QuoteSessionItemRepositoryInterface $quoteItemRepository
      * @param QuoteItemManager $quoteItemManager
      */
     public function __construct(
-        QuoteSessionObjectRepository $quoteDataRepository,
-        QuoteSessionItemRepository $quoteItemRepository,
+        QuoteSessionObjectRepositoryInterface $quoteDataRepository,
+        QuoteSessionItemRepositoryInterface $quoteItemRepository,
         QuoteItemManager $quoteItemManager
     ) {
         $this->quoteDataRepository = $quoteDataRepository;
@@ -33,6 +35,7 @@ class QuoteItemController extends Controller
 
     /**
      * Display a listing of the resource.
+     *
      * @return void
      */
     public function index()
@@ -42,6 +45,8 @@ class QuoteItemController extends Controller
 
     /**
      * Store a newly created resource in storage.
+     *
+     * @param $storeId
      * @return Response
      */
     public function store($storeId)
@@ -53,13 +58,14 @@ class QuoteItemController extends Controller
         $requestData['store_id'] = $storeId;
         $item = $this->quoteItemRepository->bySku($requestData['sku']);;
 
-        $this->manager->storeItems($requestData,$item);
+        $this->manager->storeItems($requestData, $item);
 
         return redirect()->back();
     }
 
     /**
      * Show the specified resource.
+     *
      * @return void
      */
     public function show()
@@ -70,6 +76,8 @@ class QuoteItemController extends Controller
 
     /**
      * Update the specified resource in storage.
+     *
+     * @param $storeId
      * @param $itemId
      * @return Response
      */
@@ -84,11 +92,11 @@ class QuoteItemController extends Controller
         // Store Data in Cart
         $this->manager->storeItems($items);
         return redirect()->back();
-
     }
 
     /**
      * Remove the specified resource from storage.
+     *
      * @param $itemId
      * @return Response
      */
