@@ -4,7 +4,8 @@ namespace Laragento\Indexer\Providers;
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
-use Modules\BachmannkartenImport\Console\IndexerUpdateProducts;
+use Laragento\Indexer\Console\IndexerUpdateCategories;
+use Laragento\Indexer\Console\IndexerUpdateProducts;
 
 class IndexerServiceProvider extends ServiceProvider
 {
@@ -26,7 +27,8 @@ class IndexerServiceProvider extends ServiceProvider
     public function register()
     {
         $this->commands([
-            IndexerUpdateProducts::class
+            IndexerUpdateProducts::class,
+            IndexerUpdateCategories::class
         ]);
     }
 }
