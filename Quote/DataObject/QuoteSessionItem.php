@@ -4,8 +4,6 @@
 namespace Laragento\Quote\DataObject;
 
 
-use Laragento\Catalog\Repositories\Product\ProductRepository;
-
 class QuoteSessionItem
 {
     /* ORIGINAL from DB, actually not used
@@ -43,27 +41,27 @@ class QuoteSessionItem
     protected $description;
     protected $weight;
     protected $qty;
-    protected $price = 0.0000;
-    protected $base_price = 0.0000;
-    protected $custom_price = 0.0000;
-    protected $discount_percent = 0.0000;
-    protected $discount_amount = 0.0000;
-    protected $base_discount_amount = 0.0000;
-    protected $tax_percent = 0.0000;
-    protected $tax_amount = 0.0000;
-    protected $base_tax_amount = 0.0000;
-    protected $row_total = 0.0000;
-    protected $base_row_total = 0.0000;
-    protected $row_total_with_discount = 0.0000;
+    protected $price = '0.0000';
+    protected $base_price = '0.0000';
+    protected $custom_price = '0.0000';
+    protected $discount_percent = '0.0000';
+    protected $discount_amount = '0.0000';
+    protected $base_discount_amount = '0.0000';
+    protected $tax_percent = '0.0000';
+    protected $tax_amount = '0.0000';
+    protected $base_tax_amount = '0.0000';
+    protected $row_total = '0.0000';
+    protected $base_row_total = '0.0000';
+    protected $row_total_with_discount = '0.0000';
     protected $row_weight;
     protected $original_custom_price;
     protected $redirect_url;
-    protected $price_incl_tax = 0.0000;
-    protected $base_price_incl_tax = 0.0000;
-    protected $row_total_incl_tax = 0.0000;
-    protected $base_row_total_incl_tax = 0.0000;
-    protected $discount_tax_compensation_amount = 0.0000;
-    protected $base_discount_tax_compensation_amount = 0.0000;
+    protected $price_incl_tax = '0.0000';
+    protected $base_price_incl_tax = '0.0000';
+    protected $row_total_incl_tax = '0.0000';
+    protected $base_row_total_incl_tax = '0.0000';
+    protected $discount_tax_compensation_amount = '0.0000';
+    protected $base_discount_tax_compensation_amount = '0.0000';
     protected $free_shipping = 0;
 
     public function __get($prop)
@@ -237,193 +235,193 @@ class QuoteSessionItem
     }
 
     /**
-     * @return mixed
+     * @return string
      */
-    public function getPrice()
+    public function getPrice(): string
     {
         return $this->price;
     }
 
     /**
-     * @param mixed $price
+     * @param string $price
      */
-    public function setPrice($price): void
+    public function setPrice(string $price): void
     {
         $this->price = $price;
     }
 
     /**
-     * @return mixed
+     * @return string
      */
-    public function getBasePrice()
+    public function getBasePrice(): string
     {
         return $this->base_price;
     }
 
     /**
-     * @param mixed $base_price
+     * @param string $base_price
      */
-    public function setBasePrice($base_price): void
+    public function setBasePrice(string $base_price): void
     {
         $this->base_price = $base_price;
     }
 
     /**
-     * @return mixed
+     * @return string
      */
-    public function getCustomPrice()
+    public function getCustomPrice(): string
     {
         return $this->custom_price;
     }
 
     /**
-     * @param mixed $custom_price
+     * @param string $custom_price
      */
-    public function setCustomPrice($custom_price): void
+    public function setCustomPrice(string $custom_price): void
     {
         $this->custom_price = $custom_price;
     }
 
     /**
-     * @return mixed
+     * @return string
      */
-    public function getDiscountPercent()
+    public function getDiscountPercent(): string
     {
         return $this->discount_percent;
     }
 
     /**
-     * @param mixed $discount_percent
+     * @param string $discount_percent
      */
-    public function setDiscountPercent($discount_percent): void
+    public function setDiscountPercent(string $discount_percent): void
     {
         $this->discount_percent = $discount_percent;
     }
 
     /**
-     * @return mixed
+     * @return string
      */
-    public function getDiscountAmount()
+    public function getDiscountAmount(): string
     {
         return $this->discount_amount;
     }
 
     /**
-     * @param mixed $discount_amount
+     * @param string $discount_amount
      */
-    public function setDiscountAmount($discount_amount): void
+    public function setDiscountAmount(string $discount_amount): void
     {
         $this->discount_amount = $discount_amount;
     }
 
     /**
-     * @return mixed
+     * @return string
      */
-    public function getBaseDiscountAmount()
+    public function getBaseDiscountAmount(): string
     {
         return $this->base_discount_amount;
     }
 
     /**
-     * @param mixed $base_discount_amount
+     * @param string $base_discount_amount
      */
-    public function setBaseDiscountAmount($base_discount_amount): void
+    public function setBaseDiscountAmount(string $base_discount_amount): void
     {
         $this->base_discount_amount = $base_discount_amount;
     }
 
     /**
-     * @return mixed
+     * @return string
      */
-    public function getTaxPercent()
+    public function getTaxPercent(): string
     {
         return $this->tax_percent;
     }
 
     /**
-     * @param mixed $tax_percent
+     * @param string $tax_percent
      */
-    public function setTaxPercent($tax_percent): void
+    public function setTaxPercent(string $tax_percent): void
     {
         $this->tax_percent = $tax_percent;
     }
 
     /**
-     * @return mixed
+     * @return string
      */
-    public function getTaxAmount()
+    public function getTaxAmount(): string
     {
         return $this->tax_amount;
     }
 
     /**
-     * @param mixed $tax_amount
+     * @param string $tax_amount
      */
-    public function setTaxAmount($tax_amount): void
+    public function setTaxAmount(string $tax_amount): void
     {
         $this->tax_amount = $tax_amount;
     }
 
     /**
-     * @return mixed
+     * @return string
      */
-    public function getBaseTaxAmount()
+    public function getBaseTaxAmount(): string
     {
         return $this->base_tax_amount;
     }
 
     /**
-     * @param mixed $base_tax_amount
+     * @param string $base_tax_amount
      */
-    public function setBaseTaxAmount($base_tax_amount): void
+    public function setBaseTaxAmount(string $base_tax_amount): void
     {
         $this->base_tax_amount = $base_tax_amount;
     }
 
     /**
-     * @return mixed
+     * @return string
      */
-    public function getRowTotal()
+    public function getRowTotal(): string
     {
         return $this->row_total;
     }
 
     /**
-     * @param mixed $row_total
+     * @param string $row_total
      */
-    public function setRowTotal($row_total): void
+    public function setRowTotal(string $row_total): void
     {
         $this->row_total = $row_total;
     }
 
     /**
-     * @return mixed
+     * @return string
      */
-    public function getBaseRowTotal()
+    public function getBaseRowTotal(): string
     {
         return $this->base_row_total;
     }
 
     /**
-     * @param mixed $base_row_total
+     * @param string $base_row_total
      */
-    public function setBaseRowTotal($base_row_total): void
+    public function setBaseRowTotal(string $base_row_total): void
     {
         $this->base_row_total = $base_row_total;
     }
 
     /**
-     * @return mixed
+     * @return string
      */
-    public function getRowTotalWithDiscount()
+    public function getRowTotalWithDiscount(): string
     {
         return $this->row_total_with_discount;
     }
 
     /**
-     * @param mixed $row_total_with_discount
+     * @param string $row_total_with_discount
      */
-    public function setRowTotalWithDiscount($row_total_with_discount): void
+    public function setRowTotalWithDiscount(string $row_total_with_discount): void
     {
         $this->row_total_with_discount = $row_total_with_discount;
     }
@@ -477,113 +475,113 @@ class QuoteSessionItem
     }
 
     /**
-     * @return mixed
+     * @return string
      */
-    public function getPriceInclTax()
+    public function getPriceInclTax(): string
     {
         return $this->price_incl_tax;
     }
 
     /**
-     * @param mixed $price_incl_tax
+     * @param string $price_incl_tax
      */
-    public function setPriceInclTax($price_incl_tax): void
+    public function setPriceInclTax(string $price_incl_tax): void
     {
         $this->price_incl_tax = $price_incl_tax;
     }
 
     /**
-     * @return mixed
+     * @return string
      */
-    public function getBasePriceInclTax()
+    public function getBasePriceInclTax(): string
     {
         return $this->base_price_incl_tax;
     }
 
     /**
-     * @param mixed $base_price_incl_tax
+     * @param string $base_price_incl_tax
      */
-    public function setBasePriceInclTax($base_price_incl_tax): void
+    public function setBasePriceInclTax(string $base_price_incl_tax): void
     {
         $this->base_price_incl_tax = $base_price_incl_tax;
     }
 
     /**
-     * @return mixed
+     * @return string
      */
-    public function getRowTotalInclTax()
+    public function getRowTotalInclTax(): string
     {
         return $this->row_total_incl_tax;
     }
 
     /**
-     * @param mixed $row_total_incl_tax
+     * @param string $row_total_incl_tax
      */
-    public function setRowTotalInclTax($row_total_incl_tax): void
+    public function setRowTotalInclTax(string $row_total_incl_tax): void
     {
         $this->row_total_incl_tax = $row_total_incl_tax;
     }
 
     /**
-     * @return mixed
+     * @return string
      */
-    public function getBaseRowTotalInclTax()
+    public function getBaseRowTotalInclTax(): string
     {
         return $this->base_row_total_incl_tax;
     }
 
     /**
-     * @param mixed $base_row_total_incl_tax
+     * @param string $base_row_total_incl_tax
      */
-    public function setBaseRowTotalInclTax($base_row_total_incl_tax): void
+    public function setBaseRowTotalInclTax(string $base_row_total_incl_tax): void
     {
         $this->base_row_total_incl_tax = $base_row_total_incl_tax;
     }
 
     /**
-     * @return mixed
+     * @return string
      */
-    public function getDiscountTaxCompensationAmount()
+    public function getDiscountTaxCompensationAmount(): string
     {
         return $this->discount_tax_compensation_amount;
     }
 
     /**
-     * @param mixed $discount_tax_compensation_amount
+     * @param string $discount_tax_compensation_amount
      */
-    public function setDiscountTaxCompensationAmount($discount_tax_compensation_amount): void
+    public function setDiscountTaxCompensationAmount(string $discount_tax_compensation_amount): void
     {
         $this->discount_tax_compensation_amount = $discount_tax_compensation_amount;
     }
 
     /**
-     * @return mixed
+     * @return string
      */
-    public function getBaseDiscountTaxCompensationAmount()
+    public function getBaseDiscountTaxCompensationAmount(): string
     {
         return $this->base_discount_tax_compensation_amount;
     }
 
     /**
-     * @param mixed $base_discount_tax_compensation_amount
+     * @param string $base_discount_tax_compensation_amount
      */
-    public function setBaseDiscountTaxCompensationAmount($base_discount_tax_compensation_amount): void
+    public function setBaseDiscountTaxCompensationAmount(string $base_discount_tax_compensation_amount): void
     {
         $this->base_discount_tax_compensation_amount = $base_discount_tax_compensation_amount;
     }
 
     /**
-     * @return mixed
+     * @return int
      */
-    public function getFreeShipping()
+    public function getFreeShipping(): int
     {
         return $this->free_shipping;
     }
 
     /**
-     * @param mixed $free_shipping
+     * @param int $free_shipping
      */
-    public function setFreeShipping($free_shipping): void
+    public function setFreeShipping(int $free_shipping): void
     {
         $this->free_shipping = $free_shipping;
     }

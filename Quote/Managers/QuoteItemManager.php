@@ -117,7 +117,10 @@ class QuoteItemManager
         $quote = $this->getQuote();
         $quote->setItems($data);
         $this->settingQuoteItemsInfo($quote);
-        $this->calculateTotals($quote);
+
+        if (config('quote.calculateTotals') == true) {
+            $this->calculateTotals($quote);
+        }
     }
 
     /**
@@ -128,7 +131,10 @@ class QuoteItemManager
         $quote = $this->getQuote();
         $quote->setItems($items);
         $this->settingQuoteItemsInfo($quote);
-        $this->calculateTotals($quote);
+        if (config('quote.calculateTotals') == true) {
+            $this->calculateTotals($quote);
+        }
+
 
     }
 
