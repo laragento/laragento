@@ -16,7 +16,7 @@ use Laragento\Dev\Providers\DevServiceProvider;
 use Laragento\Directory\Providers\DirectoryServiceProvider;
 use Laragento\Eav\Providers\EavServiceProvider;
 use Laragento\ImportExport\Providers\ImportExportServiceProvider;
-use Laragento\Indexer\IndexerServiceProvider;
+use Laragento\Indexer\Providers\IndexerServiceProvider;
 use Laragento\MediaStorage\Providers\MediaStorageServiceProvider;
 use Laragento\Quote\Providers\QuoteServiceProvider;
 use Laragento\Rating\Providers\RatingServiceProvider;

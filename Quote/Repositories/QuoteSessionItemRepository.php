@@ -52,9 +52,11 @@ class QuoteSessionItemRepository implements QuoteSessionItemRepositoryInterface
         $product = $this->productRepository::productBySku($data['sku']);
         $data['product_id'] = $product['entity_id'];
 
-        // Set Price Information
-        $totals = $this->setTotals($product->entity_id, $data['qty'], $data['store_id']);
-        $data = array_merge($data, $totals);
+        if (config('quote.calculateTotals')) {
+            // Set Price Information
+            $totals = $this->setTotals($product->entity_id, $data['qty'], $data['store_id']);
+            $data = array_merge($data, $totals);
+        }
 
         // Populate Item
         $quoteItem = new QuoteSessionItem();
@@ -135,9 +137,12 @@ class QuoteSessionItemRepository implements QuoteSessionItemRepositoryInterface
                 break;
             }
         }
-        // Recalculate Totals
-        $totals = $this->setTotals($item->getProductId(), $data['qty'], $data['store_id']);
-        $data = array_merge($data, $totals);
+        if (config('quote.calculateTotals')) {
+
+            // Recalculate Totals
+            $totals = $this->setTotals($item->getProductId(), $data['qty'], $data['store_id']);
+            $data = array_merge($data, $totals);
+        }
 
         // Set new item values
         foreach ($data as $key => $value) {

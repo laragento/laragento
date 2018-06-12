@@ -1,6 +1,6 @@
 <?php
 
-namespace Laragento\Indexer;
+namespace Laragento\Indexer\Providers;
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
