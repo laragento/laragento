@@ -1,6 +1,6 @@
 <?php
 
-namespace Modules\BachmannkartenImport\Console;
+namespace Modules\BachmannkartenImport\Indexer;
 
 use Illuminate\Console\Command;
 use Laragento\Customer\Models\Address;
