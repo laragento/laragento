@@ -1,0 +1,21 @@
+{
+    "name": "laragento/indexer",
+    "description": "Yeah",
+    "type": "extension",
+    "minimum-stability": "dev",
+    "require": {
+        "laragento/catalog":"dev-dev"
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Laragento\\Indexer\\Providers\\CatalogServiceProvider"
+            ]
+        }
+    },
+    "autoload": {
+        "psr-4": {
+            "Laragento\\Indexer\\": "./"
+        }
+    }
+}

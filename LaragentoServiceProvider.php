@@ -16,6 +16,7 @@ use Laragento\Dev\Providers\DevServiceProvider;
 use Laragento\Directory\Providers\DirectoryServiceProvider;
 use Laragento\Eav\Providers\EavServiceProvider;
 use Laragento\ImportExport\Providers\ImportExportServiceProvider;
+use Laragento\Indexer\IndexerServiceProvider;
 use Laragento\MediaStorage\Providers\MediaStorageServiceProvider;
 use Laragento\Quote\Providers\QuoteServiceProvider;
 use Laragento\Rating\Providers\RatingServiceProvider;
@@ -61,5 +62,6 @@ class LaragentoServiceProvider extends ServiceProvider
         $this->app->register(ReviewServiceProvider::class);
         $this->app->register(StoreServiceProvider::class);
         $this->app->register(XmlChunkServiceProvider::class);
+        $this->app->register(IndexerServiceProvider::class);
     }
 }
