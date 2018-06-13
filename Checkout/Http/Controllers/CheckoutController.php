@@ -14,7 +14,7 @@ class CheckoutController extends Controller
      */
     public function index()
     {
-        dd("Checkout Controller");
+
         return view('checkout::index');
     }
 

@@ -147,6 +147,12 @@ class QuoteSessionObject
      * @var array
      */
     protected $taxGroups = [];
+
+    /**
+     * @var array
+     */
+    protected $customAttributes = [];
+
     /**
      * @var string|null
      */
@@ -577,7 +583,21 @@ class QuoteSessionObject
         $this->taxGroups = $taxGroups;
     }
 
+    /**
+     * @return array
+     */
+    public function getCustomAttributes(): array
+    {
+        return $this->customAttributes;
+    }
 
+    /**
+     * @param array $customAttributes
+     */
+    public function setCustomAttributes(array $customAttributes): void
+    {
+        $this->customAttributes = $customAttributes;
+    }
 
     /**
      * @return null|string

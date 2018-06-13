@@ -4,6 +4,8 @@
 namespace Laragento\Quote\DataObject;
 
 
+use Laragento\Catalog\Repositories\Product\ProductRepositoryInterface;
+
 class QuoteSessionItem
 {
     /* ORIGINAL from DB, actually not used
@@ -63,6 +65,9 @@ class QuoteSessionItem
     protected $discount_tax_compensation_amount = '0.0000';
     protected $base_discount_tax_compensation_amount = '0.0000';
     protected $free_shipping = 0;
+
+    // Object only
+    protected $customAttributes = [];
 
     public function __get($prop)
     {
@@ -584,6 +589,27 @@ class QuoteSessionItem
     public function setFreeShipping(int $free_shipping): void
     {
         $this->free_shipping = $free_shipping;
+    }
+
+    /**
+     * @return array
+     */
+    public function getCustomAttributes(): array
+    {
+        return $this->customAttributes;
+    }
+
+    /**
+     * @param array $customAttributes
+     */
+    public function setCustomAttributes(array $customAttributes): void
+    {
+        $this->customAttributes = $customAttributes;
+    }
+
+    public function product()
+    {
+        return ProductRepositoryInterface::productBySku($this->sku);
     }
 
     public function toArray()
