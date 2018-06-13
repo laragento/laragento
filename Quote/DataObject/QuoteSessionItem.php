@@ -4,6 +4,7 @@
 namespace Laragento\Quote\DataObject;
 
 
+use Laragento\Catalog\Repositories\Product\ProductRepository;
 use Laragento\Catalog\Repositories\Product\ProductRepositoryInterface;
 
 class QuoteSessionItem
@@ -609,7 +610,7 @@ class QuoteSessionItem
 
     public function product()
     {
-        return ProductRepositoryInterface::productBySku($this->sku);
+        return ProductRepository::productBySku($this->sku);
     }
 
     public function toArray()
