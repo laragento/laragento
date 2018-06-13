@@ -134,8 +134,6 @@ class QuoteItemManager
         if (config('quote.calculateTotals') == true) {
             $this->calculateTotals($quote);
         }
-
-
     }
 
     public function storeItemData($data, $item)
