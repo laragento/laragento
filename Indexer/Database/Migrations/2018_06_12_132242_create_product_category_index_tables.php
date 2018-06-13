@@ -17,7 +17,7 @@ class CreateProductCategoryIndexTables extends Migration
             $table->increments('id');
 
             $table->unsignedInteger('product_id');
-            $table->unsignedInteger('store_id');
+            $table->smallInteger('store_id');
 
             $table->timestamps();
 
@@ -29,7 +29,7 @@ class CreateProductCategoryIndexTables extends Migration
             $table->increments('id');
 
             $table->unsignedInteger('category_id');
-            $table->unsignedInteger('store_id');
+            $table->smallInteger('store_id');
 
             $table->timestamps();
 
