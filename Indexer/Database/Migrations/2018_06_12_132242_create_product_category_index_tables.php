@@ -13,7 +13,7 @@ class CreateProductCategoryIndexTables extends Migration
      */
     public function up()
     {
-        Schema::table('lg_catalog_product_index', function (Blueprint $table) {
+        Schema::create('lg_catalog_product_index', function (Blueprint $table) {
             $table->increments('id');
 
             $table->unsignedInteger('id_product');
@@ -21,7 +21,7 @@ class CreateProductCategoryIndexTables extends Migration
             $table->timestamps();
         });
 
-        Schema::table('lg_catalog_category_index', function (Blueprint $table) {
+        Schema::create('lg_catalog_category_index', function (Blueprint $table) {
             $table->increments('id');
 
             $table->unsignedInteger('id_category');
