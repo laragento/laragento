@@ -21,6 +21,8 @@ class IndexerUpdateProducts extends Command
         ProductAttributeRepositoryInterface $productAttributeRepository
     ) {
         $this->productAttributeRepository = $productAttributeRepository;
+
+        parent::__construct();
     }
 
     /**
