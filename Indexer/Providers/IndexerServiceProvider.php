@@ -16,6 +16,7 @@ class IndexerServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        $this->registerConfig();
         $this->loadMigrationsFrom(__DIR__.'/../Database/Migrations');
     }
 
@@ -30,5 +31,20 @@ class IndexerServiceProvider extends ServiceProvider
             IndexerUpdateProducts::class,
             IndexerUpdateCategories::class
         ]);
+    }
+
+    /**
+     * Register config.
+     *
+     * @return void
+     */
+    protected function registerConfig()
+    {
+        $this->publishes([
+            __DIR__.'/../Config/config.php' => config_path('indexer.php'),
+        ], 'config');
+        $this->mergeConfigFrom(
+            __DIR__.'/../Config/config.php', 'indexer'
+        );
     }
 }

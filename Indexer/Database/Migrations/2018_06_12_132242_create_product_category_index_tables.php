@@ -16,17 +16,25 @@ class CreateProductCategoryIndexTables extends Migration
         Schema::create('lg_catalog_product_index', function (Blueprint $table) {
             $table->increments('id');
 
-            $table->unsignedInteger('id_product');
+            $table->unsignedInteger('product_id');
+            $table->unsignedSmallInteger('store_id');
 
             $table->timestamps();
+
+            $table->foreign('product_id')->references('entity_id')->on('catalog_product_entity');
+            $table->foreign('store_id')->references('store_id')->on('store');
         });
 
         Schema::create('lg_catalog_category_index', function (Blueprint $table) {
             $table->increments('id');
 
-            $table->unsignedInteger('id_category');
+            $table->unsignedInteger('category_id');
+            $table->unsignedSmallInteger('store_id');
 
             $table->timestamps();
+
+            $table->foreign('category_id')->references('entity_id')->on('catalog_category_product');
+            $table->foreign('store_id')->references('store_id')->on('store');
         });
     }
 
