@@ -17,14 +17,14 @@ class IndexerCommand extends Command
     /**
      * Fill index table with defined cols
      *
-     * @param $table
+     * @param $indexTable
      * @param $attributes
      */
-    protected function syncIndexerCols($table, $attributes) {
+    protected function syncIndexerCols($indexTable, $attributes) {
         foreach($attributes as $attribute => $type) {
-            if(!Schema::hasColumn($table, $attribute)) {
+            if(!Schema::hasColumn($indexTable, $attribute)) {
                 //create collumn if not found in table
-                Schema::table($table, function($table) use($attribute, $type) {
+                Schema::table($indexTable, function($table) use($attribute, $type) {
                     switch($type) {
                         case 'text':
                             $table->text($attribute)->default('')->nullable();

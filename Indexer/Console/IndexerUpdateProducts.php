@@ -53,6 +53,6 @@ class IndexerUpdateProducts extends IndexerCommand
 
         $this->syncIndexerCols('lg_catalog_product_index', $productAttributes);
 
-        $this->updateIndexerTable('lg_catalog_product_index', 'indexer-update-products-timestamp', $productAttributes, $storeIds, 'product_id', ProductIndex::class, $this->productAttributeRepository);
+        $this->updateIndexerTable('catalog_product_entity', 'indexer-update-products-timestamp', $productAttributes, $storeIds, 'product_id', ProductIndex::class, $this->productAttributeRepository);
     }
 }
