@@ -49,9 +49,9 @@ class IndexerUpdateProducts extends Command
         //check if attributes present in indexer table
         $productAttributes = Config::get('indexer.product_attributes');
         foreach($productAttributes as $productAttribute) {
-            if(!Schema::hasColumn('catalog_product_entity', $productAttribute)) {
+            if(!Schema::hasColumn('lg_catalog_product_index', $productAttribute)) {
                 //create collumn if not found in table
-                Schema::table('catalog_product_entity', function($table) use($productAttribute) {
+                Schema::table('lg_catalog_product_index', function($table) use($productAttribute) {
                     $table->string($productAttribute, 255)->default('');
                 });
             }
