@@ -15,7 +15,7 @@ use Modules\BachmannkartenNavision\OData\Navision;
 use Validator;
 use DateTime;
 
-class IndexerUpdateCategories extends Command
+class IndexerUpdateCategories extends IndexerCommand
 {
     protected $categoryAttributeRepository;
     protected $countUpdates;
@@ -52,6 +52,8 @@ class IndexerUpdateCategories extends Command
         //check if attributes present in indexer table
         $categoryAttributes = Config::get('indexer.category_attributes');
         $storeIds = Config::get('indexer.stores');
+
+
 
         foreach($categoryAttributes as $categoryAttribute) {
             if(!Schema::hasColumn('lg_catalog_category_index', $categoryAttribute)) {
