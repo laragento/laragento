@@ -17,21 +17,19 @@ class StoreOrderTest extends SalesTestCase
     public function storeOrder()
     {
 
-        // Get a quote
+        // Get a quote and store Items
         $quote = $this->quote();
-        $items = $quote->getItems();
-        // Save Order
-        $orderData = $this->orderManager->quoteToOrder($quote);
+        $this->populateCart(['sku' => '003222', 'qty' => 10]);
+        $this->populateCart(['sku' => '003224', 'qty' => 5]);
 
-        $order = Order::create($orderData);
-        foreach ($items as $item) {
-            $itemData = $this->orderManager->quoteItemToOrderItem($item, $order);
-            $orderItem = Item::create($itemData);
-            $this->assertDatabaseHas('sales_order_item', ['item_id' => $orderItem->item_id]);
-        }
+        // Save Order
+        $order = $this->orderManager->saveOrderFromQuote($quote);
+
 
         // Confirm Entry in DB
         $this->assertDatabaseHas('sales_order', ['entity_id' => $order->entity_id]);
+        $this->assertDatabaseHas('sales_order_item', ['sku' => '003222']);
+        $this->assertDatabaseHas('sales_order_address', ['parent_id' => $order->entity_id]);
 
     }
 

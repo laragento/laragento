@@ -57,16 +57,18 @@ abstract class SalesTestCase extends TestCase
         $this->customer = $this->customerRepository->get()[0];
 
         $this->createQuote();
-        $this->populateCart();
+
     }
 
 
     /**
      *
      */
-    protected function populateCart()
+    protected function populateCart($data = null)
     {
-        $data = ['sku' => '003222', 'qty' => 10];
+        if (!$data) {
+            $data = ['sku' => '003222', 'qty' => 10];
+        }
         $this->itemManager->storeItems($data);
     }
 

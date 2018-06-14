@@ -3,13 +3,47 @@
 
 namespace Laragento\Sales\Managers;
 
+use Laragento\Customer\Repositories\AddressRepositoryInterface;
 use Laragento\Quote\DataObject\QuoteSessionItem;
 use Laragento\Quote\DataObject\QuoteSessionObject;
+use Laragento\Sales\Models\Order;
+use Laragento\Sales\Models\Order\Address;
+use Laragento\Sales\Models\Order\Item;
+use Laragento\Sales\Repositories\OrderItemRepository;
+use Laragento\Sales\Repositories\OrderRepository;
 use Laragento\Store\Models\Store;
 
 class OrderManager
 {
-    public function quoteToOrder(QuoteSessionObject $quote)
+    protected $orderItemRepository;
+    protected $orderRepository;
+    protected $addressRepository;
+
+    public function __construct(OrderRepository $orderRepository, OrderItemRepository $orderItemRepository, AddressRepositoryInterface $addressRepository)
+    {
+        $this->orderItemRepository = $orderItemRepository;
+        $this->orderRepository = $orderRepository;
+        $this->addressRepository = $addressRepository;
+    }
+
+    /**
+     * @param QuoteSessionObject $quote
+     * @return mixed
+     */
+    public function saveOrderFromQuote($quote)
+    {
+        $orderData = $this->quoteToOrder($quote);
+        $order = $this->orderRepository->store($orderData);
+        $this->saveItems($quote, $order);
+        $this->saveAddresses($order);
+        return $order;
+    }
+
+    /**
+     * @param QuoteSessionObject $quote
+     * @return array
+     */
+    protected function quoteToOrder($quote)
     {
         $store = Store::whereStoreId($quote->getStoreId())->first();
         return [
@@ -52,7 +86,7 @@ class OrderManager
         ];
     }
 
-    public function quoteItemToOrderItem(QuoteSessionItem $item, $order)
+    protected function quoteItemToOrderItem(QuoteSessionItem $item, $order)
     {
         return [
             'order_id' => $order->entity_id,
@@ -90,5 +124,60 @@ class OrderManager
             'base_row_total_incl_tax' => $item->getBaseRowTotalInclTax(),
             'free_shipping' => $item->getFreeShipping()
         ];
+    }
+
+    protected function getAddressData($orderId, $addressId, $type)
+    {
+        /** @var Address $address */
+        $address = $this->addressRepository->first($addressId);
+
+        return [
+            'parent_id' => $orderId,
+            'customer_address_id' => $addressId,
+            'quote_address_id' => $addressId,
+            'region_id' => $address->region_id,
+            'customer_id' => $address->customer_id,
+            'fax' => $address->fax,
+            'region' => $address->region,
+            'postcode' => $address->postcode,
+            'lastname' => $address->lastname,
+            'street' => $address->street,
+            'city' => $address->city,
+            'email' => $address->email,
+            'telephone' => $address->telephone,
+            'country_id' => $address->country_id,
+            'firstname' => $address->firstname,
+            'address_type' => $type,
+            'prefix' => $address->prefix,
+            'middlename' => $address->middlename,
+            'suffix' => $address->suffix,
+            'company' => $address->company,
+            'vat_id' => $address->vat_id,
+            'vat_is_valid' => $address->vat_is_valid,
+            'vat_request_id' => $address->vat_request_id,
+            'vat_request_date' => $address->vat_request_date,
+            'vat_request_success' => $address->vat_request_success
+        ];
+    }
+
+    /**
+     * @param QuoteSessionObject $quote
+     * @param $order
+     */
+    protected function saveItems(QuoteSessionObject $quote, $order): void
+    {
+        foreach ($quote->getItems() as $item) {
+            $itemData = $this->quoteItemToOrderItem($item, $order);
+            Item::create($itemData);
+        }
+    }
+
+    protected function saveAddresses(Order $order)
+    {
+        $billingdata = $this->getAddressData($order->entity_id, $order->billing_address_id, 'billing');
+        $shippingdata = $this->getAddressData($order->entity_id, $order->shipping_address_id, 'shipping');
+        Address::create($billingdata);
+        Address::create($shippingdata);
+
     }
 }
