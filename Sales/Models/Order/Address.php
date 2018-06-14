@@ -40,6 +40,7 @@ class Address extends Model
 {
     protected $table = 'sales_order_address';
     protected $primaryKey = 'entity_id';
+
     protected $fillable = [
         'parent_id',
         'customer_address_id',
@@ -73,6 +74,8 @@ class Address extends Model
         'vat_request_date',
         'vat_request_success',
     ];
+
+    public $timestamps = false;
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasOne

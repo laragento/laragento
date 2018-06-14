@@ -24,6 +24,12 @@ interface CustomerRepositoryInterface extends RepositoryInterface
      * @param $customerId
      * @return mixed
      */
+    public function firstById($customerId);
+
+    /**
+     * @param $customerId
+     * @return mixed
+     */
     public function group($customerId);
 
     /**

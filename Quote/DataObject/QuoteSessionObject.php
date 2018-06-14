@@ -3,6 +3,9 @@
 
 namespace Laragento\Quote\DataObject;
 
+use Laragento\Customer\Models\Customer;
+use Laragento\Customer\Repositories\CustomerRepositoryInterface;
+
 
 /**
  * Class QuoteSessionObject
@@ -157,13 +160,14 @@ class QuoteSessionObject
      * @var string|null
      */
     protected $cart_id;
+    protected $customerRepository;
 
     /**
      * QuoteSessionObject constructor.
      */
-    public function __construct()
+    public function __construct(CustomerRepositoryInterface $customerRepository)
     {
-
+        $this->customerRepository = $customerRepository;
 
     }
 
@@ -618,6 +622,13 @@ class QuoteSessionObject
         $this->cart_id = $cart_id;
     }
 
+    /**
+     * @return Customer
+     */
+    public function customer()
+    {
+        return $this->customerRepository->firstById($this->customer_id);
+    }
 
     /**
      * @return array
