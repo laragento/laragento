@@ -74,7 +74,7 @@ class IndexerUpdateProducts extends Command
 
         $this->countUpdates = 0;
 
-        $query->orderBy('entity_id')->chunk(100, function ($products) use($productAttributes, $storeIds, $countUpdates) {
+        $query->orderBy('entity_id')->chunk(100, function ($products) use($productAttributes, $storeIds) {
             foreach($products as $product) {
                 $this->countUpdates++;
 
