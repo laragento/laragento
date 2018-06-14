@@ -27,7 +27,7 @@ class IndexerCommand extends Command
                 Schema::table($indexTable, function($table) use($attribute, $type) {
                     switch($type) {
                         case 'text':
-                            $table->text($attribute)->default('')->nullable();
+                            $table->text($attribute)->nullable();
                             break;
                         case 'float':
                             $table->float($attribute)->default(0)->nullable();
