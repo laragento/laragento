@@ -71,8 +71,12 @@ class IndexerUpdateProducts extends Command
             $query = $query->where('updated_at', '>', $lastExecution->format('Y-m-d H:i:s'));
         }
 
-        $query->orderBy('entity_id')->chunk(100, function ($products) use($productAttributes, $storeIds) {
+        $countUpdates = 0;
+
+        $query->orderBy('entity_id')->chunk(100, function ($products) use($productAttributes, $storeIds, $countUpdates) {
             foreach($products as $product) {
+                $countUpdates++;
+
                 //update attributes in index table for stores
                 foreach($storeIds as $storeId) {
                     $productIndex = ProductIndex::firstOrNew([
@@ -97,6 +101,7 @@ class IndexerUpdateProducts extends Command
 
         //update last execution timestamp
         $timestamp = time();
+        print 'Products updated: ' . $countUpdates . "\n";
         print 'Cache timestamp: ' . $timestamp . "\n";
         Cache::forever('indexer-update-products-timestamp', $timestamp);
     }
