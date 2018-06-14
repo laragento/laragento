@@ -3,6 +3,7 @@
 
 namespace Laragento\Sales\Managers;
 
+use Laragento\Quote\DataObject\QuoteSessionItem;
 use Laragento\Quote\DataObject\QuoteSessionObject;
 use Laragento\Store\Models\Store;
 
@@ -48,6 +49,46 @@ class OrderManager
             "shipping_method" => "versandkostenfrei", // ToDo make dynamic
             "store_name" => $store->name,
             "customer_note" => "" // ToDo make dynamic
+        ];
+    }
+
+    public function quoteItemToOrderItem(QuoteSessionItem $item, $order)
+    {
+        return [
+            'order_id' => $order->entity_id,
+            'parent_item_id' => null,
+            'quote_item_id' => $item->getItemId(),
+            'store_id' => $item->getStoreId(),
+            'product_id' => $item->getProductId(),
+            'product_type' => $item->product()->type,
+            'product_options' => $item->product()->options,
+            'sku' => $item->getSku(),
+            'name' => $item->getName(),
+            'description' => $item->getDescription(),
+            'qty_ordered' => $item->getQty(),
+            'price' => $item->getPrice(),
+            'base_price' => $item->getBasePrice(),
+            'original_price' => $item->product()->price,
+            'base_original_price' => $item->product()->price, // ToDo
+            'tax_percent' => $item->getTaxPercent(),
+            'tax_amount' => $item->getTaxAmount(),
+            'base_tax_amount' => $item->getBaseTaxAmount(),
+            'discount_percent' => $item->getDiscountPercent(),
+            'discount_amount' => $item->getDiscountAmount(),
+            'base_discount_amount' => $item->getBaseDiscountAmount(),
+            'row_total' => $item->getRowTotal(),
+            'base_row_total' => $item->getBaseRowTotal(),
+            'row_weight' => $item->getRowWeight(),
+            'base_tax_before_discount' => $item->getBaseTaxAmount(), // ToDo
+            'tax_before_discount' => $item->getBaseTaxAmount(), // ToDo
+            'ext_order_item_id' => null,
+            'locked_do_invoice' => null,
+            'locked_do_ship' => null,
+            'price_incl_tax' => $item->getPriceInclTax(),
+            'base_price_incl_tax' => $item->getBasePriceInclTax(),
+            'row_total_incl_tax' => $item->getRowTotalInclTax(),
+            'base_row_total_incl_tax' => $item->getBaseRowTotalInclTax(),
+            'free_shipping' => $item->getFreeShipping()
         ];
     }
 }
