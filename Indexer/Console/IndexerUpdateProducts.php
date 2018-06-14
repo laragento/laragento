@@ -48,6 +48,8 @@ class IndexerUpdateProducts extends Command
     {
         //check if attributes present in indexer table
         $productAttributes = Config::get('indexer.product_attributes');
+        $storeIds = Config::get('indexer.stores');
+
         foreach($productAttributes as $productAttribute) {
             if(!Schema::hasColumn('lg_catalog_product_index', $productAttribute)) {
                 //create collumn if not found in table
@@ -69,16 +71,27 @@ class IndexerUpdateProducts extends Command
             $query = $query->where('updated_at', '>', $lastExecution->format('Y-m-d H:i:s'));
         }
 
-        $query->orderBy('entity_id')->chunk(100, function ($products) use($productAttributes) {
+        $query->orderBy('entity_id')->chunk(100, function ($products) use($productAttributes, $storeIds) {
             foreach($products as $product) {
-                //update attributes in index table
-                $productIndex = ProductIndex::firstOrNew(['product_id' => $product->entity_id]);
+                //update attributes in index table for stores
+                foreach($storeIds as $storeId) {
+                    $productIndex = ProductIndex::firstOrNew([
+                        'product_id' => $product->entity_id,
+                        'store_id' => $storeId
+                    ]);
 
-                foreach($productAttributes as $productAttribute) {
-                    $productIndex->{$productAttribute} =  ($data = $this->productAttributeRepository->data($productAttribute, $product->entity_id)) ? $data->value : '';
+                    foreach($productAttributes as $productAttribute) {
+                        $data = $this->productAttributeRepository->data($productAttribute, $product->entity_id, $storeId);
+                        //if data not found for specific storeId, search in default store 0
+                        if(!$data) {
+                            $data = $this->productAttributeRepository->data($productAttribute, $product->entity_id);
+                        }
+
+                        $productIndex->{$productAttribute} = $data ? $data->value : '';
+                    }
+
+                    $productIndex->save();
                 }
-
-                $productIndex->save();
             }
         });
 
