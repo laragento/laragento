@@ -57,7 +57,7 @@ class IndexerUpdateProducts extends Command
                 Schema::table('lg_catalog_product_index', function($table) use($productAttribute, $type) {
                     switch($type) {
                         case 'text':
-                            $table->text($productAttribute, 255)->default('')->nullable();
+                            $table->text($productAttribute)->default('')->nullable();
                             break;
                         default:
                             $table->string($productAttribute, 255)->default('')->nullable();
@@ -91,7 +91,7 @@ class IndexerUpdateProducts extends Command
                         'store_id' => $storeId
                     ]);
 
-                    foreach($productAttributes as $productAttribute) {
+                    foreach($productAttributes as $productAttribute => $type) {
                         $data = $this->productAttributeRepository->data($productAttribute, $product->entity_id, $storeId);
                         //if data not found for specific storeId, search in default store 0
                         if(!$data) {
