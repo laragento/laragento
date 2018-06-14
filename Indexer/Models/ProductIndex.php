@@ -14,5 +14,7 @@ use Laragento\Catalog\Models\Product\Entity\Varchar;
 
 class ProductIndex extends Model
 {
+    protected $fillable = ['product_id'];
+
     protected $table = 'lg_catalog_product_index';
 }
