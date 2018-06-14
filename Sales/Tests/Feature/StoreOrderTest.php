@@ -21,11 +21,10 @@ class StoreOrderTest extends SalesTestCase
 
         // Save Order
         $orderData = $this->orderManager->quoteToOrder($quote);
-        dd($orderData);
-        $order = Order::create($quote);
+        $order = Order::create($orderData);
 
         // Confirm Entry in DB
-        $this->assertDatabaseHas('sales_order', ['id' => $order->id]);
+        $this->assertDatabaseHas('sales_order', ['entity_id' => $order->entity_id]);
     }
 
 }

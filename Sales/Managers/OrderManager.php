@@ -23,7 +23,7 @@ class OrderManager
             "base_discount_amount" => $quote->getBaseSubtotal() - $quote->getBaseSubtotalWithDiscount(),
             "base_grand_total" => $quote->getBaseGrandTotal(),
             "base_subtotal" => $quote->getBaseSubtotal(),
-            "base_tax_amount" => "", //ToDo calculate
+            "base_tax_amount" => "0.0000", //ToDo calculate
             "shipping_amount" => "0.0000", // ToDo Get from Shippipng Entity
             "total_qty_ordered" => $quote->getItemsQty(),
             "customer_is_guest" => 0,
