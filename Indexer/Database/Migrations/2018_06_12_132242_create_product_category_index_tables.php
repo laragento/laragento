@@ -33,7 +33,7 @@ class CreateProductCategoryIndexTables extends Migration
 
             $table->timestamps();
 
-            $table->foreign('category_id')->references('entity_id')->on('catalog_category_product');
+            $table->foreign('category_id')->references('entity_id')->on('catalog_category_entity');
             $table->foreign('store_id')->references('store_id')->on('store');
         });
     }

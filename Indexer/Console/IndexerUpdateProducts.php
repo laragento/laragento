@@ -16,6 +16,7 @@ use DateTime;
 class IndexerUpdateProducts extends Command
 {
     protected $productAttributeRepository;
+    protected $countUpdates;
 
     public function __construct(
         ProductAttributeRepositoryInterface $productAttributeRepository
@@ -48,11 +49,19 @@ class IndexerUpdateProducts extends Command
     {
         //check if attributes present in indexer table
         $productAttributes = Config::get('indexer.product_attributes');
-        foreach($productAttributes as $productAttribute) {
-            if(!Schema::hasColumn('catalog_product_entity', $productAttribute)) {
+        $storeIds = Config::get('indexer.stores');
+
+        foreach($productAttributes as $productAttribute => $type) {
+            if(!Schema::hasColumn('lg_catalog_product_index', $productAttribute)) {
                 //create collumn if not found in table
-                Schema::table('catalog_product_entity', function($table) use($productAttribute) {
-                    $table->string($productAttribute, 255)->default('');
+                Schema::table('lg_catalog_product_index', function($table) use($productAttribute, $type) {
+                    switch($type) {
+                        case 'text':
+                            $table->text($productAttribute)->default('')->nullable();
+                            break;
+                        default:
+                            $table->string($productAttribute, 255)->default('')->nullable();
+                    }
                 });
             }
         }
@@ -69,21 +78,37 @@ class IndexerUpdateProducts extends Command
             $query = $query->where('updated_at', '>', $lastExecution->format('Y-m-d H:i:s'));
         }
 
-        $query->orderBy('entity_id')->chunk(100, function ($products) use($productAttributes) {
+        $this->countUpdates = 0;
+
+        $query->orderBy('entity_id')->chunk(100, function ($products) use($productAttributes, $storeIds) {
             foreach($products as $product) {
-                //update attributes in index table
-                $productIndex = ProductIndex::firstOrNew(['product_id' => $product->entity_id]);
+                $this->countUpdates++;
 
-                foreach($productAttributes as $productAttribute) {
-                    $productIndex->{$productAttribute} =  ($data = $this->productAttributeRepository->data($productAttribute, $product->entity_id)) ? $data->value : '';
+                //update attributes in index table for stores
+                foreach($storeIds as $storeId) {
+                    $productIndex = ProductIndex::firstOrNew([
+                        'product_id' => $product->entity_id,
+                        'store_id' => $storeId
+                    ]);
+
+                    foreach($productAttributes as $productAttribute => $type) {
+                        $data = $this->productAttributeRepository->data($productAttribute, $product->entity_id, $storeId);
+                        //if data not found for specific storeId, search in default store 0
+                        if(!$data) {
+                            $data = $this->productAttributeRepository->data($productAttribute, $product->entity_id);
+                        }
+
+                        $productIndex->{$productAttribute} = $data ? $data->value : '';
+                    }
+
+                    $productIndex->save();
                 }
-
-                $productIndex->save();
             }
         });
 
         //update last execution timestamp
         $timestamp = time();
+        print 'Products updated: ' . $this->countUpdates . "\n";
         print 'Cache timestamp: ' . $timestamp . "\n";
         Cache::forever('indexer-update-products-timestamp', $timestamp);
     }
