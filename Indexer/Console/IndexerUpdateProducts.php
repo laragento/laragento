@@ -51,11 +51,17 @@ class IndexerUpdateProducts extends Command
         $productAttributes = Config::get('indexer.product_attributes');
         $storeIds = Config::get('indexer.stores');
 
-        foreach($productAttributes as $productAttribute) {
+        foreach($productAttributes as $productAttribute => $type) {
             if(!Schema::hasColumn('lg_catalog_product_index', $productAttribute)) {
                 //create collumn if not found in table
-                Schema::table('lg_catalog_product_index', function($table) use($productAttribute) {
-                    $table->string($productAttribute, 255)->default('')->nullable();
+                Schema::table('lg_catalog_product_index', function($table) use($productAttribute, $type) {
+                    switch($type) {
+                        case 'text':
+                            $table->text($productAttribute, 255)->default('')->nullable();
+                            break;
+                        default:
+                            $table->string($productAttribute, 255)->default('')->nullable();
+                    }
                 });
             }
         }
