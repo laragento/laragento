@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <phpunit backupGlobals="false"
          backupStaticAttributes="false"
-         bootstrap="../../vendor/autoload.php"
+         bootstrap="../../autoload.php"
          colors="true"
          convertErrorsToExceptions="true"
          convertNoticesToExceptions="true"
@@ -9,6 +9,14 @@
          processIsolation="false"
          stopOnFailure="false">
     <testsuites>
+        <testsuite name="SalesFeature">
+            <directory suffix="Test.php">./Sales/Tests/Feature</directory>
+        </testsuite>
+
+        <testsuite name="SalesUnit">
+            <directory suffix="Test.php">./Sales/Tests/Unit</directory>
+        </testsuite>
+
         <testsuite name="Feature">
             <directory suffix="Test.php">./tests/Feature</directory>
         </testsuite>

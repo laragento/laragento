@@ -1,10 +1,10 @@
 <?php
 
-namespace Laragento\Sales\Providers;
+namespace Laragento\Sales\Repositories;
 
 use Laragento\Sales\Models\Order;
 
-class SalesRepository
+class OrderRepository
 {
     public function getNewestOrdersByCustomer($customerId)
     {
@@ -31,8 +31,8 @@ class SalesRepository
             ->get();
     }
 
-    public function store()
+    public function store($orderData)
     {
-
+        return Order::create($orderData);
     }
 }
