@@ -34,6 +34,7 @@ class QuoteSessionObjectRepository implements QuoteSessionObjectRepositoryInterf
             $this->quote->setCartId();
         }
         if (Auth::user() && !$this->quote->getCustomerId()) {
+
             $this->quote->setCustomerId(Auth::user()['entity_id']);
         }
         if (!$this->quote->getRemoteIp()) {

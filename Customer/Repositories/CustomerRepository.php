@@ -97,6 +97,18 @@ class CustomerRepository implements CustomerRepositoryInterface
     /**
      * {@inheritDoc}
      */
+    public function firstById($customerId)
+    {
+        return Customer::with(['addresses', 'group', 'billing', 'shipping'])
+            ->whereEntityId($customerId)
+            ->whereIsActive(1)
+            //->whereStoreId(0)
+            ->first();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public function group($customerId)
     {
         $customer = Customer::with('group')

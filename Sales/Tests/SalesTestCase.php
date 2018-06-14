@@ -2,14 +2,12 @@
 
 namespace Laragento\Sales\Tests;
 
-use Laragento\Customer\Repositories\CustomerRepository;
 use Laragento\Customer\Repositories\CustomerRepositoryInterface;
 use Laragento\Quote\DataObject\QuoteSessionObject;
 use Laragento\Quote\Managers\QuoteItemManager;
-use Laragento\Quote\Repositories\QuoteSessionItemRepository;
 use Laragento\Quote\Repositories\QuoteSessionItemRepositoryInterface;
-use Laragento\Quote\Repositories\QuoteSessionObjectRepository;
 use Laragento\Quote\Repositories\QuoteSessionObjectRepositoryInterface;
+use Laragento\Sales\Managers\OrderManager;
 use Tests\TestCase;
 
 /**
@@ -19,15 +17,15 @@ use Tests\TestCase;
 abstract class SalesTestCase extends TestCase
 {
     /**
-     * @var QuoteSessionObjectRepository
+     * @var QuoteSessionObjectRepositoryInterface
      */
     protected $quoteDataRepository;
     /**
-     * @var QuoteSessionItemRepository
+     * @var QuoteSessionItemRepositoryInterface
      */
     protected $quoteItemRepository;
     /**
-     * @var CustomerRepository
+     * @var CustomerRepositoryInterface
      */
     protected $customerRepository;
     /**
@@ -38,6 +36,10 @@ abstract class SalesTestCase extends TestCase
      * @var QuoteItemManager
      */
     protected $itemManager;
+    /**
+     * @var OrderManager
+     */
+    protected $orderManager;
 
 
     /**
@@ -50,6 +52,7 @@ abstract class SalesTestCase extends TestCase
         $this->quoteDataRepository = $this->app->make(QuoteSessionObjectRepositoryInterface::class);
         $this->quoteItemRepository = $this->app->make(QuoteSessionItemRepositoryInterface::class);
         $this->itemManager = $this->app->make(QuoteItemManager::class);
+        $this->orderManager = $this->app->make(OrderManager::class);
 
         $this->customer = $this->customerRepository->get()[0];
 
@@ -65,7 +68,6 @@ abstract class SalesTestCase extends TestCase
     {
         $data = ['sku' => '003222', 'qty' => 10];
         $this->itemManager->storeItems($data);
-        dd($this->quoteDataRepository->getQuote());
     }
 
     /**
@@ -73,6 +75,7 @@ abstract class SalesTestCase extends TestCase
      */
     protected function createQuote()
     {
+        $this->actingAs($this->customer);
         $this->quoteDataRepository->createQuote();
     }
 
