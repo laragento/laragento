@@ -57,7 +57,7 @@ class IndexerUpdateCategories extends Command
             if(!Schema::hasColumn('lg_catalog_category_index', $categoryAttribute)) {
                 //create collumn if not found in table
                 Schema::table('lg_catalog_category_index', function($table) use($categoryAttribute) {
-                    $table->string($categoryAttribute, 255)->default('');
+                    $table->string($categoryAttribute, 255)->default('')->nullable();
                 });
             }
         }

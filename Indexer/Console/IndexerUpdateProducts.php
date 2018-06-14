@@ -55,7 +55,7 @@ class IndexerUpdateProducts extends Command
             if(!Schema::hasColumn('lg_catalog_product_index', $productAttribute)) {
                 //create collumn if not found in table
                 Schema::table('lg_catalog_product_index', function($table) use($productAttribute) {
-                    $table->string($productAttribute, 255)->default('');
+                    $table->string($productAttribute, 255)->default('')->nullable();
                 });
             }
         }
