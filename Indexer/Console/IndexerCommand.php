@@ -30,7 +30,7 @@ class IndexerCommand extends Command
                             $table->text($attribute)->default('')->nullable();
                             break;
                         case 'float':
-                            $table->float($attribute)->default('')->nullable();
+                            $table->float($attribute)->default(0)->nullable();
                             break;
                         default:
                             $table->string($attribute, 255)->default('')->nullable();
