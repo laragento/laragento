@@ -45,6 +45,9 @@ class OrderManager
      */
     protected function quoteToOrder($quote)
     {
+        /** @var Order $lastOrder */
+        $lastOrderIncrement = Order::orderBy('increment_id','desc')->first()->increment_id;
+        $incrementId = str_pad(((int)$lastOrderIncrement + 1), 6, 0, STR_PAD_LEFT);
         $store = Store::whereStoreId($quote->getStoreId())->first();
         return [
             "state" => "new",
@@ -68,7 +71,7 @@ class OrderManager
             "send_email" => 1,
             "shipping_address_id" => $quote->customer()->shipping['entity_id'],
             "subtotal_incl_tax" => $quote->getSubtotal(), // ToDo Tax Calculation
-            "increment_id" => "",
+            "increment_id" => $incrementId,
             "base_currency_code" => $quote->getBaseCurrencyCode(),
             "customer_email" => $quote->customer()->email,
             "customer_firstname" => $quote->customer()->firstname,

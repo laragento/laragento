@@ -8,13 +8,6 @@ use Illuminate\Database\Eloquent\Model;
  * Class Store
  *
  * @package Laragento\Store\Models
- * @property int store_id
- * @property string code
- * @property int website_id
- * @property int group_id
- * @property string name
- * @property int sort_order
- * @property int is_active
  * @property int $store_id Store Id
  * @property string|null $code Code
  * @property int $website_id Website Id
