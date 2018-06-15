@@ -51,7 +51,9 @@ class QuoteSessionItemRepository implements QuoteSessionItemRepositoryInterface
         // Get and set Product
         $product = $this->productRepository::productBySku($data['sku']);
         $data['product_id'] = $product->entity_id;
-        $data['name'] = $product->name;
+        $data['product_type'] = $product->type_id;
+        $data['name'] = $val = $this->productAttributeRepository->data('name', $product->entity_id,
+            $data['store_id']);
 
         if (config('quote.calculateTotals')) {
             // Set Price Information

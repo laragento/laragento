@@ -13,25 +13,7 @@ class QuoteSessionItem
 
     protected $created_at;
     protected $updated_at;
-    protected $parent_item_id;
-    protected $applied_rule_ids;
-    protected $additional_data;
-    protected $is_qty_decimal;
-    protected $no_discount;
-    protected $product_type;
-    protected $base_tax_before_discount;
-    protected $tax_before_discount;
-    protected $base_cost;
-    protected $gift_message_id;
-    protected $weee_tax_applied;
-    protected $weee_tax_applied_amount;
-    protected $weee_tax_applied_row_amount;
-    protected $weee_tax_disposition;
-    protected $weee_tax_row_disposition;
-    protected $base_weee_tax_applied_amount;
-    protected $base_weee_tax_applied_row_amnt;
-    protected $base_weee_tax_disposition;
-    protected $base_weee_tax_row_disposition;
+
      */
 
     protected $item_id;
@@ -66,6 +48,25 @@ class QuoteSessionItem
     protected $discount_tax_compensation_amount = '0.0000';
     protected $base_discount_tax_compensation_amount = '0.0000';
     protected $free_shipping = 0;
+    protected $parent_item_id;
+    protected $applied_rule_ids;
+    protected $additional_data;
+    protected $is_qty_decimal = 0;
+    protected $no_discount = 0;
+    protected $product_type;
+    protected $base_tax_before_discount;
+    protected $tax_before_discount;
+    protected $base_cost;
+    protected $gift_message_id;
+    protected $weee_tax_applied;
+    protected $weee_tax_applied_amount;
+    protected $weee_tax_applied_row_amount;
+    protected $weee_tax_disposition;
+    protected $weee_tax_row_disposition;
+    protected $base_weee_tax_applied_amount;
+    protected $base_weee_tax_applied_row_amnt;
+    protected $base_weee_tax_disposition;
+    protected $base_weee_tax_row_disposition;
 
     // Object only
     protected $customAttributes = [];
@@ -607,6 +608,312 @@ class QuoteSessionItem
     {
         $this->customAttributes = $customAttributes;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getParentItemId()
+    {
+        return $this->parent_item_id;
+    }
+
+    /**
+     * @param mixed $parent_item_id
+     */
+    public function setParentItemId($parent_item_id): void
+    {
+        $this->parent_item_id = $parent_item_id;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getAppliedRuleIds()
+    {
+        return $this->applied_rule_ids;
+    }
+
+    /**
+     * @param mixed $applied_rule_ids
+     */
+    public function setAppliedRuleIds($applied_rule_ids): void
+    {
+        $this->applied_rule_ids = $applied_rule_ids;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getAdditionalData()
+    {
+        return $this->additional_data;
+    }
+
+    /**
+     * @param mixed $additional_data
+     */
+    public function setAdditionalData($additional_data): void
+    {
+        $this->additional_data = $additional_data;
+    }
+
+    /**
+     * @return int
+     */
+    public function getisQtyDecimal(): int
+    {
+        return $this->is_qty_decimal;
+    }
+
+    /**
+     * @param int $is_qty_decimal
+     */
+    public function setIsQtyDecimal(int $is_qty_decimal): void
+    {
+        $this->is_qty_decimal = $is_qty_decimal;
+    }
+
+    /**
+     * @return int
+     */
+    public function getNoDiscount(): int
+    {
+        return $this->no_discount;
+    }
+
+    /**
+     * @param int $no_discount
+     */
+    public function setNoDiscount(int $no_discount): void
+    {
+        $this->no_discount = $no_discount;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getProductType()
+    {
+        return $this->product_type;
+    }
+
+    /**
+     * @param mixed $product_type
+     */
+    public function setProductType($product_type): void
+    {
+        $this->product_type = $product_type;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getBaseTaxBeforeDiscount()
+    {
+        return $this->base_tax_before_discount;
+    }
+
+    /**
+     * @param mixed $base_tax_before_discount
+     */
+    public function setBaseTaxBeforeDiscount($base_tax_before_discount): void
+    {
+        $this->base_tax_before_discount = $base_tax_before_discount;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getTaxBeforeDiscount()
+    {
+        return $this->tax_before_discount;
+    }
+
+    /**
+     * @param mixed $tax_before_discount
+     */
+    public function setTaxBeforeDiscount($tax_before_discount): void
+    {
+        $this->tax_before_discount = $tax_before_discount;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getBaseCost()
+    {
+        return $this->base_cost;
+    }
+
+    /**
+     * @param mixed $base_cost
+     */
+    public function setBaseCost($base_cost): void
+    {
+        $this->base_cost = $base_cost;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getGiftMessageId()
+    {
+        return $this->gift_message_id;
+    }
+
+    /**
+     * @param mixed $gift_message_id
+     */
+    public function setGiftMessageId($gift_message_id): void
+    {
+        $this->gift_message_id = $gift_message_id;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getWeeeTaxApplied()
+    {
+        return $this->weee_tax_applied;
+    }
+
+    /**
+     * @param mixed $weee_tax_applied
+     */
+    public function setWeeeTaxApplied($weee_tax_applied): void
+    {
+        $this->weee_tax_applied = $weee_tax_applied;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getWeeeTaxAppliedAmount()
+    {
+        return $this->weee_tax_applied_amount;
+    }
+
+    /**
+     * @param mixed $weee_tax_applied_amount
+     */
+    public function setWeeeTaxAppliedAmount($weee_tax_applied_amount): void
+    {
+        $this->weee_tax_applied_amount = $weee_tax_applied_amount;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getWeeeTaxAppliedRowAmount()
+    {
+        return $this->weee_tax_applied_row_amount;
+    }
+
+    /**
+     * @param mixed $weee_tax_applied_row_amount
+     */
+    public function setWeeeTaxAppliedRowAmount($weee_tax_applied_row_amount): void
+    {
+        $this->weee_tax_applied_row_amount = $weee_tax_applied_row_amount;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getWeeeTaxDisposition()
+    {
+        return $this->weee_tax_disposition;
+    }
+
+    /**
+     * @param mixed $weee_tax_disposition
+     */
+    public function setWeeeTaxDisposition($weee_tax_disposition): void
+    {
+        $this->weee_tax_disposition = $weee_tax_disposition;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getWeeeTaxRowDisposition()
+    {
+        return $this->weee_tax_row_disposition;
+    }
+
+    /**
+     * @param mixed $weee_tax_row_disposition
+     */
+    public function setWeeeTaxRowDisposition($weee_tax_row_disposition): void
+    {
+        $this->weee_tax_row_disposition = $weee_tax_row_disposition;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getBaseWeeeTaxAppliedAmount()
+    {
+        return $this->base_weee_tax_applied_amount;
+    }
+
+    /**
+     * @param mixed $base_weee_tax_applied_amount
+     */
+    public function setBaseWeeeTaxAppliedAmount($base_weee_tax_applied_amount): void
+    {
+        $this->base_weee_tax_applied_amount = $base_weee_tax_applied_amount;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getBaseWeeeTaxAppliedRowAmnt()
+    {
+        return $this->base_weee_tax_applied_row_amnt;
+    }
+
+    /**
+     * @param mixed $base_weee_tax_applied_row_amnt
+     */
+    public function setBaseWeeeTaxAppliedRowAmnt($base_weee_tax_applied_row_amnt): void
+    {
+        $this->base_weee_tax_applied_row_amnt = $base_weee_tax_applied_row_amnt;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getBaseWeeeTaxDisposition()
+    {
+        return $this->base_weee_tax_disposition;
+    }
+
+    /**
+     * @param mixed $base_weee_tax_disposition
+     */
+    public function setBaseWeeeTaxDisposition($base_weee_tax_disposition): void
+    {
+        $this->base_weee_tax_disposition = $base_weee_tax_disposition;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getBaseWeeeTaxRowDisposition()
+    {
+        return $this->base_weee_tax_row_disposition;
+    }
+
+    /**
+     * @param mixed $base_weee_tax_row_disposition
+     */
+    public function setBaseWeeeTaxRowDisposition($base_weee_tax_row_disposition): void
+    {
+        $this->base_weee_tax_row_disposition = $base_weee_tax_row_disposition;
+    }
+
+
 
     public function product()
     {
