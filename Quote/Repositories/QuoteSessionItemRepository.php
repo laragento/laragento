@@ -52,8 +52,9 @@ class QuoteSessionItemRepository implements QuoteSessionItemRepositoryInterface
         $product = $this->productRepository::productBySku($data['sku']);
         $data['product_id'] = $product->entity_id;
         $data['product_type'] = $product->type_id;
-        $data['name'] = $val = $this->productAttributeRepository->data('name', $product->entity_id,
-            $data['store_id']);
+        $data['name'] = $this->getAttributeValue('name', $product->entity_id);
+        $data['description'] = $this->getAttributeValue('description', $product->entity_id);
+
 
         if (config('quote.calculateTotals')) {
             // Set Price Information
@@ -224,5 +225,17 @@ class QuoteSessionItemRepository implements QuoteSessionItemRepositoryInterface
         $data['row_total'] = $data['base_row_total'];
 
         return $data;
+    }
+
+    /**
+     * @param $productId
+     * @param $attribute
+     * @return mixed
+     */
+    protected function getAttributeValue($attribute, $productId, $storeId = 0)
+    {
+        $attr = $this->productAttributeRepository->data($attribute,
+            $productId, $storeId);
+        return is_object($attr) ? $attr->value : '';
     }
 }
