@@ -3,7 +3,7 @@
 namespace Laragento\Quote\Repositories;
 
 use Illuminate\Support\Facades\Auth;
-use Laragento\Quote\DataObject\QuoteSessionObject;
+use Laragento\Quote\DataObjects\QuoteSessionObject;
 
 class QuoteSessionObjectRepository implements QuoteSessionObjectRepositoryInterface
 {

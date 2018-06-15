@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Laragento\Quote\DataObject;
+namespace Laragento\Quote\DataObjects;
 
 use Laragento\Customer\Models\Customer;
 use Laragento\Customer\Repositories\CustomerRepositoryInterface;
@@ -9,7 +9,7 @@ use Laragento\Customer\Repositories\CustomerRepositoryInterface;
 
 /**
  * Class QuoteSessionObject
- * @package Laragento\Quote\DataObject
+ * @package Laragento\Quote\DataObjects
  */
 class QuoteSessionObject
 {

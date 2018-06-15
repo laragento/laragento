@@ -4,8 +4,8 @@
 namespace Laragento\Sales\Managers;
 
 use Laragento\Customer\Repositories\AddressRepositoryInterface;
-use Laragento\Quote\DataObject\QuoteSessionItem;
-use Laragento\Quote\DataObject\QuoteSessionObject;
+use Laragento\Quote\DataObjects\QuoteSessionItem;
+use Laragento\Quote\DataObjects\QuoteSessionObject;
 use Laragento\Sales\Models\Order;
 use Laragento\Sales\Models\Order\Address;
 use Laragento\Sales\Models\Order\Item;

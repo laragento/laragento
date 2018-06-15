@@ -4,8 +4,8 @@ namespace Laragento\Quote\Repositories;
 
 use Laragento\Catalog\Repositories\Product\ProductAttributeRepositoryInterface;
 use Laragento\Catalog\Repositories\Product\ProductRepositoryInterface;
-use Laragento\Quote\DataObject\QuoteSessionItem;
-use Laragento\Quote\DataObject\QuoteSessionObject;
+use Laragento\Quote\DataObjects\QuoteSessionItem;
+use Laragento\Quote\DataObjects\QuoteSessionObject;
 
 class QuoteSessionItemRepository implements QuoteSessionItemRepositoryInterface
 {

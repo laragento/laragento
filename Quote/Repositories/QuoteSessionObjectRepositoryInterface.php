@@ -2,7 +2,7 @@
 
 namespace Laragento\Quote\Repositories;
 
-use Laragento\Quote\DataObject\QuoteSessionObject;
+use Laragento\Quote\DataObjects\QuoteSessionObject;
 
 
 /**

@@ -6,7 +6,7 @@ use Illuminate\Http\Response;
 use Illuminate\Routing\Controller;
 use Laragento\Catalog\Repositories\Product\ProductRepository;
 use Laragento\Catalog\Transformers\ChildProductTransformer;
-use Laragento\Quote\DataObject\QuoteSessionItem;
+use Laragento\Quote\DataObjects\QuoteSessionItem;
 use Laragento\Quote\Managers\QuoteItemManager;
 use Laragento\Quote\Repositories\QuoteSessionItemRepository;
 use Laragento\Quote\Repositories\QuoteSessionItemRepositoryInterface;

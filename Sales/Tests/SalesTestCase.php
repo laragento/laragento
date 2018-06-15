@@ -3,7 +3,7 @@
 namespace Laragento\Sales\Tests;
 
 use Laragento\Customer\Repositories\CustomerRepositoryInterface;
-use Laragento\Quote\DataObject\QuoteSessionObject;
+use Laragento\Quote\DataObjects\QuoteSessionObject;
 use Laragento\Quote\Managers\QuoteItemManager;
 use Laragento\Quote\Repositories\QuoteSessionItemRepositoryInterface;
 use Laragento\Quote\Repositories\QuoteSessionObjectRepositoryInterface;

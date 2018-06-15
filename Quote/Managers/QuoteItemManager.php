@@ -4,8 +4,8 @@
 namespace Laragento\Quote\Managers;
 
 
-use Laragento\Quote\DataObject\QuoteSessionItem;
-use Laragento\Quote\DataObject\QuoteSessionObject;
+use Laragento\Quote\DataObjects\QuoteSessionItem;
+use Laragento\Quote\DataObjects\QuoteSessionObject;
 use Laragento\Quote\Repositories\QuoteSessionItemRepository;
 use Laragento\Quote\Repositories\QuoteSessionItemRepositoryInterface;
 use Laragento\Quote\Repositories\QuoteSessionObjectRepository;

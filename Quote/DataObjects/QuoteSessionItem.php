@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Laragento\Quote\DataObject;
+namespace Laragento\Quote\DataObjects;
 
 
 use Laragento\Catalog\Repositories\Product\ProductRepository;

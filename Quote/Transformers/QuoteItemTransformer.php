@@ -2,7 +2,7 @@
 
 namespace Laragento\Quote\Transformers;
 
-use Laragento\Quote\DataObject\QuoteSessionItem;
+use Laragento\Quote\DataObjects\QuoteSessionItem;
 use League\Fractal;
 
 class QuoteItemTransformer extends Fractal\TransformerAbstract
