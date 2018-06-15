@@ -13,7 +13,7 @@ use Laragento\Indexer\Models\ProductIndex;
 use Validator;
 use DateTime;
 
-class IndexerUpdateProducts extends Command
+class IndexerUpdateProducts extends IndexerCommand
 {
     protected $productAttributeRepository;
     protected $countUpdates;
@@ -51,65 +51,8 @@ class IndexerUpdateProducts extends Command
         $productAttributes = Config::get('indexer.product_attributes');
         $storeIds = Config::get('indexer.stores');
 
-        foreach($productAttributes as $productAttribute => $type) {
-            if(!Schema::hasColumn('lg_catalog_product_index', $productAttribute)) {
-                //create collumn if not found in table
-                Schema::table('lg_catalog_product_index', function($table) use($productAttribute, $type) {
-                    switch($type) {
-                        case 'text':
-                            $table->text($productAttribute)->default('')->nullable();
-                            break;
-                        default:
-                            $table->string($productAttribute, 255)->default('')->nullable();
-                    }
-                });
-            }
-        }
+        $this->syncIndexerCols('lg_catalog_product_index', $productAttributes);
 
-        //check last execution time
-        $lastExecutionTimestamp = Cache::get('indexer-update-products-timestamp');
-
-        $lastExecution = null;
-        $query = DB::table('catalog_product_entity');
-
-        if($lastExecutionTimestamp != null) {
-            $lastExecution = new DateTime();
-            $lastExecution->setTimestamp($lastExecutionTimestamp);
-            $query = $query->where('updated_at', '>', $lastExecution->format('Y-m-d H:i:s'));
-        }
-
-        $this->countUpdates = 0;
-
-        $query->orderBy('entity_id')->chunk(100, function ($products) use($productAttributes, $storeIds) {
-            foreach($products as $product) {
-                $this->countUpdates++;
-
-                //update attributes in index table for stores
-                foreach($storeIds as $storeId) {
-                    $productIndex = ProductIndex::firstOrNew([
-                        'product_id' => $product->entity_id,
-                        'store_id' => $storeId
-                    ]);
-
-                    foreach($productAttributes as $productAttribute => $type) {
-                        $data = $this->productAttributeRepository->data($productAttribute, $product->entity_id, $storeId);
-                        //if data not found for specific storeId, search in default store 0
-                        if(!$data) {
-                            $data = $this->productAttributeRepository->data($productAttribute, $product->entity_id);
-                        }
-
-                        $productIndex->{$productAttribute} = $data ? $data->value : '';
-                    }
-
-                    $productIndex->save();
-                }
-            }
-        });
-
-        //update last execution timestamp
-        $timestamp = time();
-        print 'Products updated: ' . $this->countUpdates . "\n";
-        print 'Cache timestamp: ' . $timestamp . "\n";
-        Cache::forever('indexer-update-products-timestamp', $timestamp);
+        $this->updateIndexerTable('catalog_product_entity', 'indexer-update-products-timestamp', $productAttributes, $storeIds, 'product_id', ProductIndex::class, $this->productAttributeRepository);
     }
 }
