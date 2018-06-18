@@ -17,4 +17,8 @@ class CategoryIndex extends Model
     protected $fillable = ['category_id', 'store_id'];
 
     protected $table = 'lg_catalog_category_index';
+
+    public function category() {
+        return $this->belongsTo(Category::class, 'category_id', 'entity_id');
+    }
 }

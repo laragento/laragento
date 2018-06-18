@@ -8,6 +8,7 @@ use Laragento\Catalog\Models\Category\Entity\Text;
 use Laragento\Catalog\Models\Category\Entity\Varchar;
 use Laragento\Catalog\Models\Product\Product;
 use Laragento\Catalog\Models\Url\CatalogUrlRewriteProductCategory;
+use Laragento\Indexer\Models\CategoryIndex;
 use Laragento\Indexer\Models\ProductIndex;
 
 /**
@@ -99,5 +100,10 @@ class Category extends Model
     public function indexProducts()
     {
         return $this->belongsToMany(ProductIndex::class, 'catalog_category_product', 'category_id', 'product_id', 'entity_id', 'product_id');
+    }
+
+    public function indexCategory()
+    {
+        return $this->belongsTo(CategoryIndex::class, 'entity_id', 'category_id');
     }
 }

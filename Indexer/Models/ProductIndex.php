@@ -11,6 +11,7 @@ use Laragento\Catalog\Models\Product\Entity\Integer;
 use Laragento\Catalog\Models\Product\Entity\Text;
 use Laragento\Catalog\Models\Product\Entity\Tierprice;
 use Laragento\Catalog\Models\Product\Entity\Varchar;
+use Laragento\Catalog\Models\Product\ProductWebsite;
 
 class ProductIndex extends Model
 {
@@ -25,5 +26,7 @@ class ProductIndex extends Model
         return $this->belongsToMany(Category::class, 'catalog_category_product', 'product_id', 'category_id', 'product_id', 'entity_id');
     }
 
-
+    public function websites() {
+        return $this->hasMany(ProductWebsite::class, 'product_id', 'product_id');
+    }
 }

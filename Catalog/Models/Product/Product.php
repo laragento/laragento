@@ -11,6 +11,7 @@ use Laragento\Catalog\Models\Product\Entity\Integer;
 use Laragento\Catalog\Models\Product\Entity\Text;
 use Laragento\Catalog\Models\Product\Entity\Tierprice;
 use Laragento\Catalog\Models\Product\Entity\Varchar;
+use Laragento\Indexer\Models\ProductIndex;
 
 /**
  * Product product model
@@ -138,6 +139,11 @@ class Product extends Model
             ->union($this->decimals()->whereIn('store_id', $storeArray))
             ->union($this->datetimes()->whereIn('store_id', $storeArray))
             ->union($this->integers()->whereIn('store_id', $storeArray));
+    }
+
+    public function indexProduct()
+    {
+        return $this->belongsTo(ProductIndex::class, 'entity_id', 'product_id');
     }
 
 
