@@ -8,11 +8,20 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
 use DateTime;
+use Laragento\Catalog\Repositories\Product\ProductRepositoryInterface;
 
 class IndexerCommand extends Command
 {
+    protected $productRepository;
+
     protected $countUpdates;
     protected $indexTableModified;
+
+    public function __construct(
+        ProductRepositoryInterface $productRepository
+    ) {
+        $this->productRepository = $productRepository;
+    }
 
     /**
      * Fill index table with defined cols
@@ -30,6 +39,9 @@ class IndexerCommand extends Command
                             $table->text($attribute)->nullable();
                             break;
                         case 'float':
+                            $table->float($attribute)->default(0)->nullable();
+                            break;
+                        case 'stock':
                             $table->float($attribute)->default(0)->nullable();
                             break;
                         default:
@@ -85,13 +97,24 @@ class IndexerCommand extends Command
                     ]);
 
                     foreach($attributes as $attribute => $type) {
-                        $data = $attributeRepository->data($attribute, $item->entity_id, $storeId);
-                        //if data not found for specific storeId, search in default store 0
-                        if(!$data) {
-                            $data = $attributeRepository->data($attribute, $item->entity_id);
+                        $value = '';
+
+                        if($type == 'stock') {
+                            //get product stock qty
+                            $value = ($productStock = $this->productRepository::stockByProductId($item->entity_id)) ? $productStock->qty : 0;
+                        } else {
+                            $data = $attributeRepository->data($attribute, $item->entity_id, $storeId);
+                            //if data not found for specific storeId, search in default store 0
+                            if(!$data) {
+                                $data = $attributeRepository->data($attribute, $item->entity_id);
+                            }
+
+                            if($data) {
+                                $value = $data->value;
+                            }
                         }
 
-                        $productIndex->{$attribute} = $data ? $data->value : '';
+                        $productIndex->{$attribute} = $value;
                     }
 
                     $productIndex->save();
