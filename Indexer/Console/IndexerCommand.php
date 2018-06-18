@@ -34,7 +34,7 @@ class IndexerCommand extends Command
                             $table->float($attribute)->default(0)->nullable();
                             break;
                         case 'stock':
-                            $table->float($attribute)->default(0)->nullable();
+                            $table->integer($attribute)->default(0)->nullable();
                             break;
                         default:
                             $table->string($attribute, 255)->default('')->nullable();
