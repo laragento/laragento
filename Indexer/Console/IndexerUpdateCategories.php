@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use Laragento\Catalog\Repositories\Category\CategoryAttributeRepositoryInterface;
+use Laragento\Catalog\Repositories\Product\ProductRepositoryInterface;
 use Laragento\Indexer\Models\CategoryIndex;
 use Modules\BachmannkartenShop\Models\Customer;
 use Modules\BachmannkartenNavision\OData\Navision;
@@ -18,12 +19,16 @@ use DateTime;
 class IndexerUpdateCategories extends IndexerCommand
 {
     protected $categoryAttributeRepository;
+    protected $productRepository;
+
     protected $countUpdates;
 
     public function __construct(
-        CategoryAttributeRepositoryInterface $categoryAttributeRepository
+        CategoryAttributeRepositoryInterface $categoryAttributeRepository,
+        ProductRepositoryInterface $productRepository
     ) {
         $this->categoryAttributeRepository = $categoryAttributeRepository;
+        $this->productRepository = $productRepository;
 
         parent::__construct();
     }
@@ -55,6 +60,6 @@ class IndexerUpdateCategories extends IndexerCommand
 
         $this->syncIndexerCols('lg_catalog_category_index', $categoryAttributes);
 
-        $this->updateIndexerTable('catalog_category_entity', 'indexer-update-categories-timestamp', $categoryAttributes, $storeIds, 'category_id', CategoryIndex::class, $this->categoryAttributeRepository);
+        $this->updateIndexerTable('catalog_category_entity', 'indexer-update-categories-timestamp', $categoryAttributes, $storeIds, 'category_id', CategoryIndex::class, $this->categoryAttributeRepository, $this->productRepository);
     }
 }

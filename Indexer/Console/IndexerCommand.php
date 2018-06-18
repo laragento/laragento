@@ -12,16 +12,8 @@ use Laragento\Catalog\Repositories\Product\ProductRepositoryInterface;
 
 class IndexerCommand extends Command
 {
-    protected $productRepository;
-
     protected $countUpdates;
     protected $indexTableModified;
-
-    public function __construct(
-        ProductRepositoryInterface $productRepository
-    ) {
-        $this->productRepository = $productRepository;
-    }
 
     /**
      * Fill index table with defined cols
@@ -64,8 +56,9 @@ class IndexerCommand extends Command
      * @param $foreignKey
      * @param $indexClass
      * @param $attributeRepository
+     * @param $productRepository
      */
-    protected function updateIndexerTable($table, $cacheKey, $attributes, $storeIds, $foreignKey, $indexClass, $attributeRepository) {
+    protected function updateIndexerTable($table, $cacheKey, $attributes, $storeIds, $foreignKey, $indexClass, $attributeRepository, $productRepository) {
         //if index table is modified, reset last execution timestamp
         if($this->indexTableModified) {
             Cache::forget($cacheKey);
@@ -85,7 +78,7 @@ class IndexerCommand extends Command
 
         $this->countUpdates = 0;
 
-        $query->orderBy('entity_id')->chunk(100, function ($items) use($attributes, $storeIds, $foreignKey, $indexClass, $attributeRepository) {
+        $query->orderBy('entity_id')->chunk(100, function ($items) use($attributes, $storeIds, $foreignKey, $indexClass, $attributeRepository, $productRepository) {
             foreach($items as $item) {
                 $this->countUpdates++;
 
@@ -101,7 +94,7 @@ class IndexerCommand extends Command
 
                         if($type == 'stock') {
                             //get product stock qty
-                            $value = ($productStock = $this->productRepository::stockByProductId($item->entity_id)) ? $productStock->qty : 0;
+                            $value = ($productStock = $productRepository::stockByProductId($item->entity_id)) ? $productStock->qty : 0;
                         } else {
                             $data = $attributeRepository->data($attribute, $item->entity_id, $storeId);
                             //if data not found for specific storeId, search in default store 0

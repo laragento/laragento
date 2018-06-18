@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use Laragento\Catalog\Repositories\Product\ProductAttributeRepositoryInterface;
+use Laragento\Catalog\Repositories\Product\ProductRepositoryInterface;
 use Laragento\Indexer\Models\ProductIndex;
 
 use Validator;
@@ -16,12 +17,16 @@ use DateTime;
 class IndexerUpdateProducts extends IndexerCommand
 {
     protected $productAttributeRepository;
+    protected $productRepository;
+
     protected $countUpdates;
 
     public function __construct(
-        ProductAttributeRepositoryInterface $productAttributeRepository
+        ProductAttributeRepositoryInterface $productAttributeRepository,
+        ProductRepositoryInterface $productRepository
     ) {
         $this->productAttributeRepository = $productAttributeRepository;
+        $this->productRepository = $productRepository;
 
         parent::__construct();
     }
@@ -53,6 +58,6 @@ class IndexerUpdateProducts extends IndexerCommand
 
         $this->syncIndexerCols('lg_catalog_product_index', $productAttributes);
 
-        $this->updateIndexerTable('catalog_product_entity', 'indexer-update-products-timestamp', $productAttributes, $storeIds, 'product_id', ProductIndex::class, $this->productAttributeRepository);
+        $this->updateIndexerTable('catalog_product_entity', 'indexer-update-products-timestamp', $productAttributes, $storeIds, 'product_id', ProductIndex::class, $this->productAttributeRepository, $this->productRepository);
     }
 }
