@@ -33,11 +33,17 @@ class IndexerCommand extends Command
                         case 'float':
                             $table->float($attribute)->default(0)->nullable();
                             break;
+                        case 'boolean':
+                            $table->boolean($attribute)->nullable();
+                            break;
                         case 'stock':
                             $table->integer($attribute)->default(0)->nullable();
                             break;
-                        default:
+                        case 'string':
                             $table->string($attribute, 255)->default('')->nullable();
+                            break;
+                        default:
+                            die('attribute type: ' . $type . ' not implemented');
                     }
                 });
 
