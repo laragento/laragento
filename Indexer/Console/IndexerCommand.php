@@ -113,7 +113,11 @@ class IndexerCommand extends Command
                             }
                         }
 
-                        $productIndex->{$attribute} = $value;
+                        if($type == 'boolean') {
+                            $productIndex->{$attribute} = $value ? true : false;
+                        } else {
+                            $productIndex->{$attribute} = $value;
+                        }
                     }
 
                     $productIndex->save();
