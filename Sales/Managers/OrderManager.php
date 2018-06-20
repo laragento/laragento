@@ -48,7 +48,7 @@ class OrderManager
         /** @var Order $lastOrder */
         $lastOrder = Order::orderBy('increment_id', 'desc')->first();
         $lastOrderIncrement = $lastOrder ? $lastOrder->increment_id : 0;
-        $incrementId = str_pad(((int)$lastOrderIncrement + 1), 6, 0, STR_PAD_LEFT);
+        $incrementId = str_pad(((int)$lastOrderIncrement + 1), 9, 0, STR_PAD_LEFT);
         $store = Store::whereStoreId($quote->getStoreId())->first();
         return [
             "state" => "new",
