@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use Laragento\Catalog\Repositories\Category\CategoryAttributeRepositoryInterface;
 use Laragento\Catalog\Repositories\Product\ProductRepositoryInterface;
+use Laragento\Indexer\Events\CategoriesIndexed;
 use Laragento\Indexer\Models\CategoryIndex;
 use Modules\BachmannkartenShop\Models\Customer;
 use Modules\BachmannkartenNavision\OData\Navision;
@@ -60,6 +61,8 @@ class IndexerUpdateCategories extends IndexerCommand
 
         $this->syncIndexerCols('lg_catalog_category_index', $categoryAttributes);
 
-        $this->updateIndexerTable('catalog_category_entity', 'indexer-update-categories-timestamp', $categoryAttributes, $storeIds, 'category_id', CategoryIndex::class, $this->categoryAttributeRepository, $this->productRepository);
+        $updatedIndexes = $this->updateIndexerTable('catalog_category_entity', 'indexer-update-categories-timestamp', $categoryAttributes, $storeIds, 'category_id', CategoryIndex::class, $this->categoryAttributeRepository, $this->productRepository);
+
+        event(new CategoriesIndexed($updatedIndexes));
     }
 }

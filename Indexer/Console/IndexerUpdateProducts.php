@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use Laragento\Catalog\Repositories\Product\ProductAttributeRepositoryInterface;
 use Laragento\Catalog\Repositories\Product\ProductRepositoryInterface;
+use Laragento\Indexer\Events\ProductsIndexed;
 use Laragento\Indexer\Models\ProductIndex;
 
 use Validator;
@@ -58,6 +59,8 @@ class IndexerUpdateProducts extends IndexerCommand
 
         $this->syncIndexerCols('lg_catalog_product_index', $productAttributes);
 
-        $this->updateIndexerTable('catalog_product_entity', 'indexer-update-products-timestamp', $productAttributes, $storeIds, 'product_id', ProductIndex::class, $this->productAttributeRepository, $this->productRepository);
+        $updatedIndexes = $this->updateIndexerTable('catalog_product_entity', 'indexer-update-products-timestamp', $productAttributes, $storeIds, 'product_id', ProductIndex::class, $this->productAttributeRepository, $this->productRepository);
+
+        event(new ProductsIndexed($updatedIndexes));
     }
 }
