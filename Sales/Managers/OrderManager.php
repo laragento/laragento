@@ -60,9 +60,13 @@ class OrderManager
             "store_id" => $store->store_id,
             "customer_id" => $quote->getCustomerId(),
             "base_discount_amount" => $quote->getBaseSubtotal() - $quote->getBaseSubtotalWithDiscount(),
+            "discount_amount" => $quote->getSubtotal() - $quote->getSubtotalWithDiscount(),
             "base_grand_total" => $quote->getBaseGrandTotal(),
+            "grand_total" => $quote->getGrandTotal(),
             "base_subtotal" => $quote->getBaseSubtotal(),
-            "base_tax_amount" => "0.0000", //ToDo calculate
+            "subtotal" => $quote->getSubtotal(),
+            "base_tax_amount" => $quote->getCustomAttributes()['totals']->getTaxAmount(), //ToDo calculate
+            "tax_amount" => $quote->getCustomAttributes()['totals']->getTaxAmount(), //ToDo calculate
             "shipping_amount" => "0.0000", // ToDo Get from Shippipng Entity
             "total_qty_ordered" => $quote->getItemsQty(),
             "customer_is_guest" => 0,
@@ -74,6 +78,8 @@ class OrderManager
             "subtotal_incl_tax" => $quote->getSubtotal(), // ToDo Tax Calculation
             "increment_id" => $incrementId,
             "base_currency_code" => $quote->getBaseCurrencyCode(),
+            "store_currency_code" => $quote->getStoreCurrencyCode(),
+            "order_currency_code" => $quote->getQuoteCurrencyCode(),
             "customer_email" => $quote->customer()->email,
             "customer_firstname" => $quote->customer()->firstname,
             "customer_lastname" => $quote->customer()->lastname,
@@ -82,7 +88,6 @@ class OrderManager
             "customer_suffix" => $quote->customer()->suffix,
             "customer_taxvat" => $quote->customer()->taxvat,
             "discount_description" => "", // ToDo make dynamic
-            "order_currency_code" => $quote->getQuoteCurrencyCode(),
             "original_increment_id" => "",
             "shipping_method" => "versandkostenfrei", // ToDo make dynamic
             "store_name" => $store->name,
