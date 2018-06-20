@@ -12,8 +12,8 @@ use Laragento\Catalog\Repositories\Product\ProductRepositoryInterface;
 
 class IndexerCommand extends Command
 {
-    protected $countUpdates;
     protected $indexTableModified;
+    protected $updatedIndexes;
 
     /**
      * Fill index table with defined cols
@@ -63,6 +63,8 @@ class IndexerCommand extends Command
      * @param $indexClass
      * @param $attributeRepository
      * @param $productRepository
+     *
+     * @return array
      */
     protected function updateIndexerTable($table, $cacheKey, $attributes, $storeIds, $foreignKey, $indexClass, $attributeRepository, $productRepository) {
         //if index table is modified, reset last execution timestamp
@@ -82,15 +84,13 @@ class IndexerCommand extends Command
             $query = $query->where('updated_at', '>', $lastExecution->format('Y-m-d H:i:s'));
         }
 
-        $this->countUpdates = 0;
+        $this->updatedIndexes = [];
 
         $query->orderBy('entity_id')->chunk(100, function ($items) use($attributes, $storeIds, $foreignKey, $indexClass, $attributeRepository, $productRepository) {
             foreach($items as $item) {
-                $this->countUpdates++;
-
                 //update attributes in index table for stores
                 foreach($storeIds as $storeId) {
-                    $productIndex = $indexClass::firstOrNew([
+                    $indexModel = $indexClass::firstOrNew([
                         $foreignKey => $item->entity_id,
                         'store_id' => $storeId
                     ]);
@@ -113,22 +113,27 @@ class IndexerCommand extends Command
                             }
                         }
 
+                        //handle boolean types
                         if($type == 'boolean') {
-                            $productIndex->{$attribute} = $value ? true : false;
+                            $indexModel->{$attribute} = $value ? true : false;
                         } else {
-                            $productIndex->{$attribute} = $value;
+                            $indexModel->{$attribute} = $value;
                         }
                     }
 
-                    $productIndex->save();
+                    $indexModel->save();
+
+                    $this->updatedIndexes[] = $indexModel;
                 }
             }
         });
 
         //update last execution timestamp
         $timestamp = time();
-        print 'Items updated: ' . $this->countUpdates . "\n";
+        print 'Items updated: ' . count($this->updatedIndexes) . "\n";
         print 'Cache timestamp: ' . $timestamp . "\n";
         Cache::forever($cacheKey, $timestamp);
+
+        return $this->updatedIndexes;
     }
 }
