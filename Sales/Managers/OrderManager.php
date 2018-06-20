@@ -46,7 +46,8 @@ class OrderManager
     protected function quoteToOrder($quote)
     {
         /** @var Order $lastOrder */
-        $lastOrderIncrement = Order::orderBy('increment_id','desc')->first()->increment_id;
+        $lastOrder = Order::orderBy('increment_id', 'desc')->first();
+        $lastOrderIncrement = $lastOrder ? $lastOrder->increment_id : 0;
         $incrementId = str_pad(((int)$lastOrderIncrement + 1), 6, 0, STR_PAD_LEFT);
         $store = Store::whereStoreId($quote->getStoreId())->first();
         return [
