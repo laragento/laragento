@@ -21,8 +21,8 @@ class CreateProductCategoryIndexTables extends Migration
 
             $table->timestamps();
 
-            $table->foreign('product_id')->references('entity_id')->on('catalog_product_entity');
-            $table->foreign('store_id')->references('store_id')->on('store');
+            $table->foreign('product_id')->references('entity_id')->on('catalog_product_entity')->onDelete('cascade');
+            $table->foreign('store_id')->references('store_id')->on('store')->onDelete('cascade');
         });
 
         Schema::create('lg_catalog_category_index', function (Blueprint $table) {
@@ -33,8 +33,8 @@ class CreateProductCategoryIndexTables extends Migration
 
             $table->timestamps();
 
-            $table->foreign('category_id')->references('entity_id')->on('catalog_category_entity');
-            $table->foreign('store_id')->references('store_id')->on('store');
+            $table->foreign('category_id')->references('entity_id')->on('catalog_category_entity')->onDelete('cascade');
+            $table->foreign('store_id')->references('store_id')->on('store')->onDelete('cascade');
         });
     }
 
