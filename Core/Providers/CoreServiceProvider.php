@@ -27,6 +27,7 @@ class CoreServiceProvider extends ServiceProvider
         $this->registerConfig();
         $this->registerViews();
         $this->registerFactories();
+        $this->registerHelpers();
         $this->loadMigrationsFrom(__DIR__ . '/../Database/Migrations');
         $this->loadRoutesFrom(__DIR__ . '/../Http/routes.php');
         $router->aliasMiddleware('storeId', ApiStoreIdMiddleware::class);
@@ -56,6 +57,21 @@ class CoreServiceProvider extends ServiceProvider
             __DIR__.'/../Config/config.php', 'core'
         );
     }
+
+    /**
+     * Register helpers file
+     */
+    public function registerHelpers()
+    {
+        // Load the helpers in app/Http/helpers.php
+        if (file_exists($file = app_path('Helpers/PriceHelper.php')))
+        {
+            require $file;
+        }
+
+    }
+
+
 
     /**
      * Register views.

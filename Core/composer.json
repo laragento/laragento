@@ -16,6 +16,10 @@
     "autoload": {
       "psr-4": {
           "Laragento\\Core\\": "./"
-      }
+      },
+      "files": [
+          "Helpers/PriceHelper.php"
+      ]
   }
+
 }
