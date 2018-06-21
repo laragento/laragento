@@ -63,12 +63,13 @@ class CoreServiceProvider extends ServiceProvider
      */
     public function registerHelpers()
     {
-        // Load the helpers in app/Http/helpers.php
-        if (file_exists($file = app_path('Helpers/PriceHelper.php')))
-        {
-            require $file;
+        $helperDir = __DIR__ . '/../Helpers/';
+        $helpers = scandir($helperDir);
+        foreach ($helpers as $helper) {
+            if (!in_array($helper,array(".",".."))) {
+                require_once $helperDir.$helper;
+            }
         }
-
     }
 
 
