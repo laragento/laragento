@@ -73,6 +73,7 @@ class IndexerCommand extends Command
         }
 
         //check last execution time
+        $timestamp = time();
         $lastExecutionTimestamp = Cache::get($cacheKey);
 
         $lastExecution = null;
@@ -129,7 +130,6 @@ class IndexerCommand extends Command
         });
 
         //update last execution timestamp
-        $timestamp = time();
         print 'Items updated: ' . count($this->updatedIndexes) . "\n";
         print 'Cache timestamp: ' . $timestamp . "\n";
         Cache::forever($cacheKey, $timestamp);
