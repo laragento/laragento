@@ -14,9 +14,8 @@ class StoreOrderTest extends SalesTestCase
     /**
      * @test
      */
-    public function storeOrder()
+    public function store_order()
     {
-
         // Get a quote and store Items
         $quote = $this->quote();
         $this->populateCart(['sku' => '003222', 'qty' => 10]);
@@ -25,12 +24,9 @@ class StoreOrderTest extends SalesTestCase
         // Save Order
         $order = $this->orderManager->saveOrderFromQuote($quote);
 
-
         // Confirm Entry in DB
         $this->assertDatabaseHas('sales_order', ['entity_id' => $order->entity_id]);
         $this->assertDatabaseHas('sales_order_item', ['sku' => '003222']);
         $this->assertDatabaseHas('sales_order_address', ['parent_id' => $order->entity_id]);
-
     }
-
 }

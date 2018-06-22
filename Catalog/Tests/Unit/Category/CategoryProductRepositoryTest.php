@@ -28,15 +28,16 @@ class CategoryProductRepositoryTest extends BaseTestCase
     {
         parent::setUp();
         $this->app->make('Illuminate\Database\Eloquent\Factory')->load(__DIR__ . '/../../database/factories');
-        $this->categoryProductRepository = new CategoryProductRepository();
+        $this->categoryProductRepository = $this->app->make(CategoryProductRepository::class);
         DB::beginTransaction();
     }
 
     /**
+     * @test
      * @todo use factories
      * @todo don't use constant _id's
      */
-    public function testStoreNewCategoryToProductRelation()
+    public function store_new_category_to_product_relation()
     {
         $category = new Category([
             'attribute_set_id' => 3,
@@ -58,7 +59,7 @@ class CategoryProductRepositoryTest extends BaseTestCase
         ]);
         $product->save();
 
-        $result = $this->categoryProductRepository->store($category->entity_id, $product->entity_id);
+        $this->categoryProductRepository->store($category->entity_id, $product->entity_id);
         $categoryProduct = CategoryProduct::whereCategoryId($category->entity_id)->whereProductId($product->entity_id)->first();
 
         $this->assertEquals($category->entity_id, $categoryProduct->category_id);

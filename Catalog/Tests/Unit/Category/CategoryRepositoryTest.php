@@ -20,15 +20,16 @@ class CategoryRepositoryTest extends BaseTestCase
     {
         parent::setUp();
         $this->app->make('Illuminate\Database\Eloquent\Factory')->load(__DIR__ . '/../../database/factories');
-        $this->categoryRepository = new CategoryRepository();
+        $this->categoryRepository = $this->app->make(CategoryRepository::class);
         DB::beginTransaction();
     }
 
     /**
+     * @test
      * @todo use factories
      * @todo don't use constant _id's
      */
-    public function testGetCategoryIdByName()
+    public function get_category_id_by_name()
     {
         self::assertTrue(true);
 //            $category = factory(Category::class)->create();
