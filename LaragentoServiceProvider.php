@@ -3,8 +3,8 @@
 namespace Laragento;
 
 use Illuminate\Support\Facades\Route;
-use Illuminate\Support\ServiceProvider;
 use Laragento\Catalog\Repositories\Product\ProductRepository;
+use Illuminate\Support\ServiceProvider;
 use Laragento\CatalogImportExport\CatalogImportExportServiceProvider;
 use Laragento\CatalogUrlRewrite\Providers\CatalogUrlRewriteServiceProvider;
 use Laragento\Checkout\Providers\CheckoutServiceProvider;
@@ -12,7 +12,6 @@ use Laragento\Catalog\Providers\CatalogServiceProvider;
 use Laragento\Core\Providers\CoreServiceProvider;
 use Laragento\Customer\CustomerServiceProvider;
 use Laragento\CustomerImportExport\Providers\CustomerImportExportServiceProvider;
-use Laragento\Dev\Providers\DevServiceProvider;
 use Laragento\Directory\Providers\DirectoryServiceProvider;
 use Laragento\Eav\Providers\EavServiceProvider;
 use Laragento\ImportExport\Providers\ImportExportServiceProvider;

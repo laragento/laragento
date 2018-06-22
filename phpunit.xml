@@ -46,10 +46,6 @@
             <directory suffix="Test.php">./CustomerImportExport/tests/</directory>
         </testsuite>
 
-        <testsuite name="Dev">
-            <directory suffix="Test.php">./Dev/tests/</directory>
-        </testsuite>
-
 
         <testsuite name="Eav">
             <directory suffix="Test.php">./Eav/tests/</directory>
