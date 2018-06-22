@@ -52,7 +52,6 @@ class LaragentoServiceProvider extends ServiceProvider
         $this->app->register(CoreServiceProvider::class);
         $this->app->register(CustomerServiceProvider::class);
         $this->app->register(CustomerImportExportServiceProvider::class);
-        $this->app->register(DevServiceProvider::class);
         $this->app->register(DirectoryServiceProvider::class);
         $this->app->register(EavServiceProvider::class);
         $this->app->register(ImportExportServiceProvider::class);
