@@ -238,6 +238,9 @@ class ProductRepository implements ProductRepositoryInterface
                 dd($this->errors);
             }
 
+            //update update_at timestamp for indexer
+            $product->touch();
+
             return $product;
         }
 
