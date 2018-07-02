@@ -88,27 +88,27 @@ class ImageRepository implements ImageRepositoryInterface
      */
     public function saveThumbnail($productId, $imageData, $type)
     {
-        $attribute_id = null;
+        $attributeId = null;
 
         if ($type == 'image') {
-            $attribute_id = 87;
+            $attributeId = 87;
         } elseif ($type == 'small_image') {
-            $attribute_id = 88;
+            $attributeId = 88;
         } elseif ($type == 'thumbnail') {
-            $attribute_id = 89;
+            $attributeId = 89;
         } else {
             dd('the image type is not valid');
         }
 
-        $varchar = Varchar::where('entity_id', $productId)->where('attribute_id', $attribute_id)->first();
-        if (!$varchar) {
-            Varchar::create([
-                'attribute_id' => $attribute_id,
-                'store_id' => $imageData['store_id'],
-                'entity_id' => $productId,
-                'value' => $imageData['name'],
-            ]);
-        }
+        $varchar = Varchar::firstOrNew([
+            'entity_id' => $productId,
+            'attribute_id' => $attributeId,
+            'store_id' => $imageData['store_id']
+        ]);
+
+        $varchar->value = $imageData['name'];
+
+        $varchar->save();
     }
 
     /**
