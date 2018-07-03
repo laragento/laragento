@@ -6,21 +6,13 @@ use Laragento\Catalog\Repositories\Product\ProductRepositoryInterface;
 
 class StockHandler implements IndexHandlerInterface
 {
-    protected static $productRepository;
-
-    public function __construct(
-        ProductRepositoryInterface $productRepository
-    )
-    {
-        self::$productRepository = $productRepository;
-    }
-
     /**
      * @param $productId
+     * @param $productRepository
      * @return int
      */
-    public static function execute($productId)
+    public static function execute($productId, $productRepository)
     {
-        return ($productStock = self::$productRepository::stockByProductId($productId)) ? $productStock->qty : 0;
+        return ($productStock = $productRepository::stockByProductId($productId)) ? $productStock->qty : 0;
     }
 }

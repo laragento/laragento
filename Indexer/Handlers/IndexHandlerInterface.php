@@ -5,7 +5,8 @@ namespace Laragento\Indexer\Handlers;
 interface IndexHandlerInterface
 {
     /**
-     * @param $params
+     * @param $productId
+     * @param $productRepository
      */
-    public static function execute($params);
+    public static function execute($productId, $productRepository);
 }
