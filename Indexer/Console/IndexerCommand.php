@@ -22,11 +22,11 @@ class IndexerCommand extends Command
      * @param $attributes
      */
     protected function syncIndexerCols($indexTable, $attributes) {
-        foreach($attributes as $attribute => $type) {
+        foreach($attributes as $attribute => $config) {
             if(!Schema::hasColumn($indexTable, $attribute)) {
                 //create collumn if not found in table
-                Schema::table($indexTable, function($table) use($attribute, $type) {
-                    switch($type) {
+                Schema::table($indexTable, function($table) use($attribute, $config) {
+                    switch($config['type']) {
                         case 'text':
                             $table->text($attribute)->nullable();
                             break;
@@ -36,14 +36,14 @@ class IndexerCommand extends Command
                         case 'boolean':
                             $table->boolean($attribute)->nullable();
                             break;
-                        case 'stock':
+                        case 'integer':
                             $table->integer($attribute)->default(0)->nullable();
                             break;
                         case 'string':
                             $table->string($attribute, 255)->default('')->nullable();
                             break;
                         default:
-                            die('attribute type: ' . $type . ' not implemented');
+                            die('attribute type: ' . $config['type'] . ' not implemented');
                     }
                 });
 
@@ -96,13 +96,13 @@ class IndexerCommand extends Command
                         'store_id' => $storeId
                     ]);
 
-                    foreach($attributes as $attribute => $type) {
+                    foreach($attributes as $attribute => $config) {
                         $value = '';
 
-                        if($type == 'stock') {
-                            //get product stock qty
-                            $value = ($productStock = $productRepository::stockByProductId($item->entity_id)) ? $productStock->qty : 0;
+                        if(isset($config['handler'])) {
+                            $value = $this->executeCode($config['handler'], 'execute', [$item->entity_id]);
                         } else {
+
                             $data = $attributeRepository->data($attribute, $item->entity_id, $storeId);
                             //if data not found for specific storeId, search in default store 0
                             if(!$data) {
@@ -115,7 +115,7 @@ class IndexerCommand extends Command
                         }
 
                         //handle boolean types
-                        if($type == 'boolean') {
+                        if($config['type'] == 'boolean') {
                             $indexModel->{$attribute} = $value ? true : false;
                         } else {
                             $indexModel->{$attribute} = $value;
@@ -135,5 +135,22 @@ class IndexerCommand extends Command
         Cache::forever($cacheKey, $timestamp);
 
         return $this->updatedIndexes;
+    }
+
+    /**
+     * @param $class
+     * @param $function
+     * @param $params
+     * @return bool|mixed
+     */
+    private function executeCode($class, $function, $params) {
+        if(!method_exists($class, $function)) {
+            return false;
+        }
+        if(!is_callable([$class, $function])) {
+            return false;
+        }
+
+        return call_user_func_array([$class, $function], $params);
     }
 }
