@@ -7,6 +7,8 @@ interface IndexHandlerInterface
     /**
      * @param $productId
      * @param $productRepository
+     * @param $attribute
+     * @param $attributeRepository
      */
-    public static function execute($productId, $productRepository);
+    public static function execute($productId, $productRepository, $attribute, $attributeRepository);
 }

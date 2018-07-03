@@ -2,16 +2,16 @@
 
 namespace Laragento\Indexer\Handlers;
 
-use Laragento\Catalog\Repositories\Product\ProductRepositoryInterface;
-
 class StockHandler implements IndexHandlerInterface
 {
     /**
      * @param $productId
      * @param $productRepository
+     * @param $attribute
+     * @param $attributeRepository
      * @return int
      */
-    public static function execute($productId, $productRepository)
+    public static function execute($productId, $productRepository, $attribute, $attributeRepository)
     {
         return ($productStock = $productRepository::stockByProductId($productId)) ? $productStock->qty : 0;
     }

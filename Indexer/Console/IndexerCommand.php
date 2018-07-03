@@ -100,7 +100,7 @@ class IndexerCommand extends Command
                         $value = '';
 
                         if(isset($config['handler'])) {
-                            $value = $this->executeCode($config['handler'], 'execute', [$item->entity_id, $productRepository]);
+                            $value = $this->executeCode($config['handler'], 'execute', [$item->entity_id, $productRepository, $attribute, $attributeRepository]);
                         } else {
                             $data = $attributeRepository->data($attribute, $item->entity_id, $storeId);
                             //if data not found for specific storeId, search in default store 0
