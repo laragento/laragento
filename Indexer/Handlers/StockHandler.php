@@ -9,9 +9,10 @@ class StockHandler implements IndexHandlerInterface
      * @param $productRepository
      * @param $attribute
      * @param $attributeRepository
+     * @param $indexModel
      * @return int
      */
-    public static function execute($productId, $productRepository, $attribute, $attributeRepository)
+    public static function execute($productId, $productRepository, $attribute, $attributeRepository, $indexModel)
     {
         return ($productStock = $productRepository::stockByProductId($productId)) ? $productStock->qty : 0;
     }
