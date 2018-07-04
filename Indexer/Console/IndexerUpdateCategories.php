@@ -58,8 +58,9 @@ class IndexerUpdateCategories extends IndexerCommand
         //check if attributes present in indexer table
         $categoryAttributes = Config::get('indexer.category_attributes');
         $storeIds = Config::get('indexer.stores');
+        $categoryFilter = Config::get('indexer.category_filter');
 
-        $this->syncIndexerCols('lg_catalog_category_index', $categoryAttributes);
+        $this->syncIndexerCols('lg_catalog_category_index', $categoryAttributes, ['id', 'category_id', 'store_id', 'created_at', 'updated_at']);
 
         $updatedIndexes = $this->updateIndexerTable('catalog_category_entity', 'indexer-update-categories-timestamp', $categoryAttributes, $storeIds, 'category_id', CategoryIndex::class, $this->categoryAttributeRepository, $this->productRepository);
 

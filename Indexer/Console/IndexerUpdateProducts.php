@@ -56,8 +56,9 @@ class IndexerUpdateProducts extends IndexerCommand
         //check if attributes present in indexer table
         $productAttributes = Config::get('indexer.product_attributes');
         $storeIds = Config::get('indexer.stores');
+        $productFilter = Config::get('indexer.product_filter');
 
-        $this->syncIndexerCols('lg_catalog_product_index', $productAttributes);
+        $this->syncIndexerCols('lg_catalog_product_index', $productAttributes, ['id', 'product_id', 'store_id', 'created_at', 'updated_at']);
 
         $updatedIndexes = $this->updateIndexerTable('catalog_product_entity', 'indexer-update-products-timestamp', $productAttributes, $storeIds, 'product_id', ProductIndex::class, $this->productAttributeRepository, $this->productRepository);
 

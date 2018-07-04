@@ -20,8 +20,9 @@ class IndexerCommand extends Command
      *
      * @param $indexTable
      * @param $attributes
+     * @param array $ignoreCols
      */
-    protected function syncIndexerCols($indexTable, $attributes) {
+    protected function syncIndexerCols($indexTable, $attributes, $ignoreCols = []) {
         foreach($attributes as $attribute => $config) {
             if(!Schema::hasColumn($indexTable, $attribute)) {
                 //create collumn if not found in table
@@ -45,6 +46,24 @@ class IndexerCommand extends Command
                         default:
                             die('attribute type: ' . $config['type'] . ' not implemented');
                     }
+                });
+
+                $this->indexTableModified = true;
+            }
+        }
+
+        //remove unused cols
+        $tableCols = Schema::getColumnListing($indexTable);
+        foreach($tableCols as $tableCol) {
+            //ignore specific cols
+            if(in_array($tableCol, $ignoreCols)) {
+                continue;
+            }
+
+            //remove col if not in attributes any more
+            if(!in_array($tableCol, array_keys($attributes))) {
+                Schema::table($indexTable, function($table) use($tableCol) {
+                    $table->dropColumn($tableCol);
                 });
 
                 $this->indexTableModified = true;
@@ -91,6 +110,10 @@ class IndexerCommand extends Command
             foreach($items as $item) {
                 //update attributes in index table for stores
                 foreach($storeIds as $storeId) {
+                    //TODO check if product / category active for current StoreID
+
+
+
                     $indexModel = $indexClass::firstOrNew([
                         $foreignKey => $item->entity_id,
                         'store_id' => $storeId
