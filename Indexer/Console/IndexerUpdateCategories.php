@@ -62,7 +62,7 @@ class IndexerUpdateCategories extends IndexerCommand
 
         $this->syncIndexerCols('lg_catalog_category_index', $categoryAttributes, ['id', 'category_id', 'store_id', 'created_at', 'updated_at']);
 
-        $updatedIndexes = $this->updateIndexerTable('catalog_category_entity', 'indexer-update-categories-timestamp', $categoryAttributes, $storeIds, 'category_id', CategoryIndex::class, $this->categoryAttributeRepository, $this->productRepository);
+        $updatedIndexes = $this->updateIndexerTable('catalog_category_entity', 'indexer-update-categories-timestamp', $categoryAttributes, $storeIds, 'category_id', CategoryIndex::class, $this->categoryAttributeRepository, $this->productRepository, $categoryFilter);
 
         event(new CategoriesIndexed($updatedIndexes));
     }

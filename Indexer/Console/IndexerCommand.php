@@ -82,10 +82,10 @@ class IndexerCommand extends Command
      * @param $indexClass
      * @param $attributeRepository
      * @param $productRepository
-     *
+     * @param $filter
      * @return array
      */
-    protected function updateIndexerTable($table, $cacheKey, $attributes, $storeIds, $foreignKey, $indexClass, $attributeRepository, $productRepository) {
+    protected function updateIndexerTable($table, $cacheKey, $attributes, $storeIds, $foreignKey, $indexClass, $attributeRepository, $productRepository, $filter) {
         //if index table is modified, reset last execution timestamp
         if($this->indexTableModified) {
             Cache::forget($cacheKey);
@@ -106,18 +106,22 @@ class IndexerCommand extends Command
 
         $this->updatedIndexes = [];
 
-        $query->orderBy('entity_id')->chunk(100, function ($items) use($attributes, $storeIds, $foreignKey, $indexClass, $attributeRepository, $productRepository) {
+        $query->orderBy('entity_id')->chunk(100, function ($items) use($attributes, $storeIds, $foreignKey, $indexClass, $attributeRepository, $productRepository, $filter) {
             foreach($items as $item) {
                 //update attributes in index table for stores
                 foreach($storeIds as $storeId) {
-                    //TODO check if product / category active for current StoreID
-
-
-
                     $indexModel = $indexClass::firstOrNew([
                         $foreignKey => $item->entity_id,
                         'store_id' => $storeId
                     ]);
+
+                    //TODO check if product / category active for current StoreID
+                    if(isset($filter) && $filter != '') {
+                        //if filter return false abort processing entry
+                        if(!$this->executeCode($filter, 'execute', [$item->entity_id, $productRepository, $attributeRepository, $indexModel])) {
+                            $indexModel->delete();
+                        }
+                    }
 
                     foreach($attributes as $attribute => $config) {
                         $value = '';
