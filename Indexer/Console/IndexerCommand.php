@@ -119,7 +119,7 @@ class IndexerCommand extends Command
                     if(isset($filter) && $filter != '') {
                         //if filter return false abort processing entry
                         if(!$this->executeCode($filter, 'execute', [$item->entity_id, $productRepository, $attributeRepository, $indexModel])) {
-                            $indexModel->delete();
+                            $indexClass::where($foreignKey, '=', $item->entity_id)->where('store_id', '=', $storeId)->delete();
                         }
                     }
 
