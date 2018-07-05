@@ -198,10 +198,7 @@ class ProductRepository implements ProductRepositoryInterface
     {
         //check if product already exists, if not create new db entry
         $product = Product::where('sku' , $productData['sku'])->first();
-        if ($product) {
-            $product->type_id = $productData['type_id'];
-            $product->sku = $productData['sku'];
-        } else {
+        if (!$product) {
             print 'create new product' . "\n";
             $product = Product::create([
                 'attribute_set_id' => 4,
@@ -242,7 +239,7 @@ class ProductRepository implements ProductRepositoryInterface
             }
 
             //update update_at timestamp for indexer
-            $product->save();
+            $product->touch();
 
             return $product;
         }
