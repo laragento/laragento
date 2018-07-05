@@ -115,7 +115,6 @@ class IndexerCommand extends Command
                         'store_id' => $storeId
                     ]);
 
-                    //TODO check if product / category active for current StoreID
                     if(isset($filter) && $filter != '') {
                         //if filter return false abort processing entry
                         if(!$this->executeCode($filter, 'execute', [$item->entity_id, $productRepository, $attributeRepository, $indexModel])) {
