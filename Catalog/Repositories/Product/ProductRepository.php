@@ -77,8 +77,14 @@ class ProductRepository implements ProductRepositoryInterface
         return self::product($identifier);
     }
 
+    public function links($productId)
+    {
+        return Product::with([
+            'links',
+        ])->where(['entity_id' => $productId])->get();
+    }
 
-    /**
+        /**
      * @param $identifier
      * @return \Illuminate\Database\Eloquent\Model|null|static
      */
@@ -109,6 +115,7 @@ class ProductRepository implements ProductRepositoryInterface
             ->limit($limit)
             ->get();
     }
+
 
     /**
      * @param $urlKey

@@ -13,6 +13,13 @@ interface ProductLinkRepositoryInterface
         'int'
     ];
 
+    const CATALOG_PRODUCT_LINK_TYPES = [
+        'relation' => 1,
+        'super' => 3,
+        'up_sell' => 4,
+        'cross_sell' => 5
+    ];
+
     public function find($productId, $linkedProductId);
 
     public function store($productId, $linkedProductId, $linkTypeId, $value = null);

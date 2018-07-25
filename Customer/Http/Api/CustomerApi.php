@@ -117,9 +117,9 @@ class CustomerApi extends Controller implements CustomerApiInterface
         $fractal = Fractal::create($address, new AddressTransformer());
         if (!$address) {
             $fractal->addMeta([
-                'message' => __('default-billing-address-not-found'),
+                'message' => __('default_billing_address_not_found'),
                 'error' => [
-                    'code' => 'default-billing-address-not-found'
+                    'code' => 'default_billing_address_not_found'
                 ]
             ]);
         }

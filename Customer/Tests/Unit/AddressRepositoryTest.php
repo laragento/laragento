@@ -3,7 +3,6 @@
 namespace Laragento\Customer\Tests\Unit;
 
 use Laragento\Customer\Models\Address;
-use Laragento\Customer\Models\Customer;
 
 class AddressRepositoryTest extends AbstractRepositoryTest
 {
@@ -16,55 +15,46 @@ class AddressRepositoryTest extends AbstractRepositoryTest
     /**
      * @test
      */
-    public function get_address_by_customer_id()
+    public function get_address_by_id()
     {
-        /* find first address by customerId and assert address parent_id by customerId */
-        $addresses = $this->addressRepository->getByCustomerId($this->customer->entity_id);
-        $this->assertEquals($addresses->first()->parent_id, $this->customer->entity_id);
+        /** @var Address $address */
+        $address = $this->addressRepository->first($this->address->getKey());
+        $this->assertEquals($this->address->getKey(), $address->getKey());
+        $this->assertEquals($this->address->firstname, $address->firstname);
+        $this->assertNotNull($address->getKey());
     }
 
     /**
      * @test
      */
-    public function save_new_address()
+    public function store_new_address()
     {
-        $newCustomer = factory(Customer::class)->make();
-        $newCustomer->save();
-
-        $newAddress = factory(Address::class)->make([
-            'parent_id' => $newCustomer->entity_id
-        ]);
-
-        $addressArray = [
-            'is_active' => 1,
-            'parent_id' => $newAddress->parent_id,
-            'firstname' => $newAddress->firstname,
-            'middlename' => $newAddress->middlename,
-            'lastname' => $newAddress->lastname,
-            'company' => $newAddress->company,
-            'street' => $newAddress->street,
-            'city' => $newAddress->city,
-            'postcode' => $newAddress->postcode,
-            'region_id' => $newAddress->region_id,
-            'country_id' => $newAddress->country_id,
-            'prefix' => $newAddress->prefix,
-            'suffix' => $newAddress->suffix,
-            'telephone' => $newAddress->telephone,
-            'fax' => $newAddress->fax,
-        ];
-
-        $storeResponse = $this->addressRepository->store($addressArray);
-        $address = $this->addressRepository->first($storeResponse->entity_id);
-
-        /* is the store response correct? */
-        $this->assertEquals($storeResponse->entity_id, $address->entity_id);
-
-        /* is the response correct? */
-        foreach ($addressArray as $addressItemKey => $addressItem) {
-            $this->assertEquals($addressItem, $address->getAttribute($addressItemKey));
-        }
-
-        /* is the relation correct */
-        $this->assertEquals($newCustomer->entity_id, $address->parent_id);
+        $addressArray = $this->address->toArray();
+        $addressArray['firstname'] = (string)rand(10000000000000, 99999999999999);
+        unset($addressArray['entity_id']);
+        $newAddress = $this->addressRepository->store($addressArray);
+        $this->assertEquals($newAddress->firstname, $addressArray['firstname']);
+        $this->assertNotEquals($newAddress->firstname, $this->address->firstname);
     }
+
+    /**
+     * @test
+     */
+    public function get_by_customer_id()
+    {
+        $address = $this->addressRepository->getByCustomerId($this->address->parent_id);
+        $this->assertEquals($address->first()->firstname, $this->address->firstname);
+    }
+
+    /**
+     * @test
+     */
+    public function destroy_address()
+    {
+        $this->addressRepository->destroy($this->address->getKey());
+        /** @var Address $address */
+        $address = $this->addressRepository->first($this->address->getKey());
+        $this->assertEquals(null, $address);
+    }
+
 }

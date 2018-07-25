@@ -2,9 +2,7 @@
 
 namespace Laragento\Customer;
 
-use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
-use Laragento\Customer\Models\Customer;
 
 class CustomerServiceProvider extends ServiceProvider
 {

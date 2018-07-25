@@ -11,7 +11,7 @@ return [
     |
     */
 
-    'default-billing-address-not-found' => 'The default billing address could not be found.',
-    'default-shipping-address-not-found' => 'The default shipping address could not be found.',
+    'default_billing_address_not_found' => 'The default billing address could not be found.',
+    'default_shipping_address_not_found' => 'The default shipping address could not be found.',
 
 ];

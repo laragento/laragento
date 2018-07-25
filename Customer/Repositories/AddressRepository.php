@@ -61,6 +61,24 @@ class AddressRepository implements AddressRepositoryInterface
     /**
      * {@inheritDoc}
      */
+    public function update($addressData,$addressId)
+    {
+        $address = $this->first($addressId);
+        $address->update($addressData);
+        return $address;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function destroy($addressId)
+    {
+        Address::destroy($addressId);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public function getByCustomerId($customerId)
     {
         return Address::whereParentId($customerId)

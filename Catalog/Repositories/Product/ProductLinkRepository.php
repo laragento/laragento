@@ -40,6 +40,14 @@ class ProductLinkRepository implements ProductLinkRepositoryInterface
         return $productLink;
     }
 
+    public function getUpsell($productId)
+    {
+        return ProductLink::where([
+            'product_id' => $productId,
+            'link_type_id' => self::CATALOG_PRODUCT_LINK_TYPES['up_sell']
+        ])->get();
+    }
+
     public function findAttributeByType($typeId)
     {
         $condition = [
