@@ -25,10 +25,10 @@ class CustomerServiceProvider extends ServiceProvider
         $this->registerTranslations();
         $this->registerConfig();
         $this->registerViews();
-        //$this->registerFactories();
+        $this->registerFactories();
         $this->loadMigrationsFrom(__DIR__.'/../Database/Migrations');
         $this->loadRoutesFrom(__DIR__.'/../Http/routes.php');
-        //config(['auth.providers.users.model' => Customer::class ]);
+        config(['auth.providers.users.model' => Models\Customer::class ]);
     }
 
 
