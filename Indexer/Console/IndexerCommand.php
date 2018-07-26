@@ -141,7 +141,7 @@ class IndexerCommand extends Command
                             }
 
                             if($data) {
-                                $value = $data->value;
+                                $value = $data->value != '' ? $data->value : null;
                             }
                         }
 
