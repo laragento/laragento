@@ -35,7 +35,7 @@ class IndexerCommand extends Command
                             $table->float($attribute)->default(0)->nullable();
                             break;
                         case 'boolean':
-                            $table->boolean($attribute)->nullable();
+                            $table->boolean($attribute); //dont set boolean types to null, if null set to false
                             break;
                         case 'integer':
                             $table->integer($attribute)->default(0)->nullable();
@@ -138,8 +138,13 @@ class IndexerCommand extends Command
                             }
 
                             if($data) {
-                                $value = $data->value != '' ? $data->value : null;
+                                $value = $data->value;
                             }
+                        }
+
+                        //set empty values to null
+                        if($value == '') {
+                            $value = null;
                         }
 
                         //handle product sku
