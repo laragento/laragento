@@ -43,9 +43,6 @@ class IndexerCommand extends Command
                         case 'string':
                             $table->string($attribute, 255)->default('')->nullable();
                             break;
-                        case 'date':
-                            $table->date($attribute)->nullable();
-                            break;
                         case 'datetime':
                             $table->dateTime($attribute)->nullable();
                             break;
