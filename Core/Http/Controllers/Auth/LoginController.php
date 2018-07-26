@@ -35,7 +35,7 @@ class LoginController extends Controller
     public function __construct()
     {
         $this->middleware('guest')->except('logout');
-        $this->redirectTo = config('customer.afterlogin_redirect');
+        $this->redirectTo = config('core.afterlogin_redirect');
     }
 
     /**

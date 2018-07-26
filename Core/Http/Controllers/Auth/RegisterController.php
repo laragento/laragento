@@ -39,7 +39,7 @@ class RegisterController extends Controller
     public function __construct()
     {
         $this->middleware('guest');
-        $this->redirectTo = config('customer.afterregister_redirect');
+        $this->redirectTo = config('core.afterregister_redirect');
     }
 
     /**
