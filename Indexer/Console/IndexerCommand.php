@@ -145,6 +145,11 @@ class IndexerCommand extends Command
                             }
                         }
 
+                        //handle product sku
+                        if(isset($indexModel->sku) && isset($item->sku)) {
+                            $indexModel->sku = $item->sku;
+                        }
+
                         //handle boolean types
                         if($config['type'] == 'boolean') {
                             $indexModel->{$attribute} = $value ? true : false;
