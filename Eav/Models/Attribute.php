@@ -3,14 +3,12 @@
 namespace Laragento\Eav\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Laragento\Eav\Models\Option\AttributeOption;
 
 
 /**
  * Class Attribute
  *
- * @property int attribute_id
- * @property int entity_type_id
- * @property string attribute_code
  * @package Laragento\Eav\Models
  * @property int $attribute_id Attribute Id
  * @property int $entity_type_id Entity Type Id
@@ -71,4 +69,9 @@ class Attribute extends Model
         'note',
     ];
     protected $primaryKey = 'attribute_id';
+
+    public function options()
+    {
+        return $this->hasMany(AttributeOption::class, 'attribute_id', 'attribute_id');
+    }
 }

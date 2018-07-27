@@ -3,6 +3,7 @@
 namespace Laragento\Catalog\Repositories\Catalog;
 
 use Illuminate\Support\Facades\DB;
+use Laragento\Eav\Models\Option\AttributeOptionValue;
 use Laragento\Eav\Repositories\AttributeRepository;
 
 class CatalogAttributeRepository extends AttributeRepository implements CatalogAttributeRepositoryInterface
@@ -28,5 +29,32 @@ class CatalogAttributeRepository extends AttributeRepository implements CatalogA
             })
             ->where('is_visible_on_front', '=', 1)
             ->get()->toArray();
+    }
+
+    public function attributeLabels()
+    {
+        return DB::table('catalog_eav_attribute')
+            ->where('is_filterable','=','1')
+            ->join('eav_attribute',
+                function ($join) {
+                    $join->on('eav_attribute.attribute_id', '=', 'catalog_eav_attribute.attribute_id')
+                        ->where('eav_attribute.is_user_defined', '=', '1');
+                }
+            )
+            ->get(['eav_attribute.attribute_id','attribute_code','frontend_label']);
+    }
+
+    public function indexedAttributeOptionValues($optionIdArray)
+    {
+        $optionValues = AttributeOptionValue::where(function ($query) use ($optionIdArray) {
+            $query->whereIn('option_id', $optionIdArray);
+        })->get(['option_id','value']);
+
+        $indexedOptionValues = [];
+        foreach ($optionValues->toArray() as &$row) {
+            $indexedOptionValues[$row['option_id']] = &$row;
+        }
+
+        return $indexedOptionValues;
     }
 }

@@ -9,4 +9,6 @@ interface CatalogAttributeRepositoryInterface
      * @return mixed
      */
     public function catalogAttributesByAttributeSet($attributeSetId);
+    public function attributeLabels();
+    public function indexedAttributeOptionValues($optionIdArray);
 }
