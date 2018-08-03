@@ -149,6 +149,11 @@ class QuoteSessionObject
     /**
      * @var array
      */
+    protected $addresses = [];
+
+    /**
+     * @var array
+     */
     protected $taxGroups = [];
 
     /**
@@ -569,6 +574,22 @@ class QuoteSessionObject
     public function setItems(array $items): void
     {
         $this->items = $items;
+    }
+
+    /**
+     * @return array
+     */
+    public function getAddresses(): array
+    {
+        return $this->addresses;
+    }
+
+    /**
+     * @param array $addresses
+     */
+    public function setAddresses(array $addresses): void
+    {
+        $this->addresses = $addresses;
     }
 
     /**

@@ -81,7 +81,7 @@ class QuoteItemManager
             $tax = $item->getBaseRowTotalInclTax() - $item->getBaseRowTotal();
             $strIndex = str_replace('.', '_', number_format($item->getTaxPercent(), 2));
             $val = isset($taxes[$strIndex]) ? $taxes[$strIndex] : 0;
-            $taxes[$item->getTaxPercent()] = $val + $tax;
+            $taxes[$item->getTaxPercent()] = (float)$val + (float)$tax;
             array_push($taxes['total'], $tax);
         }
         $grandTotalFull = array_sum($prices);

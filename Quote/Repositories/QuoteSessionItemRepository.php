@@ -199,9 +199,18 @@ class QuoteSessionItemRepository implements QuoteSessionItemRepositoryInterface
         $data['tax_percent'] = config('quote.totals.tax_percent');
 
         // Get item prices
-        $data['base_price_incl_tax'] = ($val = $this->productAttributeRepository->data('price', $productId,
-            $storeId)) ? $val->value : 0;
+        $specialPrice = $this->specialPrice($storeId,$productId);
+        if($specialPrice != null)
+        {
+            $data['base_price_incl_tax'] = $specialPrice;
+            $data['price_incl_tax'] = $data['base_price_incl_tax'];
+        }else{
+            $data['base_price_incl_tax'] = ($val = $this->productAttributeRepository->data('price', $productId,
+                $storeId)) ? $val->value : 0;
+        }
+
         $data['price_incl_tax'] = $data['base_price_incl_tax'];
+
 
         // Calculate item tax amounts
         $taxAmount = $data['base_price_incl_tax'] * $data['tax_percent'] / 100;
@@ -237,5 +246,34 @@ class QuoteSessionItemRepository implements QuoteSessionItemRepositoryInterface
         $attr = $this->productAttributeRepository->data($attribute,
             $productId, $storeId);
         return is_object($attr) ? $attr->value : '';
+    }
+
+
+    /**
+     * @param $storeId
+     * @param $productId
+     * @return null
+     */
+    protected function specialPrice($storeId,$productId)
+    {
+        // @todo make less db queries!
+        $specialPriceFrom = ($val = $this->productAttributeRepository->data('special_from_date', $productId,
+            $storeId)) ? $val->value : null;
+        $specialPriceTo = ($val = $this->productAttributeRepository->data('special_to_date', $productId,
+            $storeId)) ? $val->value : null;
+
+        $from = \Carbon\Carbon::parse($specialPriceFrom);
+        $to = \Carbon\Carbon::parse($specialPriceTo);
+
+        if(\Carbon\Carbon::create()->between($from, $to))
+        {
+            $specialPrice = ($val = $this->productAttributeRepository->data('special_price', $productId,
+                $storeId)) ? $val->value : null;
+            if( $specialPrice != null)
+            {
+                return $specialPrice;
+            }
+        }
+        return null;
     }
 }

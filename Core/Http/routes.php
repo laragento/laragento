@@ -18,10 +18,3 @@ Route::group(['middleware' => 'web', 'prefix' => '', 'namespace' => 'Laragento\C
         Route::get('password/reset/{token}', 'ResetPasswordController@showResetForm')->name('password.reset');
         Route::post('password/reset', 'ResetPasswordController@reset');
     });
-
-Route::group(['middleware' => 'web', 'prefix' => 'core', 'namespace' => 'Laragento\Core\Http\Controllers'], function()
-{
-    Route::get('/', 'CoreController@index');
-});
-
-
