@@ -26,6 +26,7 @@ class AdminServiceProvider extends ServiceProvider
         $this->registerConfig();
         $this->registerViews();
         $this->registerFactories();
+        $this->loadRoutesFrom(__DIR__ . '/../Http/routes.php');
         $this->loadMigrationsFrom(__DIR__ . '/../Database/Migrations');
 
         $this->app['config']->set('auth.guards.admins', [
