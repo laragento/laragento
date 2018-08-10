@@ -26,6 +26,6 @@ In composer.json add psr-4 line "Module" in autoload block:<br>
 },`
 
 Add the Provider to your app.php config:<br>
-`Modules\BachmannkartenImport\Providers\MyModuleProvider::class,`
+`Modules\MyModuleName\Providers\MyModuleProvider::class,`
 
 The module is ready to use! Great :-)
