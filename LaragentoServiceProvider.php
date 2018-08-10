@@ -3,6 +3,7 @@
 namespace Laragento;
 
 use Illuminate\Support\Facades\Route;
+use Laragento\Admin\Providers\AdminServiceProvider;
 use Laragento\Catalog\Repositories\Product\ProductRepository;
 use Illuminate\Support\ServiceProvider;
 use Laragento\CatalogImportExport\CatalogImportExportServiceProvider;
@@ -43,6 +44,7 @@ class LaragentoServiceProvider extends ServiceProvider
      */
     public function register()
     {
+        $this->app->register(AdminServiceProvider::class);
         $this->app->register(CatalogServiceProvider::class);
         $this->app->register(CatalogImportExportServiceProvider::class);
         $this->app->register(CatalogUrlRewriteServiceProvider::class);

@@ -11,6 +11,13 @@
     "type": "project",
     "minimum-stability": "dev",
     "repositories": [
+      {
+        "type": "path",
+        "url": "./Admin",
+        "options": {
+          "symlink": true
+        }
+      },
         {
             "type": "path",
             "url": "./Catalog",
