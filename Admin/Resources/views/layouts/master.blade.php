@@ -25,7 +25,7 @@
 
     </header>
     <main>
-        @if(Auth::check('admins'))
+        @if(Auth::guard('admins')->check())
             <form style="display:none" id="admin-logout-form" action="{{route('admin.logout')}}" method="post">
                 @csrf
             </form>
