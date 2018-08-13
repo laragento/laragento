@@ -1,6 +1,10 @@
 <?php
 
 return [
-    'dashboard' => 'Dashboard',
-    'dashboard_lead_text' => 'Dashboard Text'
+    "add" => "Hinzufügen",
+    "edit" => "Bearbeiten",
+    "update" => "Ändern",
+    "create" => "Erstellen",
+    "delete" => "Löschen",
+    "remove" => "Entfernen"
 ];
