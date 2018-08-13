@@ -6,5 +6,6 @@ return [
     "update" => "Ändern",
     "create" => "Erstellen",
     "delete" => "Löschen",
-    "remove" => "Entfernen"
+    "remove" => "Entfernen",
+    "actions" => "Aktionen"
 ];
