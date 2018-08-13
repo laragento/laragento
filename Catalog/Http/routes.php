@@ -1,7 +1,7 @@
 <?php
 
 
-Route::group(['prefix'=>'category', 'middleware' => 'storeId'], function (){
+Route::group(['prefix'=>'category', 'middleware' => 'storeId', 'namespace' => 'Laragento\Catalog\Http\Controllers'], function (){
     Route::get('all', 'CatalogController@all');
     Route::get('{category_slug}', 'CatalogController@category');
 });
