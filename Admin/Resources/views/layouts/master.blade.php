@@ -35,7 +35,7 @@
                 <ul class="first-level">
                     <li><span>Logo</span></li>
                     @if(config('admin.modules.laragentocms') === 1)
-                        @include('laragentocms::partials.nav')
+                        @include('cms::partials.nav')
                     @endif
                     <li><span onclick="submitLogoutForm()" class="pseudo-link">Logout</span></li>
                 </ul>
