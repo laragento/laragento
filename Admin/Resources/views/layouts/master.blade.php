@@ -34,7 +34,7 @@
                 <label for="toggle-nav" id="nav-toggler"><span>Menu</span></label>
                 <ul class="first-level">
                     <li><span>Logo</span></li>
-                    @if(config('admin.modules.laragento_cms') === 1)
+                    @if(config('admin.modules.laragentocms') === 1)
                         @include('laragentocms::partials.nav')
                     @endif
                     <li><span onclick="submitLogoutForm()" class="pseudo-link">Logout</span></li>
