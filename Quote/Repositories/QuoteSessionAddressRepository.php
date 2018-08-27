@@ -33,7 +33,22 @@ class QuoteSessionAddressRepository implements QuoteSessionAddressRepositoryInte
 
     /**
      * @inheritdoc
-     * @ToDo Bases and Amounts are not regarding conversions
+     */
+    public function byId($id)
+    {
+        $addresses = $this->get();
+
+        /** @var QuoteSessionAddress $address */
+        foreach ($addresses as $address) {
+            if ($address->getAddressId() == $id) {
+                return $address;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * @inheritdoc
      */
     public function create($data)
     {
@@ -47,23 +62,6 @@ class QuoteSessionAddressRepository implements QuoteSessionAddressRepositoryInte
             $quoteAddress->$function($value);
         }
         return $quoteAddress;
-
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function byId($id)
-    {
-        $addresses = $this->get();
-
-        /** @var QuoteSessionAddress $address */
-        foreach ($addresses as $address) {
-            if ($address->getAddressId() == $id) {
-                return $address;
-            }
-        }
-        return null;
     }
 
     /**

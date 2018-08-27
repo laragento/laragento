@@ -3,9 +3,9 @@
 
 namespace Laragento\Quote\Managers;
 
-
 use Laragento\Quote\DataObjects\QuoteSessionAddress;
 use Laragento\Quote\DataObjects\QuoteSessionObject;
+use Laragento\Quote\DataObjects\QuoteSessionShipping;
 use Laragento\Quote\Repositories\QuoteSessionAddressRepositoryInterface;
 use Laragento\Quote\Repositories\QuoteSessionObjectRepositoryInterface;
 
@@ -35,49 +35,136 @@ class QuoteAddressManager
         return $this->quoteDataRepository->getQuote();
     }
 
-    /**
-     * @param $data
-     * @param null $address
-     */
-    public function storeAddresses($data, $address = null): void
+
+    protected function mapAddress($address,$email,$addressType)
     {
-        $data = $this->storeAddressData($data, $address);
-        $quote = $this->getQuote();
-        $quote->setAddresses($data);
+        return [
+            'email' => $email,
+            'firstname' => $address->firstname,
+            'lastname' => $address->lastname,
+            'company' => $address->company,
+            'street' => $address->street,
+            'postcode' => $address->postcode,
+            'city' => $address->city,
+            'country_id' => $address->country_id,
+            'telephone' => $address->telephone,
+            'address_type' => $addressType,
+        ];
     }
 
     /**
-     * @param $addresses
-     */
-    public function updateAddresses($addresses): void
-    {
-        $quote = $this->getQuote();
-        $quote->setAddresses($addresses);
-    }
-
-    /**
-     * @param $data
-     * @param $address
+     * @param $addressData
      * @return array
      */
-    public function storeAddressData($data, $address)
+    protected function  mapBillingAddress($addressData)
     {
-        /** @var QuoteSessionAddress $address */
-        if (!$address) {
-            $addresses = $this->getQuote()->getAddresses();
-            if (count($data) > 0) {
-                // Set Create new Address
-                $addressData = $this->setAddressId($data);
-                $address = $this->quoteAddressRepository->createAddress($addressData);
-                // Store address
-                array_push($addresses, $address);
-            }
-        } else {
-            // Update Address Data
-            $addresses = $this->quoteAddressRepository->updateAddress($address->getAddressId(), $data);
+        if(isset($addressData['billing_address'])){
+            return $this->mapAddress(
+                $addressData['billing_address'],
+                $addressData['email'],
+                'billing'
+            );
         }
-
-        return $addresses;
+        return [
+            'email' => $addressData['email'],
+            'firstname' => $addressData['firstname'],
+            'lastname' => $addressData['lastname'],
+            'company' => $addressData['company'],
+            'street' => $addressData['street'],
+            'postcode' => $addressData['postcode'],
+            'city' => $addressData['city'],
+            'country_id' => $addressData['country_id'],
+            'telephone' => $addressData['telephone'],
+            'address_type' => 'billing',
+        ];
     }
 
+    protected function mapShippingAddress($addressData)
+    {
+        if(isset($addressData['shipping_address'])){
+            return $this->mapAddress(
+                $addressData['shipping_address'],
+                $addressData['email'],
+                'shipping'
+            );
+        }
+        return [
+            'firstname' => $addressData['shipping_firstname'],
+            'lastname' => $addressData['shipping_lastname'],
+            'company' => $addressData['shipping_company'],
+            'street' => $addressData['shipping_street'],
+            'postcode' => $addressData['shipping_postcode'],
+            'city' => $addressData['shipping_city'],
+            'country_id' => $addressData['shipping_country_id'],
+            'telephone' => $addressData['shipping_telephone'],
+            'address_type' => 'shipping',
+        ];
+    }
+
+    /**
+     * @param $addressData
+     * @return array
+     */
+    public function updateAddresses($addressData)
+    {
+        $billingAddress = $this->mapBillingAddress($addressData);
+
+        if(isset($addressData['same_as_billing']) && $addressData['same_as_billing'] == 'on'){
+            $shippingAddress = $billingAddress;
+            $shippingAddress['address_type'] = 'shipping';
+        }else{
+            $shippingAddress = $this->mapShippingAddress($addressData);
+        }
+
+        $addresses[] = $billingAddress;
+        $addresses[] = $shippingAddress;
+
+        $storedAddresses = [];
+        $quote = $this->getQuote();
+        foreach ($addresses as $key => $address) {
+            $storedAddresses[] = $this->createAddressDataObject($address);
+        }
+        $quote->setAddresses($storedAddresses);
+        $quote->setShipping(new QuoteSessionShipping());
+        return $quote->getAddresses();
+    }
+
+    /**
+     * @param $address
+     * @return mixed
+     */
+    public function createAddressDataObject($address)
+    {
+        return $this->quoteAddressRepository->create($address);
+    }
+
+    /**
+     * @return null
+     */
+    public function getBillingAddress()
+    {
+        $quote = $this->getQuote();
+        $addresses = $quote->getAddresses();
+        foreach ($addresses as $address) {
+            if (isset($address->address_type ) && $address->address_type  == 'billing') {
+                return $address;
+            }
+        }
+        return new QuoteSessionAddress();
+    }
+
+    /**
+     * @return null
+     */
+    public function getShippingAddress()
+    {
+        $quote = $this->getQuote();
+        $addresses = $quote->getAddresses();
+        foreach ($addresses as $address) {
+            if ($address->address_type == 'shipping') {
+                return $address;
+            }
+        }
+        return new QuoteSessionAddress();
+    }
 }

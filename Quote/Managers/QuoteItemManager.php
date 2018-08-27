@@ -75,6 +75,8 @@ class QuoteItemManager
         $taxes = [
             'total' => []
         ];
+        $totalWeight = 0.0000;
+
         /** @var QuoteSessionItem $item */
         foreach ($quote->getItems() as $item) {
             array_push($prices, $item->getBaseRowTotalInclTax());
@@ -82,6 +84,7 @@ class QuoteItemManager
             $strIndex = str_replace('.', '_', number_format($item->getTaxPercent(), 2));
             $val = isset($taxes[$strIndex]) ? $taxes[$strIndex] : 0;
             $taxes[$item->getTaxPercent()] = (float)$val + (float)$tax;
+            $totalWeight = $totalWeight + ($item->getWeight()*$item->getQty());
             array_push($taxes['total'], $tax);
         }
         $grandTotalFull = array_sum($prices);
@@ -100,6 +103,7 @@ class QuoteItemManager
         $quote->setBaseSubtotal($subTotal);
         $quote->setBaseSubtotalWithDiscount($subTotal);
         $quote->setTaxGroups($taxes);
+        $quote->setTotalWeight($totalWeight);
 
 
         $this->quoteDataRepository->updateQuote($quote);

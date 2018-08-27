@@ -52,6 +52,7 @@ class QuoteSessionItemRepository implements QuoteSessionItemRepositoryInterface
         $product = $this->productRepository::productBySku($data['sku']);
         $data['product_id'] = $product->entity_id;
         $data['product_type'] = $product->type_id;
+        $data['weight'] =  $this->getAttributeValue('weight', $product->entity_id);
         $data['name'] = $this->getAttributeValue('name', $product->entity_id);
         $data['description'] = $this->getAttributeValue('description', $product->entity_id);
 

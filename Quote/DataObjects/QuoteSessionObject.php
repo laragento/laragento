@@ -6,11 +6,24 @@ namespace Laragento\Quote\DataObjects;
 use Laragento\Customer\Models\Customer;
 use Laragento\Customer\Repositories\CustomerRepositoryInterface;
 
-
 /**
  * Class QuoteSessionObject
  * @package Laragento\Quote\DataObjects
- */
+ *
+ * @property int customer_id
+ * @property float base_subtotal
+ * @property float base_subtotal_with_discount
+ * @property float subtotal_with_discount
+ * @property float subtotal
+ * @property float base_grand_total
+ * @property float grand_total
+ * @property int items_qty
+ * @property string base_currency_code
+ * @property string store_currency_code
+ * @property string quote_currency_code
+ * @property QuoteSessionShipping shipping
+*/
+
 class QuoteSessionObject
 {
     /* ORIGINAL from DB, actually not used
@@ -42,6 +55,16 @@ class QuoteSessionObject
     protected $is_persistent;
     protected $gift_message_id;
     */
+
+    /**
+     * @var float
+     */
+    protected $totalWeight = 0.0000;
+
+    /**
+     * @var QuoteSessionShipping
+     */
+    protected $shipping = null;
 
     /**
      * @var int
@@ -152,6 +175,11 @@ class QuoteSessionObject
     protected $addresses = [];
 
     /**
+     * @var null
+     */
+    protected $payment = null;
+
+    /**
      * @var array
      */
     protected $taxGroups = [];
@@ -174,6 +202,38 @@ class QuoteSessionObject
     {
         $this->customerRepository = $customerRepository;
 
+    }
+
+    /**
+     * @return float
+     */
+    public function getTotalWeight(): float
+    {
+        return $this->totalWeight;
+    }
+
+    /**
+     * @param float $totalWeight
+     */
+    public function setTotalWeight(float $totalWeight): void
+    {
+        $this->totalWeight = $totalWeight;
+    }
+
+    /**
+     * @return null
+     */
+    public function getShipping()
+    {
+        return $this->shipping;
+    }
+
+    /**
+     * @param null $shipping
+     */
+    public function setShipping($shipping): void
+    {
+        $this->shipping = $shipping;
     }
 
     /**
@@ -592,6 +652,23 @@ class QuoteSessionObject
         $this->addresses = $addresses;
     }
 
+
+    /**
+     * @return array
+     */
+    public function getPayment(): array
+    {
+        return $this->payment;
+    }
+
+    /**
+     * @param QuoteSessionPayment $payment
+     */
+    public function setPayment(QuoteSessionPayment $payment)
+    {
+        $this->payment = $payment;
+    }
+
     /**
      * @return array
      */
@@ -651,6 +728,19 @@ class QuoteSessionObject
         return $this->customerRepository->firstById($this->customer_id);
     }
 
+
+    // Object only
+
+    public function __get($prop)
+    {
+        return $this->$prop;
+    }
+
+    public function __isset($prop) : bool
+    {
+        return isset($this->$prop);
+    }
+
     /**
      * @return array
      */
@@ -698,6 +788,8 @@ class QuoteSessionObject
 
         return $uuid;
     }
+
+
 
 
 }

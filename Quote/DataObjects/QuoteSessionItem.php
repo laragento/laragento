@@ -7,6 +7,34 @@ namespace Laragento\Quote\DataObjects;
 use Laragento\Catalog\Repositories\Product\ProductRepository;
 use Laragento\Catalog\Repositories\Product\ProductRepositoryInterface;
 
+/**
+ * QuoteSessionItem model
+ * @property int item_id
+ * @property int quote_id
+ * @property int store_id
+ * @property int product_id
+ * @property string sku
+ * @property string name
+ * @property string description
+ * @property string qty
+ * @property float price
+ * @property float base_price
+ * @property float tax_percent
+ * @property float tax_amount
+ * @property float base_tax_amount
+ * @property int discount_percent
+ * @property float discount_amount
+ * @property float base_discount_amount
+ * @property float row_total
+ * @property float base_row_total
+ * @property float row_weight
+ * @property float price_incl_tax
+ * @property float base_price_incl_tax
+ * @property float row_total_incl_tax
+ * @property float base_row_total_incl_tax
+ * @property int free_shipping
+ */
+
 class QuoteSessionItem
 {
     /* ORIGINAL from DB, actually not used
@@ -919,6 +947,8 @@ class QuoteSessionItem
     {
         return ProductRepository::productBySku($this->sku);
     }
+
+
 
     public function toArray()
     {

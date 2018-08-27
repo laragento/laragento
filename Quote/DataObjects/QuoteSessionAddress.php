@@ -9,14 +9,8 @@ class QuoteSessionAddress
 
     protected $created_at;
     protected $updated_at;
-
-    protected $vat_id;
-    protected $vat_is_valid;
-    protected $vat_request_id;
-    protected $vat_request_date;
-    protected $vat_request_success;
-    protected $gift_message_id;
      */
+
 
     protected $address_id;
     protected $quote_id;
@@ -72,6 +66,12 @@ class QuoteSessionAddress
     protected $shipping_incl_tax = '0.0000';
     protected $base_shipping_incl_tax = '0.0000';
     protected $free_shipping;
+    protected $vat_id;
+    protected $vat_is_valid;
+    protected $vat_request_id;
+    protected $vat_request_date;
+    protected $vat_request_success;
+    protected $gift_message_id;
 
     /**
      * @return mixed
