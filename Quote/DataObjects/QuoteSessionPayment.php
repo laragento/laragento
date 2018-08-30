@@ -40,13 +40,7 @@ class QuoteSessionPayment
     // Object only
     protected $customAttributes = [];
 
-    /**
-     * @param mixed $paypal_correlation_id
-     */
-    public function setPaypalCorrelationId($paypal_correlation_id): void
-    {
-        $this->paypal_correlation_id = $paypal_correlation_id;
-    }
+
 
     /**
      * @return array
@@ -407,6 +401,14 @@ class QuoteSessionPayment
     public function getPaypalCorrelationId()
     {
         return $this->paypal_correlation_id;
+    }
+
+    /**
+     * @param mixed $paypal_correlation_id
+     */
+    public function setPaypalCorrelationId($paypal_correlation_id): void
+    {
+        $this->paypal_correlation_id = $paypal_correlation_id;
     }
 
 }
