@@ -160,9 +160,9 @@ abstract class AbstractOrderManager
      * @param QuoteSessionObject $quote
      * @param $order
      */
-    protected function saveGrid($quote,$order): void
+    protected function saveGrid($quote, $order): void
     {
-        $gridData = $this->mapOrderToOrderGrid($quote,$order);
+        $gridData = $this->mapOrderToOrderGrid($quote, $order);
         Grid::create($gridData);
     }
 
@@ -188,8 +188,8 @@ abstract class AbstractOrderManager
             }
         }
 
-       $this->billingAddress =  Address::create($billingAddress);
-       $this->shippingAddress = Address::create($shippingAddress);
+        $this->billingAddress = Address::create($billingAddress);
+        $this->shippingAddress = Address::create($shippingAddress);
     }
 
 
@@ -216,7 +216,6 @@ abstract class AbstractOrderManager
     protected function mapOrderToOrderGrid(QuoteSessionObject $quote, $order)
     {
         return [
-            'entity_id' => $order->entity_id,
             'status' => $order->status,
             'store_id' => $order->store_id,
             'store_name' => $order->store_name,
@@ -237,7 +236,8 @@ abstract class AbstractOrderManager
             'customer_group' => $order->customer_group_id,
             'subtotal' => $order->base_subtotal,
             'shipping_and_handling' => $order->shipping_amount,
-            'customer_name' => $order->customer_firstname . ' ' . $order->customer_lastname, //ToDo make Helper or method
+            'customer_name' => $order->customer_firstname . ' ' . $order->customer_lastname,
+            //ToDo make Helper or method
             'payment_method' => $quote->getPayment()->method,
             'total_refunded' => null,
             'signifyd_guarantee_status' => null
@@ -260,12 +260,12 @@ abstract class AbstractOrderManager
         $company = $address->company ? $address->company : '';
         $suffix = $address->suffix ? $address->suffix : '';
         $nameLine = $this->createNameString($address) . $suffix;
-        $addressLine = $address->street ? $address->street . "\n\r": '';
-        $postcode = $address->postcode ? $address->postcode .' ' : '';
+        $addressLine = $address->street ? $address->street . "\n\r" : '';
+        $postcode = $address->postcode ? $address->postcode . ' ' : '';
         $city = $address->city ? $address->city : '';
         $cityLine = $postcode || $city ? $postcode . $city . "\n\r" : '';
         //ToDo Get Countryname, not ID
-        $country =  $address->country_id && ($address->county_id != 'CH' && $address->county_id != 'FL')? $address->country_id : '';
+        $country = $address->country_id && ($address->county_id != 'CH' && $address->county_id != 'FL') ? $address->country_id : '';
 
         $addressData = $company ? $company . "\n\r" . $prefix . $nameLine . "\n\r" : trim($prefix) . "\n\r" . $nameLine . "\n\r";
 
@@ -289,7 +289,29 @@ abstract class AbstractOrderManager
 
     protected function savePayment(QuoteSessionObject $quote, $order)
     {
+        $orderPaymentData = $this->mapQuotePaymentToOrderPayment($quote,$order);
+        Order\Payment::create($orderPaymentData);
+    }
 
+    protected function mapQuotePaymentToOrderPayment($quote,$order)
+    {
+        $payment = $quote->getPayment();
+        return [
+            //ToDo: add base-values
+            'parent_id' => $order->entity_id,
+            'base_shipping_amount' => $order->shipping_amount,
+            'shipping_amount' => $order->shipping_amount,
+            'base_amount_ordered' => $order->subtotal_incl_tax,
+            'amount_ordered' => $order->subtotal_incl_tax,
+            'method' => $payment->method,
+            'additional_information' => $this->setAdditionalPaymentInfo($payment),
+        ];
+    }
+
+    protected function setAdditionalPaymentInfo($payment)
+    {
+        //ToDo: Must become dynamic
+        return '{"method_title":"Check \/ Money order"}';
     }
 
 
