@@ -39,5 +39,7 @@ use Laragento\Store\Models\Store;
  */
 class Grid extends Model
 {
-
+    protected $table = 'sales_order_grid';
+    protected $primaryKey = 'entity_id';
+    protected $guarded = [];
 }

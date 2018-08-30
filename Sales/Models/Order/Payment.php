@@ -65,5 +65,8 @@ use Laragento\Store\Models\Store;
  */
 class Payment extends Model
 {
+    protected $table = 'sales_order_payment';
+    protected $primaryKey = 'entity_id';
+    protected $guarded = [];
 
 }
