@@ -22,7 +22,7 @@ use Laragento\Customer\Repositories\CustomerRepositoryInterface;
  * @property string store_currency_code
  * @property string quote_currency_code
  * @property QuoteSessionShipping shipping
-*/
+ */
 
 class QuoteSessionObject
 {
@@ -203,6 +203,88 @@ class QuoteSessionObject
         $this->customerRepository = $customerRepository;
 
     }
+
+    /**
+     * @return Customer
+     */
+    public function customer()
+    {
+        return $this->customerRepository->firstById($this->customer_id);
+    }
+
+
+    // Object only
+
+    public function __get($prop)
+    {
+        return $this->$prop;
+    }
+
+    public function __set($prop, $value)
+    {
+        $this->$prop = $value;
+    }
+
+    public function __isset($prop) : bool
+    {
+        return isset($this->$prop);
+    }
+
+    /**
+     * @return array
+     */
+    public function toArray()
+    {
+        $serialized = (array)$this;
+        $search = "\x00*\x00";
+        $replacedKeys = str_replace($search, '', array_keys($serialized));
+
+        return array_combine($replacedKeys,$serialized);
+
+    }
+
+    /**
+     * @ToDo Move to general Helper class
+     * @param $trim
+     * @param $upper
+     * @param null $hyphen
+     * @return string
+     */
+    private function generateGUID($trim, $upper, $hyphen = null)
+    {
+        mt_srand((double)microtime() * 10000);
+        $charid = md5(uniqid(rand(), true));
+        $beginn = '';
+        $end = '';
+
+        if ($upper) {
+            $charid = strtoupper($charid);
+        }
+        if ($hyphen) {
+            $hyphen = chr(45);
+        }
+
+        if (!$trim) {
+            $beginn = chr(123);
+            $end = chr(125);
+        }
+        $uuid = $beginn
+            . substr($charid, 0, 8) . $hyphen
+            . substr($charid, 8, 4) . $hyphen
+            . substr($charid, 12, 4) . $hyphen
+            . substr($charid, 16, 4) . $hyphen
+            . substr($charid, 20, 12)
+            . $end;
+
+        return $uuid;
+    }
+
+    /*****
+     *
+     * We keep this methods for legacy reasons:
+     * Projects without magic getter/setter methods
+     *
+     */
 
     /**
      * @return float
@@ -720,74 +802,7 @@ class QuoteSessionObject
         $this->cart_id = $cart_id;
     }
 
-    /**
-     * @return Customer
-     */
-    public function customer()
-    {
-        return $this->customerRepository->firstById($this->customer_id);
-    }
 
-
-    // Object only
-
-    public function __get($prop)
-    {
-        return $this->$prop;
-    }
-
-    public function __isset($prop) : bool
-    {
-        return isset($this->$prop);
-    }
-
-    /**
-     * @return array
-     */
-    public function toArray()
-    {
-        $serialized = (array)$this;
-        $search = "\x00*\x00";
-        $replacedKeys = str_replace($search, '', array_keys($serialized));
-
-        return array_combine($replacedKeys,$serialized);
-
-    }
-
-    /**
-     * @param $trim
-     * @param $upper
-     * @param null $hyphen
-     * @return string
-     */
-    private function generateGUID($trim, $upper, $hyphen = null)
-    {
-        mt_srand((double)microtime() * 10000);
-        $charid = md5(uniqid(rand(), true));
-        $beginn = '';
-        $end = '';
-
-        if ($upper) {
-            $charid = strtoupper($charid);
-        }
-        if ($hyphen) {
-            $hyphen = chr(45);
-        }
-
-        if (!$trim) {
-            $beginn = chr(123);
-            $end = chr(125);
-        }
-        $uuid = $beginn
-            . substr($charid, 0, 8) . $hyphen
-            . substr($charid, 8, 4) . $hyphen
-            . substr($charid, 12, 4) . $hyphen
-            . substr($charid, 16, 4) . $hyphen
-            . substr($charid, 20, 12)
-            . $end;
-
-        return $uuid;
-    }
 
 
 
