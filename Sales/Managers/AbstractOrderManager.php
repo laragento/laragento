@@ -216,6 +216,7 @@ abstract class AbstractOrderManager
     protected function mapOrderToOrderGrid(QuoteSessionObject $quote, $order)
     {
         return [
+            'entity_id' => $order->entity_id,
             'status' => $order->status,
             'store_id' => $order->store_id,
             'store_name' => $order->store_name,
