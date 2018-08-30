@@ -39,6 +39,8 @@ abstract class AbstractOrderManager
         $order = $this->orderRepository->store($orderData);
         $this->saveItems($quote, $order);
         $this->saveAddresses($quote,$order);
+        // This save Grid
+        // This save payment
         return $order;
     }
 
