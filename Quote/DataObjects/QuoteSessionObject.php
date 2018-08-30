@@ -736,9 +736,9 @@ class QuoteSessionObject
 
 
     /**
-     * @return array
+     * @return QuoteSessionPayment
      */
-    public function getPayment(): array
+    public function getPayment(): QuoteSessionPayment
     {
         return $this->payment;
     }
