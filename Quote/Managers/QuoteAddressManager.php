@@ -143,14 +143,7 @@ class QuoteAddressManager
      */
     public function getBillingAddress()
     {
-        $quote = $this->getQuote();
-        $addresses = $quote->getAddresses();
-        foreach ($addresses as $address) {
-            if (isset($address->address_type ) && $address->address_type  == 'billing') {
-                return $address;
-            }
-        }
-        return new QuoteSessionAddress();
+        return $this->getAddressByType('billing');
     }
 
     /**
@@ -158,10 +151,17 @@ class QuoteAddressManager
      */
     public function getShippingAddress()
     {
+        return $this->getAddressByType('shipping');
+    }
+
+
+
+    private function getAddressByType($type)
+    {
         $quote = $this->getQuote();
         $addresses = $quote->getAddresses();
         foreach ($addresses as $address) {
-            if ($address->address_type == 'shipping') {
+            if (isset($address->address_type ) && $address->address_type  == $type) {
                 return $address;
             }
         }
