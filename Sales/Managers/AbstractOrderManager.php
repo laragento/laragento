@@ -3,28 +3,37 @@
 
 namespace Laragento\Sales\Managers;
 
+use Laragento\Quote\DataObjects\QuoteSessionAddress;
 use Laragento\Quote\DataObjects\QuoteSessionItem;
 use Laragento\Quote\DataObjects\QuoteSessionObject;
 use Laragento\Sales\Models\Order;
 use Laragento\Sales\Models\Order\Address;
+use Laragento\Sales\Models\Order\Grid;
 use Laragento\Sales\Models\Order\Item;
 use Laragento\Sales\Repositories\OrderItemRepository;
 use Laragento\Sales\Repositories\OrderRepository;
+use Laragento\Store\Repositories\StoreRepositoryInterface;
 
 abstract class AbstractOrderManager
 {
     protected $orderItemRepository;
     protected $orderRepository;
+    protected $storeRepository;
+
+    protected $billingAddress = null;
+    protected $shippingAddress = null;
 
     const ORDER_STATE_NEW = "new";
     const ORDER_STATUS_PENDING = "pending";
 
     public function __construct(
         OrderRepository $orderRepository,
-        OrderItemRepository $orderItemRepository
+        OrderItemRepository $orderItemRepository,
+        StoreRepositoryInterface $storeRepository
     ) {
         $this->orderItemRepository = $orderItemRepository;
         $this->orderRepository = $orderRepository;
+        $this->storeRepository = $storeRepository;
     }
 
     abstract protected function mapQuoteToOrder($quote);
@@ -38,8 +47,9 @@ abstract class AbstractOrderManager
         $orderData = $this->mapQuoteToOrder($quote);
         $order = $this->orderRepository->store($orderData);
         $this->saveItems($quote, $order);
-        $this->saveAddresses($quote,$order);
-        // This save Grid
+        $this->saveAddresses($quote, $order);
+        $this->savePayment($quote, $order);
+        $this->saveGrid($quote, $order);
         // This save payment
         return $order;
     }
@@ -105,8 +115,8 @@ abstract class AbstractOrderManager
     {
         return [
             'parent_id' => $orderId,
-            'customer_address_id' => NULL,  // ToDo
-            'quote_address_id' => NULL, // ToDo
+            'customer_address_id' => null,  // ToDo
+            'quote_address_id' => null, // ToDo
             'region_id' => $address->region_id,
             'customer_id' => $address->customer_id,
             'fax' => $address->fax,
@@ -146,6 +156,17 @@ abstract class AbstractOrderManager
     }
 
     /**
+     * Stores quote items to order items
+     * @param QuoteSessionObject $quote
+     * @param $order
+     */
+    protected function saveGrid($quote,$order): void
+    {
+        $gridData = $this->mapOrderToOrderGrid($quote,$order);
+        Grid::create($gridData);
+    }
+
+    /**
      * @param Order $order
      * @param $quote
      */
@@ -155,20 +176,20 @@ abstract class AbstractOrderManager
         $shippingAddress = null;
         $addresses = $quote->getAddresses();
         foreach ($addresses as $address) {
-            if ($address->address_type  == 'billing') {
+            if ($address->address_type == 'billing') {
                 $billingAddress = $this->mapQuoteAddressToOrderAddress(
                     $order->entity_id,
                     $address);
             }
-            if ($address->address_type  == 'shipping') {
+            if ($address->address_type == 'shipping') {
                 $shippingAddress = $this->mapQuoteAddressToOrderAddress(
                     $order->entity_id,
                     $address);
             }
         }
 
-        Address::create($billingAddress);
-        Address::create($shippingAddress);
+       $this->billingAddress =  Address::create($billingAddress);
+       $this->shippingAddress = Address::create($shippingAddress);
     }
 
 
@@ -188,6 +209,88 @@ abstract class AbstractOrderManager
      */
     protected function protectCode()
     {
+        // Todo: wrong codelength
         return substr(md5(uniqid(mt_rand(), true) . ':' . microtime(true)), 5, 6);
     }
+
+    protected function mapOrderToOrderGrid(QuoteSessionObject $quote, $order)
+    {
+        return [
+            'entity_id' => $order->entity_id,
+            'status' => $order->status,
+            'store_id' => $order->store_id,
+            'store_name' => $order->store_name,
+            'customer_id' => $order->customer_id,
+            'base_grand_total' => $order->base_grand_total,
+            'base_total_paid' => null,
+            'grand_total' => $order->grand_total,
+            'total_paid' => null,
+            'increment_id' => $order->increment_id,
+            'base_currency_code' => $order->base_currency_code,
+            'order_currency_code' => $order->order_currency_code,
+            'shipping_name' => $this->formatAdressName('shipping'),
+            'billing_name' => $this->formatAdressName('billing'),
+            'billing_address' => $this->serializeGridAddress('billing'),
+            'shipping_address' => $this->serializeGridAddress('shipping'),
+            'shipping_information' => $order->shipping_description,
+            'customer_email' => $order->customer_email,
+            'customer_group' => $order->customer_group_id,
+            'subtotal' => $order->base_subtotal,
+            'shipping_and_handling' => $order->shipping_amount,
+            'customer_name' => $order->customer_firstname . ' ' . $order->customer_lastname, //ToDo make Helper or method
+            'payment_method' => $quote->getPayment()->method,
+            'total_refunded' => null,
+            'signifyd_guarantee_status' => null
+        ];
+    }
+
+    protected function formatAdressName($type)
+    {
+        $address = $this->{$type . 'Address'};
+
+        return $address->company ? $address->company : $this->createNameString($address);
+
+    }
+
+    protected function serializeGridAddress($type)
+    {
+        $address = $this->{$type . 'Address'};
+
+        $prefix = $address->prefix ? $address->prefix . ' ' : '';
+        $company = $address->company ? $address->company : '';
+        $suffix = $address->suffix ? $address->suffix : '';
+        $nameLine = $this->createNameString($address) . $suffix;
+        $addressLine = $address->street ? $address->street . "\n\r": '';
+        $postcode = $address->postcode ? $address->postcode .' ' : '';
+        $city = $address->city ? $address->city : '';
+        $cityLine = $postcode || $city ? $postcode . $city . "\n\r" : '';
+        //ToDo Get Countryname, not ID
+        $country =  $address->country_id && ($address->county_id != 'CH' && $address->county_id != 'FL')? $address->country_id : '';
+
+        $addressData = $company ? $company . "\n\r" . $prefix . $nameLine . "\n\r" : trim($prefix) . "\n\r" . $nameLine . "\n\r";
+
+        return $addressData . $addressLine . $cityLine . $country;
+
+
+    }
+
+    /**
+     * @param $address
+     * @return string
+     */
+    protected function createNameString($address): string
+    {
+        $firstname = $address->firstname ? $address->firstname . ' ' : '';
+        $middlename = $address->middlename ? $address->middlename . ' ' : '';
+        $lastname = $address->lastname ? $address->lastname . ' ' : '';
+
+        return trim($firstname . $middlename . $lastname);
+    }
+
+    protected function savePayment(QuoteSessionObject $quote, $order)
+    {
+
+    }
+
+
 }

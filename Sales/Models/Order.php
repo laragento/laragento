@@ -9,6 +9,7 @@ use Laragento\Sales\Models\Order\Item;
 use Laragento\Store\Models\Store;
 
 /**
+ * @todo Model is not complete
  * Sales Order Model
  * @property int entity_id
  * @property string state
