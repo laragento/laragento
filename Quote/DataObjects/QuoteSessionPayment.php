@@ -36,6 +36,67 @@ class QuoteSessionPayment
     protected $paypal_payer_status;
     protected $paypal_correlation_id;
 
+
+    // Object only
+    protected $customAttributes = [];
+
+    /**
+     * @param mixed $paypal_correlation_id
+     */
+    public function setPaypalCorrelationId($paypal_correlation_id): void
+    {
+        $this->paypal_correlation_id = $paypal_correlation_id;
+    }
+
+    /**
+     * @return array
+     */
+    public function getCustomAttributes(): array
+    {
+        return $this->customAttributes;
+    }
+
+    /**
+     * @param array $customAttributes
+     */
+    public function setCustomAttributes(array $customAttributes): void
+    {
+        $this->customAttributes = $customAttributes;
+    }
+
+
+    public function __get($prop)
+    {
+        return $this->$prop;
+    }
+
+    public function __set($prop, $value)
+    {
+        $this->$prop = $value;
+    }
+
+    public function __isset($prop) : bool
+    {
+        return isset($this->$prop);
+    }
+
+    public function toArray()
+    {
+        $serialized = (array)$this;
+        $search = "\x00*\x00";
+        $replacedKeys = str_replace($search, '', array_keys($serialized));
+
+        return array_combine($replacedKeys, $serialized);
+
+    }
+
+    /*****
+     *
+     * We keep this methods for legacy reasons:
+     * Projects without magic getter/setter methods
+     *
+     */
+
     /**
      * @return string
      */
@@ -347,55 +408,6 @@ class QuoteSessionPayment
     {
         return $this->paypal_correlation_id;
     }
-
-    /**
-     * @param mixed $paypal_correlation_id
-     */
-    public function setPaypalCorrelationId($paypal_correlation_id): void
-    {
-        $this->paypal_correlation_id = $paypal_correlation_id;
-    }
-
-    /**
-     * @return array
-     */
-    public function getCustomAttributes(): array
-    {
-        return $this->customAttributes;
-    }
-
-    /**
-     * @param array $customAttributes
-     */
-    public function setCustomAttributes(array $customAttributes): void
-    {
-        $this->customAttributes = $customAttributes;
-    }
-
-
-    // Object only
-    protected $customAttributes = [];
-
-    public function __get($prop)
-    {
-        return $this->$prop;
-    }
-
-    public function __isset($prop) : bool
-    {
-        return isset($this->$prop);
-    }
-
-    public function toArray()
-    {
-        $serialized = (array)$this;
-        $search = "\x00*\x00";
-        $replacedKeys = str_replace($search, '', array_keys($serialized));
-
-        return array_combine($replacedKeys, $serialized);
-
-    }
-
 
 }
 
