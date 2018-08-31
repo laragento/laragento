@@ -50,7 +50,6 @@ abstract class AbstractOrderManager
         $this->saveAddresses($quote, $order);
         $this->savePayment($quote, $order);
         $this->saveGrid($quote, $order);
-        // This save payment
         return $order;
     }
 

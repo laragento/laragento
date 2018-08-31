@@ -32,10 +32,12 @@ class GuestOrderManager extends AbstractOrderManager
             "tax_amount" => "0.0000", // ToDo Tax Calculation
             "shipping_amount" => "0.0000", // ToDo Get from shipping entity
             "total_qty_ordered" => $quote->items_qty, // todo check
-            "customer_is_guest" => 1,
+            "customer_is_guest" => 1, //ToDo Is set via Checkout Method "als gast"
             "billing_address_id" => null, // ToDo!!
-            "email_sent" => 0,
-            "send_email" => 1,
+            "email_sent" => 0, //ToDo Change after Confirmation sent success event
+            "send_email" => 1,  //ToDo Change after Confirmation sent success event
+            "customer_email" => $this->getBillingEmail($quote),
+            "customer_group_id" => 0,
             "shipping_address_id" => null, // ToDo!!
             "subtotal_incl_tax" => $quote->subtotal, // ToDo Tax Calculation
             "increment_id" => $this->incrementId(),
@@ -48,5 +50,16 @@ class GuestOrderManager extends AbstractOrderManager
             "store_name" => $store->name,
             "customer_note" => "" // ToDo make dynamic
         ];
+    }
+
+    protected function getBillingEmail($quote)
+    {
+        $addresses = $quote->getAddresses();
+        foreach ($addresses as $address) {
+            if ($address->address_type == 'billing') {
+                return $address->email;
+            }
+        }
+        return null;
     }
 }
