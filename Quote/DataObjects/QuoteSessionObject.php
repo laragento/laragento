@@ -22,6 +22,7 @@ use Laragento\Customer\Repositories\CustomerRepositoryInterface;
  * @property string store_currency_code
  * @property string quote_currency_code
  * @property QuoteSessionShipping shipping
+ * @property int customer_is_guest
  */
 
 class QuoteSessionObject
@@ -800,6 +801,22 @@ class QuoteSessionObject
             $cart_id = $this->generateGUID(true, true);
         }
         $this->cart_id = $cart_id;
+    }
+
+    /**
+     * @return int
+     */
+    public function getCustomerIsGuest(): int
+    {
+        return $this->customer_is_guest;
+    }
+
+    /**
+     * @param int $customerIsGuest
+     */
+    public function setCustomerIsGuest(int $customerIsGuest): void
+    {
+        $this->customer_is_guest = $customerIsGuest;
     }
 
 
