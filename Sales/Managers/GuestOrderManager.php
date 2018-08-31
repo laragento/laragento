@@ -67,7 +67,7 @@ class GuestOrderManager extends AbstractOrderManager
             "shipping_discount_amount" => "0.0000", // ToDo Calculate Prices
             "subtotal_incl_tax" => $quote->base_subtotal, // ToDo Tax Calculation
             "total_due" => $quote->base_grand_total, // ToDo Calculate Prices
-            "weight" => $this->weight($quote),
+            "weight" => "0.0000", //ToDo must become dynamic,
             "customer_dob" => null, //ToDo get DateTime if needed
             "increment_id" => $this->incrementId(),
             "applied_rule_ids" => null, //ToDo Must become dynamic
@@ -120,11 +120,6 @@ class GuestOrderManager extends AbstractOrderManager
             }
         }
         return null;
-    }
-
-    protected function weight($quote)
-    {
-        return !empty($quote->weight) ? $quote->weight : "0.0000";
     }
 
 }
