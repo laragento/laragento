@@ -124,7 +124,7 @@ class GuestOrderManager extends AbstractOrderManager
 
     protected function weight($quote)
     {
-        return $quote->weight ? $quote->weight : "0.0000";
+        return !empty($quote->weight) ? $quote->weight : "0.0000";
     }
 
 }
