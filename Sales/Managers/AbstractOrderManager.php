@@ -221,7 +221,7 @@ abstract class AbstractOrderManager
             'customer_id' => $order->customer_id,
             'base_grand_total' => $order->base_grand_total,
             'base_total_paid' => null,
-            'grand_total' => $order->grand_total,
+            'grand_total' => $order->base_grand_total,
             'total_paid' => null,
             'increment_id' => $order->increment_id,
             'base_currency_code' => $order->base_currency_code,
