@@ -208,8 +208,7 @@ abstract class AbstractOrderManager
      */
     protected function protectCode()
     {
-        // Todo: wrong codelength
-        return substr(md5(uniqid(mt_rand(), true) . ':' . microtime(true)), 5, 6);
+        return $this->generateGUID(true, false);
     }
 
     protected function mapOrderToOrderGrid(QuoteSessionObject $quote, $order)
@@ -312,6 +311,42 @@ abstract class AbstractOrderManager
     {
         //ToDo: Must become dynamic
         return '{"method_title":"Check \/ Money order"}';
+    }
+
+    /**
+     * @ToDo Move to general Helper class
+     * @param $trim
+     * @param $upper
+     * @param null $hyphen
+     * @return string
+     */
+    private function generateGUID($trim, $upper, $hyphen = null)
+    {
+        mt_srand((double)microtime() * 10000);
+        $charid = md5(uniqid(rand(), true));
+        $beginn = '';
+        $end = '';
+
+        if ($upper) {
+            $charid = strtoupper($charid);
+        }
+        if ($hyphen) {
+            $hyphen = chr(45);
+        }
+
+        if (!$trim) {
+            $beginn = chr(123);
+            $end = chr(125);
+        }
+        $uuid = $beginn
+            . substr($charid, 0, 8) . $hyphen
+            . substr($charid, 8, 4) . $hyphen
+            . substr($charid, 12, 4) . $hyphen
+            . substr($charid, 16, 4) . $hyphen
+            . substr($charid, 20, 12)
+            . $end;
+
+        return $uuid;
     }
 
 
