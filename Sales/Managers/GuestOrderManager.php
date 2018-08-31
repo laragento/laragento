@@ -14,7 +14,7 @@ class GuestOrderManager extends AbstractOrderManager
     protected function mapQuoteToOrder($quote)
     {
         $store = Store::whereStoreId($quote->getStoreId())->first();
-        $fullStoreName = $store->website->name . "\n\r" . $store->group->name . "\n\r" . $store->name;
+        $fullStoreName = $store->website->name . "\n" . $store->group->name . "\n" . $store->name;
         return [
             "state" => self::ORDER_STATE_NEW,
             "status" => self::ORDER_STATUS_PENDING,
