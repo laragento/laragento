@@ -98,6 +98,7 @@ class QuoteItemManager
         //var_dump(round(($var + 0.000001) * 20) / 20,2);
 
         $quote->setGrandTotal($grandTotal);
+        $quote->setBaseGrandTotal($grandTotal);
         $quote->setSubtotal($subTotal);
         $quote->setSubtotalWithDiscount($subTotal);
         $quote->setBaseSubtotal($subTotal);
