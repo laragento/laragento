@@ -22,7 +22,7 @@ use Laragento\Store\Models\Store;
  */
 class Tax extends Model
 {
-    protected $table = 'tax_id';
-    protected $primaryKey = 'sales_order_tax';
+    protected $table = 'sales_order_tax';
+    protected $primaryKey = 'tax_id';
     protected $guarded = [];
 }
