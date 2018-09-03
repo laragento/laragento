@@ -23,6 +23,7 @@ use Laragento\Customer\Repositories\CustomerRepositoryInterface;
  * @property string quote_currency_code
  * @property QuoteSessionShipping shipping
  * @property int customer_is_guest
+ * @property string checkout_method
  */
 
 class QuoteSessionObject
@@ -131,6 +132,17 @@ class QuoteSessionObject
      * @var string|null
      */
     protected $remote_ip;
+
+    /**
+     * @var int
+     */
+    protected $customer_is_guest;
+
+    /**
+     * @var string|null
+     */
+    protected $checkout_method;
+
     /**
      * @var string|null
      */
@@ -201,6 +213,7 @@ class QuoteSessionObject
      */
     public function __construct(CustomerRepositoryInterface $customerRepository)
     {
+
         $this->customerRepository = $customerRepository;
 
     }
