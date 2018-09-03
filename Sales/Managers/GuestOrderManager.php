@@ -24,7 +24,7 @@ class GuestOrderManager extends AbstractOrderManager
         $orderData['customer_prefix'] = null;
         $orderData['customer_suffix'] = null;
         $orderData['customer_gender'] = null;
-
+        return $orderData;
     }
 
     protected function getBillingEmail(QuoteSessionObject $quote)
