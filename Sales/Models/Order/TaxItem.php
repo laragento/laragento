@@ -24,4 +24,5 @@ class TaxItem extends Model
     protected $table = 'tax_item_id';
     protected $primaryKey = 'sales_order_tax_item';
     protected $guarded = [];
+    public $timestamps = false;
 }

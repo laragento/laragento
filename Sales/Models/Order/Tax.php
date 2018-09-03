@@ -25,4 +25,5 @@ class Tax extends Model
     protected $table = 'sales_order_tax';
     protected $primaryKey = 'tax_id';
     protected $guarded = [];
+    public $timestamps = false;
 }
