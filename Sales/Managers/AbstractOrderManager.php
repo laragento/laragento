@@ -461,8 +461,8 @@ abstract class AbstractOrderManager
     protected function saveTax(QuoteSessionObject $quote, $order)
     {
         // ToDo Handle different Tax-Groups
-
-        $taxrate = TaxCalculationRate::where('rate', reset($quote->getItems()))->first();
+        $items = $quote->getItems();
+        $taxrate = TaxCalculationRate::where('rate', reset($items))->first();
 
         // Calculate complete tax
 
