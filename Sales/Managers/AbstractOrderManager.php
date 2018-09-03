@@ -462,7 +462,7 @@ abstract class AbstractOrderManager
     {
         // ToDo Handle different Tax-Groups
         $items = $quote->getItems();
-        $taxrate = TaxCalculationRate::where('rate', reset($items))->first();
+        $taxrate = TaxCalculationRate::where('rate', reset($items)->tax_percent)->first();
 
         // Calculate complete tax
 
@@ -492,7 +492,7 @@ abstract class AbstractOrderManager
                 'amount' => $item->tax_amount,
                 'base_amount' => $item->base_tax_amount,
                 'real_amount' => $item->tax_amount,
-                'real_base_amount' => $item->tax_amount,
+                'real_base_amount' => $item->base_tax_amount,
                 'associated_item_id' => null,
                 'taxable_item_type' => 'product' //ToDo must become dynamic
             ];
