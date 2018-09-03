@@ -22,5 +22,7 @@ use Laragento\Store\Models\Store;
  */
 class Tax extends Model
 {
-//ToDo: not important for showing up in backend
+    protected $table = 'tax_id';
+    protected $primaryKey = 'sales_order_tax';
+    protected $guarded = [];
 }

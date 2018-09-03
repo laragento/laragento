@@ -17,9 +17,11 @@ use Laragento\Store\Models\Store;
 * @property float real_amount
 * @property float real_base_amount
 * @property int associated_item_id
-* @property varchar taxable_item_type
+* @property string taxable_item_type
  */
 class TaxItem extends Model
 {
-//ToDo: not important for showing up in backend
+    protected $table = 'tax_item_id';
+    protected $primaryKey = 'sales_order_tax_item';
+    protected $guarded = [];
 }
