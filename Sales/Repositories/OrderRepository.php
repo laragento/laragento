@@ -31,8 +31,14 @@ class OrderRepository
             ->get();
     }
 
-    public function store($orderData)
+    public function store($orderData, $id = null)
     {
-        return Order::create($orderData);
+        if (!$id) {
+            $order = Order::create($orderData);
+        } else {
+            $order = Order::whereEntityId($id)->first();
+            $order->update($orderData);
+        }
+        return $order;
     }
 }

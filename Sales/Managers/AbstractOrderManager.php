@@ -184,6 +184,7 @@ abstract class AbstractOrderManager
                 $billingAddress = $this->mapQuoteAddressToOrderAddress(
                     $order->entity_id,
                     $address);
+
             }
             if ($address->address_type == 'shipping') {
                 $shippingAddress = $this->mapQuoteAddressToOrderAddress(
@@ -194,6 +195,8 @@ abstract class AbstractOrderManager
 
         $this->billingAddress = Address::create($billingAddress);
         $this->shippingAddress = Address::create($shippingAddress);
+        $this->orderRepository->store(['billing_address_id' => $this->billingAddress->entity_id], $order->entity_id);
+        $this->orderRepository->store(['shipping_address_id' => $this->shippingAddress->entity_id], $order->entity_id);
     }
 
 
