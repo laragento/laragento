@@ -12,6 +12,7 @@ use Laragento\Sales\Models\Order\Grid;
 use Laragento\Sales\Models\Order\Item;
 use Laragento\Sales\Repositories\OrderItemRepository;
 use Laragento\Sales\Repositories\OrderRepository;
+use Laragento\Store\Models\Store;
 use Laragento\Store\Repositories\StoreRepositoryInterface;
 
 abstract class AbstractOrderManager
