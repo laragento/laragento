@@ -10,6 +10,9 @@ use Laragento\Sales\Models\Order;
 use Laragento\Sales\Models\Order\Address;
 use Laragento\Sales\Models\Order\Grid;
 use Laragento\Sales\Models\Order\Item;
+use Laragento\Sales\Models\Order\Tax;
+use Laragento\Sales\Models\Order\TaxItem;
+use Laragento\Sales\Models\TaxCalculationRate;
 use Laragento\Sales\Repositories\OrderItemRepository;
 use Laragento\Sales\Repositories\OrderRepository;
 use Laragento\Store\Models\Store;
@@ -51,6 +54,7 @@ abstract class AbstractOrderManager
         $this->saveAddresses($quote, $order);
         $this->savePayment($quote, $order);
         $this->saveGrid($quote, $order);
+        $this->saveTax($quote, $order);
         return $order;
     }
 
@@ -289,11 +293,11 @@ abstract class AbstractOrderManager
 
     protected function savePayment(QuoteSessionObject $quote, $order)
     {
-        $orderPaymentData = $this->mapQuotePaymentToOrderPayment($quote,$order);
+        $orderPaymentData = $this->mapQuotePaymentToOrderPayment($quote, $order);
         Order\Payment::create($orderPaymentData);
     }
 
-    protected function mapQuotePaymentToOrderPayment($quote,$order)
+    protected function mapQuotePaymentToOrderPayment($quote, $order)
     {
         $payment = $quote->getPayment();
         return [
@@ -445,8 +449,54 @@ abstract class AbstractOrderManager
 
         /** @var QuoteSessionItem $item */
         foreach ($quote->getItems() as $item) {
-            $totalWeight = $totalWeight + ($item->getWeight()*$item->getQty());
+            $totalWeight = $totalWeight + ($item->getWeight() * $item->getQty());
         }
         return number_format(round((($totalWeight + 0.000001) * 100) / 100, 4), 4);
+    }
+
+    /**
+     * @param QuoteSessionObject $quote
+     * @param $order
+     */
+    protected function saveTax(QuoteSessionObject $quote, $order)
+    {
+        // ToDo Handle different Tax-Groups
+
+        $taxrate = TaxCalculationRate::where('rate', reset($quote->getItems()))->first();
+
+        // Calculate complete tax
+
+
+        $taxData = [
+            'order_id' => $order->entity_id,
+            'code' => $taxrate->code,
+            'title' => $taxrate->code,
+            'percent' => $taxrate->rate,
+            'amount' => $order->tax_amount,
+            'priority' => 0, // ToDo must become dynamic
+            'position' => 0, // ToDo must become dynamic
+            'process' => 0, // ToDo must become dynamic
+            'base_amount' => $order->base_tax_amount,
+            'base_real_amount' => $order->base_tax_amount
+        ];
+        $tax = Tax::create($taxData);
+
+        // calculate tax items
+
+        /** @var QuoteSessionItem $item */
+        foreach ($quote->getItems() as $item) {
+            $taxItemData = [
+                'tax_id' => $tax->tax_id,
+                'item_id' => $item->item_id,
+                'tax_percent' => $item->tax_percent,
+                'amount' => $item->tax_amount,
+                'base_amount' => $item->base_tax_amount,
+                'real_amount' => $item->tax_amount,
+                'real_base_amount' => $item->tax_amount,
+                'associated_item_id' => null,
+                'taxable_item_type' => 'product' //ToDo must become dynamic
+            ];
+            TaxItem::create($taxItemData);
+        }
     }
 }
