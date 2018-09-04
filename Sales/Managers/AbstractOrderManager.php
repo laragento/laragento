@@ -3,6 +3,7 @@
 
 namespace Laragento\Sales\Managers;
 
+use Laragento\Catalog\Repositories\Product\ProductAttributeRepositoryInterface;
 use Laragento\Quote\DataObjects\QuoteSessionAddress;
 use Laragento\Quote\DataObjects\QuoteSessionItem;
 use Laragento\Quote\DataObjects\QuoteSessionObject;
@@ -23,6 +24,7 @@ abstract class AbstractOrderManager
     protected $orderItemRepository;
     protected $orderRepository;
     protected $storeRepository;
+    protected $productAttributeRepository;
 
     protected $billingAddress = null;
     protected $shippingAddress = null;
@@ -33,11 +35,13 @@ abstract class AbstractOrderManager
     public function __construct(
         OrderRepository $orderRepository,
         OrderItemRepository $orderItemRepository,
-        StoreRepositoryInterface $storeRepository
+        StoreRepositoryInterface $storeRepository,
+        ProductAttributeRepositoryInterface $productAttributeRepository
     ) {
         $this->orderItemRepository = $orderItemRepository;
         $this->orderRepository = $orderRepository;
         $this->storeRepository = $storeRepository;
+        $this->productAttributeRepository = $productAttributeRepository;
     }
 
     abstract protected function mapQuoteToOrder($quote);
@@ -60,15 +64,19 @@ abstract class AbstractOrderManager
 
     protected function mapQuoteItemToOrderItem(QuoteSessionItem $item, $order)
     {
+        $originalBasePrice = $this->productAttributeRepository->data('price', $item->product_id)->value;
+        $originalPrice = $this->convertBaseToQuote($originalBasePrice, $order);
+
+        $productOptions = '{"info_buyRequest":{"qty":'.$item->qty.',"options":[]}}';
         return [
             'order_id' => $order->entity_id,
             'parent_item_id' => null,
             'quote_item_id' => $item->item_id,
             'store_id' => $item->store_id,
             'product_id' => $item->product_id,
-            'product_type' => $item->product()->type,
-            'product_options' => $item->product()->options,
-            'weight' => $item->getWeight(),
+            'product_type' => $item->product()->type_id,
+            'product_options' => $productOptions,
+            'weight' => $item->weight,
             'is_virtual' => 0, // ToDo
             'sku' => $item->sku,
             'name' => $item->name,
@@ -77,17 +85,12 @@ abstract class AbstractOrderManager
             'additional_data' => null, // ToDo
             'is_qty_decimal' => 0,
             'no_discount' => 0,
-            //'qty_backordered' => 0,
-            //'qty_canceled' => 0,
-            //'qty_invoiced' => 0,
             'qty_ordered' => $item->qty,
-            //'qty_refunded' => 0,
-            //'qty_shipped' => 0,
             'base_cost' => null,
             'price' => $item->price,
             'base_price' => $item->base_price,
-            'original_price' => $item->product()->price,
-            'base_original_price' => $item->product()->price, // ToDo
+            'original_price' => $originalPrice,
+            'base_original_price' => $originalBasePrice,
             'tax_percent' => $item->tax_percent,
             'tax_amount' => $item->tax_amount,
             'base_tax_amount' => $item->base_tax_amount,
@@ -97,8 +100,8 @@ abstract class AbstractOrderManager
             'row_total' => $item->row_total,
             'base_row_total' => $item->base_row_total,
             'row_weight' => $item->row_weight,
-            'base_tax_before_discount' => $item->base_tax_amount, // ToDo
-            'tax_before_discount' => $item->base_tax_amount, // ToDo
+            'base_tax_before_discount' => $item->base_tax_amount, //ToDo handle discount,
+            'tax_before_discount' => $item->tax_amount, // ToDo handle Discount
             'ext_order_item_id' => null,
             'locked_do_invoice' => null,
             'locked_do_ship' => null,
@@ -501,5 +504,22 @@ abstract class AbstractOrderManager
             ];
             TaxItem::create($taxItemData);
         }
+    }
+
+    protected function formatItemPrices($value)
+    {
+        return roundPrecicePrice($value, 1, 2, 4);
+    }
+
+    /**
+     * @param $data
+     * @param $rate
+     * @return string
+     */
+    protected function convertBaseToQuote($value, $order): string
+    {
+
+        $rate = $order->base_to_order_rate;
+        return $this->formatItemPrices($value * $rate);
     }
 }

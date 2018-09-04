@@ -17,6 +17,7 @@ use Laragento\Catalog\Repositories\Product\ProductRepositoryInterface;
  * @property string name
  * @property string description
  * @property string qty
+ * @property float weight
  * @property float price
  * @property float base_price
  * @property float tax_percent
