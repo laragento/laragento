@@ -65,7 +65,7 @@ abstract class AbstractOrderManager
     protected function mapQuoteItemToOrderItem(QuoteSessionItem $item, Order $order)
     {
         $originalBasePrice = $this->productAttributeRepository->data('price', $item->product_id, $item->store_id)->value;
-        $originalPrice = $this->convertBaseToQuote($originalBasePrice, $order->base_to_order_rate);
+        $originalPrice = $this->convertBaseToOrder($originalBasePrice, $order->base_to_order_rate);
 
         $productOptions = '{"info_buyRequest":{"qty":'.$item->qty.',"options":[]}}';
         return [
