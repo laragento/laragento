@@ -42,6 +42,8 @@ abstract class AbstractOrderManager
         $this->orderRepository = $orderRepository;
         $this->storeRepository = $storeRepository;
         $this->productAttributeRepository = $productAttributeRepository;
+
+
     }
 
     abstract protected function mapQuoteToOrder($quote);
@@ -355,6 +357,9 @@ abstract class AbstractOrderManager
 
     protected function getAbstractQuoteToOrderData(QuoteSessionObject $quote)
     {
+        $items = $quote->getItems();
+        $taxRate = TaxCalculationRate::where('rate', reset($items)->tax_percent)->first()->rate/100;
+
         $rate = $quote->getBaseToQuoteRate();
         $store = Store::whereStoreId($quote->getStoreId())->first();
         $fullStoreName = $store->website->name . "\n" . $store->group->name . "\n" . $store->name;
@@ -368,21 +373,21 @@ abstract class AbstractOrderManager
             "store_id" => $store->store_id,
             "base_discount_amount" => $quote->base_subtotal - $quote->base_subtotal_with_discount,
             "base_grand_total" => $quote->base_grand_total,
-            "base_shipping_amount" => "0.0000", // ToDo Shipping from DB
-            "base_shipping_tax_amount" => "0.0000", // ToDo Tax Calculation
+            "base_shipping_amount" => $quote->shipping->price - ($this->formatItemPrices($quote->shipping->price * $taxRate)),
+            "base_shipping_tax_amount" => $this->formatItemPrices($quote->shipping->price * $taxRate), // ToDo Tax Calculation
             "base_subtotal" => $quote->base_subtotal,
-            "base_tax_amount" => $quote->base_grand_total - $quote->base_subtotal_with_discount, // ToDo Tax Calculation
+            "base_tax_amount" => $this->formatItemPrices($quote->base_grand_total * $taxRate), // ToDo Tax Calculation
             "base_to_global_rate" => "1.0000", // ToDo Must become Dynamic
             "base_to_order_rate" => "1.0000", // ToDo Must become Dynamic
             "base_total_qty_ordered" => null, // ToDo Must become Dynamic
             "discount_amount" => $quote->subtotal - $quote->subtotal_with_discount,
             "grand_total" => $quote->grand_total,
-            "shipping_amount" => "0.0000", // ToDo Get from shipping entity
-            "shipping_tax_amount" => "0.0000", // ToDo Tax Calculation
+            "shipping_amount" => $this->convertBaseToOrder($quote->shipping->price - ($this->formatItemPrices($quote->shipping->price * $taxRate)),$quote->base_to_quote_rate), // ToDo Get from shipping entity
+            "shipping_tax_amount" => $this->convertBaseToOrder($quote->shipping->price * $taxRate,$quote->base_to_quote_rate), // ToDo Tax Calculation
             "store_to_base_rate" => "0.0000", // Deprecated in magento
             "store_to_order_rate" => "0.0000", // Deprecated in magento
             "subtotal" => $quote->subtotal,
-            "tax_amount" => $quote->grand_total - $quote->subtotal_with_discount,
+            "tax_amount" => $this->convertBaseToOrder($quote->base_grand_total * $taxRate, $quote->base_to_quote_rate),
             "total_qty_ordered" => $quote->items_qty, // todo check
             "can_ship_partially" => 0,
             "can_ship_partially_item" => 0,
@@ -435,8 +440,8 @@ abstract class AbstractOrderManager
             "base_discount_tax_compensation_amount" => "0.0000", //ToDo ToDo Calculate Prices
             "shipping_discount_tax_compensation_amount" => "0.0000", //ToDo ToDo Calculate Prices
             "base_shipping_discount_tax_compensation_amnt" => "0.0000", //ToDo ToDo Calculate Prices
-            "shipping_incl_tax" => "0.0000", //ToDo ToDo Calculate Prices
-            "base_shipping_incl_tax" => "0.0000", //ToDo ToDo Calculate Prices
+            "shipping_incl_tax" => $this->convertBaseToOrder($quote->shipping->price,$quote->base_to_quote_rate), //ToDo ToDo Calculate Prices
+            "base_shipping_incl_tax" => $quote->shipping->price, //ToDo ToDo Calculate Prices
             "coupon_rule_name" => null, //ToDo must become dynamic
             "gift_message_id" => null, //ToDo must become dynamic
             "paypal_ipn_customer_notified" => 0, //ToDo must become dynamic
@@ -462,16 +467,14 @@ abstract class AbstractOrderManager
     {
         // ToDo Handle different Tax-Groups
         $items = $quote->getItems();
-        $taxrate = TaxCalculationRate::where('rate', reset($items)->tax_percent)->first();
-
         // Calculate complete tax
-
+        $taxRate = TaxCalculationRate::where('rate', reset($items)->tax_percent)->first();
 
         $taxData = [
             'order_id' => $order->entity_id,
-            'code' => $taxrate->code,
-            'title' => $taxrate->code,
-            'percent' => $taxrate->rate,
+            'code' => $taxRate->code,
+            'title' => $taxRate->code,
+            'percent' => $taxRate->rate,
             'amount' => $order->tax_amount,
             'priority' => 0, // ToDo must become dynamic
             'position' => 0, // ToDo must become dynamic
