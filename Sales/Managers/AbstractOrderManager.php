@@ -64,13 +64,12 @@ abstract class AbstractOrderManager
 
     protected function mapQuoteItemToOrderItem(QuoteSessionItem $item, $order)
     {
-        $originalBasePrice = $this->productAttributeRepository->data('price', $item->product_id)->value;
+        $originalBasePrice = $this->productAttributeRepository->data('price', $item->product_id, $item->store_id)->value;
         $originalPrice = $this->convertBaseToQuote($originalBasePrice, $order);
 
         $productOptions = '{"info_buyRequest":{"qty":'.$item->qty.',"options":[]}}';
         return [
             'order_id' => $order->entity_id,
-            'parent_item_id' => null,
             'quote_item_id' => $item->item_id,
             'store_id' => $item->store_id,
             'product_id' => $item->product_id,
@@ -80,13 +79,10 @@ abstract class AbstractOrderManager
             'is_virtual' => 0, // ToDo
             'sku' => $item->sku,
             'name' => $item->name,
-            'description' => $item->description,
-            'applied_rule_ids' => null, // ToDo
-            'additional_data' => null, // ToDo
+            'description' => $item->description ? $item->description : null,
             'is_qty_decimal' => 0,
             'no_discount' => 0,
             'qty_ordered' => $item->qty,
-            'base_cost' => null,
             'price' => $item->price,
             'base_price' => $item->base_price,
             'original_price' => $originalPrice,
@@ -100,16 +96,13 @@ abstract class AbstractOrderManager
             'row_total' => $item->row_total,
             'base_row_total' => $item->base_row_total,
             'row_weight' => $item->row_weight,
-            'base_tax_before_discount' => $item->base_tax_amount, //ToDo handle discount,
-            'tax_before_discount' => $item->tax_amount, // ToDo handle Discount
-            'ext_order_item_id' => null,
-            'locked_do_invoice' => null,
-            'locked_do_ship' => null,
             'price_incl_tax' => $item->price_incl_tax,
             'base_price_incl_tax' => $item->base_price_incl_tax,
             'row_total_incl_tax' => $item->row_total_incl_tax,
             'base_row_total_incl_tax' => $item->base_row_total_incl_tax,
             'free_shipping' => $item->free_shipping,
+            "discount_tax_compensation_amount" => "0.0000",
+            "base_discount_tax_compensation_amount" => "0.0000"
         ];
     }
 
