@@ -372,7 +372,7 @@ abstract class AbstractOrderManager
             "is_virtual" => 0,
             "store_id" => $store->store_id,
             "base_discount_amount" => $quote->base_subtotal - $quote->base_subtotal_with_discount,
-            "base_grand_total" => $quote->base_grand_total,
+            "base_grand_total" => $quote->base_grand_total + $quote->shipping->price,
             "base_shipping_amount" => $quote->shipping->price - ($this->formatItemPrices($quote->shipping->price * $taxRate)),
             "base_shipping_tax_amount" => $this->formatItemPrices($quote->shipping->price * $taxRate), // ToDo Tax Calculation
             "base_subtotal" => $quote->base_subtotal,
@@ -381,7 +381,7 @@ abstract class AbstractOrderManager
             "base_to_order_rate" => "1.0000", // ToDo Must become Dynamic
             "base_total_qty_ordered" => null, // ToDo Must become Dynamic
             "discount_amount" => $quote->subtotal - $quote->subtotal_with_discount,
-            "grand_total" => $quote->grand_total,
+            "grand_total" => $quote->grand_total + $this->convertBaseToOrder($quote->shipping->price,$quote->base_to_quote_rate),
             "shipping_amount" => $this->convertBaseToOrder($quote->shipping->price - ($this->formatItemPrices($quote->shipping->price * $taxRate)),$quote->base_to_quote_rate), // ToDo Get from shipping entity
             "shipping_tax_amount" => $this->convertBaseToOrder($quote->shipping->price * $taxRate,$quote->base_to_quote_rate), // ToDo Tax Calculation
             "store_to_base_rate" => "0.0000", // Deprecated in magento
