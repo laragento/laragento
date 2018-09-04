@@ -62,10 +62,10 @@ abstract class AbstractOrderManager
         return $order;
     }
 
-    protected function mapQuoteItemToOrderItem(QuoteSessionItem $item, $order)
+    protected function mapQuoteItemToOrderItem(QuoteSessionItem $item, Order $order)
     {
         $originalBasePrice = $this->productAttributeRepository->data('price', $item->product_id, $item->store_id)->value;
-        $originalPrice = $this->convertBaseToQuote($originalBasePrice, $order);
+        $originalPrice = $this->convertBaseToQuote($originalBasePrice, $order->base_to_order_rate);
 
         $productOptions = '{"info_buyRequest":{"qty":'.$item->qty.',"options":[]}}';
         return [
@@ -225,7 +225,7 @@ abstract class AbstractOrderManager
             'customer_id' => $order->customer_id,
             'base_grand_total' => $order->base_grand_total,
             'base_total_paid' => null,
-            'grand_total' => $order->base_grand_total,
+            'grand_total' => $order->grand_total,
             'total_paid' => null,
             'increment_id' => $order->increment_id,
             'base_currency_code' => $order->base_currency_code,
@@ -355,6 +355,7 @@ abstract class AbstractOrderManager
 
     protected function getAbstractQuoteToOrderData(QuoteSessionObject $quote)
     {
+        $rate = $quote->getBaseToQuoteRate();
         $store = Store::whereStoreId($quote->getStoreId())->first();
         $fullStoreName = $store->website->name . "\n" . $store->group->name . "\n" . $store->name;
         return [
@@ -374,14 +375,14 @@ abstract class AbstractOrderManager
             "base_to_global_rate" => "1.0000", // ToDo Must become Dynamic
             "base_to_order_rate" => "1.0000", // ToDo Must become Dynamic
             "base_total_qty_ordered" => null, // ToDo Must become Dynamic
-            "discount_amount" => $quote->base_subtotal - $quote->base_subtotal_with_discount,
-            "grand_total" => $quote->base_grand_total,
+            "discount_amount" => $quote->subtotal - $quote->subtotal_with_discount,
+            "grand_total" => $quote->grand_total,
             "shipping_amount" => "0.0000", // ToDo Get from shipping entity
             "shipping_tax_amount" => "0.0000", // ToDo Tax Calculation
-            "store_to_base_rate" => "0.0000", // ToDo Must become Dynamic
-            "store_to_order_rate" => "0.0000", // ToDo Must become Dynamic
-            "subtotal" => $quote->base_subtotal,
-            "tax_amount" => $quote->base_grand_total - $quote->base_subtotal_with_discount,
+            "store_to_base_rate" => "0.0000", // Deprecated in magento
+            "store_to_order_rate" => "0.0000", // Deprecated in magento
+            "subtotal" => $quote->subtotal,
+            "tax_amount" => $quote->grand_total - $quote->subtotal_with_discount,
             "total_qty_ordered" => $quote->items_qty, // todo check
             "can_ship_partially" => 0,
             "can_ship_partially_item" => 0,
@@ -405,8 +406,8 @@ abstract class AbstractOrderManager
             "base_total_due" => $quote->base_grand_total,
             "payment_authorization_amount" => null, // ToDo Calculate Prices
             "shipping_discount_amount" => "0.0000", // ToDo Calculate Prices
-            "subtotal_incl_tax" => $quote->base_subtotal, // ToDo Tax Calculation
-            "total_due" => $quote->base_grand_total, // ToDo Calculate Prices
+            "subtotal_incl_tax" => $quote->subtotal, // ToDo Tax Calculation
+            "total_due" => $quote->grand_total, // ToDo Calculate Prices
             "weight" => $this->calculateTotalWeight($quote),
             "increment_id" => $this->incrementId(),
             "applied_rule_ids" => null, //ToDo Must become dynamic
@@ -414,7 +415,7 @@ abstract class AbstractOrderManager
             "discount_description" => null, // ToDo Must become dynamic,
             "ext_customer_id" => null, // ToDo Must become dynamic,
             "ext_order_id" => null, // ToDo Must become dynamic,
-            "global_currency_code" => $quote->store_currency_code, // ToDo doesn't feel right
+            "global_currency_code" => $quote->getGlobalCurrencyCode(),
             "hold_before_state" => null, // ToDo Must become dynamic,
             "hold_before_status" => null, // ToDo Must become dynamic,
             "order_currency_code" => $quote->quote_currency_code,
@@ -476,7 +477,7 @@ abstract class AbstractOrderManager
             'position' => 0, // ToDo must become dynamic
             'process' => 0, // ToDo must become dynamic
             'base_amount' => $order->base_tax_amount,
-            'base_real_amount' => $order->base_tax_amount
+            'base_real_amount' => $order->base_tax_amount // ToDo Find out what's this
         ];
         $tax = Tax::create($taxData);
 
@@ -509,10 +510,9 @@ abstract class AbstractOrderManager
      * @param $rate
      * @return string
      */
-    protected function convertBaseToQuote($value, $order): string
+    protected function convertBaseToOrder($value, $rate): string
     {
 
-        $rate = $order->base_to_order_rate;
         return $this->formatItemPrices($value * $rate);
     }
 }
