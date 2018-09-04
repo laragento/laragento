@@ -21,6 +21,10 @@ use Laragento\Customer\Repositories\CustomerRepositoryInterface;
  * @property string base_currency_code
  * @property string store_currency_code
  * @property string quote_currency_code
+ * @property float store_to_base_rate // Deprecated in magento2
+ * @property float store_to_quote_rate // Deprectated in magento2
+ * @property float base_to_global_rate
+ * @property float base_to_quote_rate
  * @property QuoteSessionShipping shipping
  * @property int customer_is_guest
  * @property string checkout_method
@@ -99,11 +103,11 @@ class QuoteSessionObject
     /**
      * @var float
      */
-    protected $store_to_base_rate = 1;
+    protected $store_to_base_rate = 0.0000;
     /**
      * @var float
      */
-    protected $store_to_quote_rate = 1;
+    protected $store_to_quote_rate = 0.0000;
     /**
      * @var string
      */
@@ -152,13 +156,13 @@ class QuoteSessionObject
      */
     protected $global_currency_code = "CHF";
     /**
-     * @var string
+     * @var decimal
      */
-    protected $base_to_global_rate = "1.0000";
+    protected $base_to_global_rate = 1.0000;
     /**
-     * @var string
+     * @var decimal
      */
-    protected $base_to_quote_rate = "1.0000";
+    protected $base_to_quote_rate = 1.0000;
     /**
      * @var string
      */

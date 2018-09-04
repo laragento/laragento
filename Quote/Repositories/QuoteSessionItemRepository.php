@@ -204,35 +204,34 @@ class QuoteSessionItemRepository implements QuoteSessionItemRepositoryInterface
         if($specialPrice != null)
         {
             $data['base_price_incl_tax'] = $specialPrice;
-            $data['price_incl_tax'] = $data['base_price_incl_tax'];
+
         }else{
-            $data['base_price_incl_tax'] = ($val = $this->productAttributeRepository->data('price', $productId,
-                $storeId)) ? $val->value : 0;
+            $data['base_price_incl_tax'] = $this->formatItemPrices(($val = $this->productAttributeRepository->data('price', $productId,
+                $storeId)) ? $val->value : 0);
         }
 
-        $data['price_incl_tax'] = $data['base_price_incl_tax'];
+        $data['price_incl_tax'] = $this->convertBaseToQuote($data['base_price_incl_tax']);
 
 
         // Calculate item tax amounts
         $taxAmount = $data['base_price_incl_tax'] * $data['tax_percent'] / 100;
-        $data['base_tax_amount'] = number_format(round((($taxAmount + 0.000001) * 100) / 100, 2), 4);
-        $data['tax_amount'] = $data['base_tax_amount'];
+        $data['base_tax_amount'] = $this->formatItemPrices($taxAmount);
+        $data['tax_amount'] = $this->convertBaseToQuote($data['base_tax_amount']);
 
         // Get row totals
         $base_row_total_incl_tax = $qty * $data['base_price_incl_tax'];
-        $data['base_row_total_incl_tax'] = number_format(round((($base_row_total_incl_tax + 0.000001) * 100) / 100, 2),
-            4);
-        $data['row_total_incl_tax'] = $data['base_row_total_incl_tax'];
+        $data['base_row_total_incl_tax'] = $this->formatItemPrices($base_row_total_incl_tax);
+        $data['row_total_incl_tax'] = $this->convertBaseToQuote($data['base_row_total_incl_tax']);
 
         // Calculate prices without taxes
         $base_price = $data['base_price_incl_tax'] - $taxAmount;
-        $data['base_price'] = number_format(round((($base_price + 0.000001) * 100) / 100, 2), 4);
-        $data['price'] = $data['base_price'];
+        $data['base_price'] = $this->formatItemPrices($base_price);
+        $data['price'] = $this->convertBaseToQuote($data['base_price']);
 
         // Calculate row totals without taxes
         $base_row_total = $qty * $base_price;
-        $data['base_row_total'] = number_format(round((($base_row_total + 0.000001) * 100) / 100, 2), 4);
-        $data['row_total'] = $data['base_row_total'];
+        $data['base_row_total'] = $this->formatItemPrices($base_row_total);
+        $data['row_total'] = $this->convertBaseToQuote($data['base_row_total']);
 
         return $data;
     }
@@ -257,7 +256,7 @@ class QuoteSessionItemRepository implements QuoteSessionItemRepositoryInterface
      */
     protected function specialPrice($storeId,$productId)
     {
-        // @todo make less db queries!
+        // Todo make less db queries!
         $specialPriceFrom = ($val = $this->productAttributeRepository->data('special_from_date', $productId,
             $storeId)) ? $val->value : null;
         $specialPriceTo = ($val = $this->productAttributeRepository->data('special_to_date', $productId,
@@ -276,5 +275,21 @@ class QuoteSessionItemRepository implements QuoteSessionItemRepositoryInterface
             }
         }
         return null;
+    }
+
+    protected function formatItemPrices($value)
+    {
+        return roundPrecicePrice($value, 1, 2, 4);
+    }
+
+    /**
+     * @param $data
+     * @param $rate
+     * @return string
+     */
+    protected function convertBaseToQuote($value): string
+    {
+        $rate = $this->quote()->base_to_quote_rate;
+        return $this->formatItemPrices($value * $rate);
     }
 }
