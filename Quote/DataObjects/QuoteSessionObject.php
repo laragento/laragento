@@ -21,8 +21,14 @@ use Laragento\Customer\Repositories\CustomerRepositoryInterface;
  * @property string base_currency_code
  * @property string store_currency_code
  * @property string quote_currency_code
+ * @property float store_to_base_rate // Deprecated in magento2
+ * @property float store_to_quote_rate // Deprectated in magento2
+ * @property float base_to_global_rate
+ * @property float base_to_quote_rate
  * @property QuoteSessionShipping shipping
-*/
+ * @property int customer_is_guest
+ * @property string checkout_method
+ */
 
 class QuoteSessionObject
 {
@@ -55,6 +61,10 @@ class QuoteSessionObject
     protected $is_persistent;
     protected $gift_message_id;
     */
+
+
+    // Object only
+    protected $customAttributes = [];
 
     /**
      * @var float
@@ -97,11 +107,11 @@ class QuoteSessionObject
     /**
      * @var float
      */
-    protected $store_to_base_rate = 1;
+    protected $store_to_base_rate = 0.0000;
     /**
      * @var float
      */
-    protected $store_to_quote_rate = 1;
+    protected $store_to_quote_rate = 0.0000;
     /**
      * @var string
      */
@@ -130,6 +140,17 @@ class QuoteSessionObject
      * @var string|null
      */
     protected $remote_ip;
+
+    /**
+     * @var int
+     */
+    protected $customer_is_guest;
+
+    /**
+     * @var string|null
+     */
+    protected $checkout_method;
+
     /**
      * @var string|null
      */
@@ -139,13 +160,13 @@ class QuoteSessionObject
      */
     protected $global_currency_code = "CHF";
     /**
-     * @var string
+     * @var decimal
      */
-    protected $base_to_global_rate = "1.0000";
+    protected $base_to_global_rate = 1.0000;
     /**
-     * @var string
+     * @var decimal
      */
-    protected $base_to_quote_rate = "1.0000";
+    protected $base_to_quote_rate = 1.0000;
     /**
      * @var string
      */
@@ -196,9 +217,92 @@ class QuoteSessionObject
      */
     public function __construct(CustomerRepositoryInterface $customerRepository)
     {
+
         $this->customerRepository = $customerRepository;
 
     }
+
+    /**
+     * @return Customer
+     */
+    public function customer()
+    {
+        return $this->customerRepository->firstById($this->customer_id);
+    }
+
+
+    // Object only
+
+    public function __get($prop)
+    {
+        return $this->$prop;
+    }
+
+    public function __set($prop, $value)
+    {
+        $this->$prop = $value;
+    }
+
+    public function __isset($prop) : bool
+    {
+        return isset($this->$prop);
+    }
+
+    /**
+     * @return array
+     */
+    public function toArray()
+    {
+        $serialized = (array)$this;
+        $search = "\x00*\x00";
+        $replacedKeys = str_replace($search, '', array_keys($serialized));
+
+        return array_combine($replacedKeys,$serialized);
+
+    }
+
+    /**
+     * @ToDo Move to general Helper class
+     * @param $trim
+     * @param $upper
+     * @param null $hyphen
+     * @return string
+     */
+    private function generateGUID($trim, $upper, $hyphen = null)
+    {
+        mt_srand((double)microtime() * 10000);
+        $charid = md5(uniqid(rand(), true));
+        $beginn = '';
+        $end = '';
+
+        if ($upper) {
+            $charid = strtoupper($charid);
+        }
+        if ($hyphen) {
+            $hyphen = chr(45);
+        }
+
+        if (!$trim) {
+            $beginn = chr(123);
+            $end = chr(125);
+        }
+        $uuid = $beginn
+            . substr($charid, 0, 8) . $hyphen
+            . substr($charid, 8, 4) . $hyphen
+            . substr($charid, 12, 4) . $hyphen
+            . substr($charid, 16, 4) . $hyphen
+            . substr($charid, 20, 12)
+            . $end;
+
+        return $uuid;
+    }
+
+    /*****
+     *
+     * We keep this methods for legacy reasons:
+     * Projects without magic getter/setter methods
+     *
+     */
 
     /**
      * @return float
@@ -650,9 +754,9 @@ class QuoteSessionObject
 
 
     /**
-     * @return array
+     * @return QuoteSessionPayment
      */
-    public function getPayment(): array
+    public function getPayment(): QuoteSessionPayment
     {
         return $this->payment;
     }
@@ -717,91 +821,23 @@ class QuoteSessionObject
     }
 
     /**
-     * @return Customer
+     * @return int
      */
-    public function customer()
+    public function getCustomerIsGuest(): int
     {
         return $this->customerRepository->firstById($this->customer_id);
     }
 
 
-
-    // Object only
-    protected $customAttributes = [];
-
     /**
-     * @param $prop
-     * @return mixed
+     * @param int $customerIsGuest
      */
-    public function __get($prop)
+    public function setCustomerIsGuest(int $customerIsGuest): void
     {
-        return $this->$prop;
+        $this->customer_is_guest = $customerIsGuest;
     }
 
-    /**
-     * @param $prop
-     * @return mixed
-     */
-    public function __set($prop)
-    {
-        return $this->$prop;
-    }
 
-    /**
-     * @param $prop
-     * @return bool
-     */
-    public function __isset($prop) : bool
-    {
-        return isset($this->$prop);
-    }
-
-    /**
-     * @return array
-     */
-    public function toArray()
-    {
-        $serialized = (array)$this;
-        $search = "\x00*\x00";
-        $replacedKeys = str_replace($search, '', array_keys($serialized));
-
-        return array_combine($replacedKeys, $serialized);
-    }
-
-    /**
-     * @param $trim
-     * @param $upper
-     * @param null $hyphen
-     * @return string
-     */
-    protected function generateGUID($trim, $upper, $hyphen = null)
-    {
-        mt_srand((double)microtime() * 10000);
-        $charid = md5(uniqid(rand(), true));
-        $beginn = '';
-        $end = '';
-
-        if ($upper) {
-            $charid = strtoupper($charid);
-        }
-        if ($hyphen) {
-            $hyphen = chr(45);
-        }
-
-        if (!$trim) {
-            $beginn = chr(123);
-            $end = chr(125);
-        }
-        $uuid = $beginn
-            . substr($charid, 0, 8) . $hyphen
-            . substr($charid, 8, 4) . $hyphen
-            . substr($charid, 12, 4) . $hyphen
-            . substr($charid, 16, 4) . $hyphen
-            . substr($charid, 20, 12)
-            . $end;
-
-        return $uuid;
-    }
 
 
 

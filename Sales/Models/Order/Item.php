@@ -16,11 +16,18 @@ use Laragento\Store\Models\Store;
  * @property int product_id
  * @property string product_type
  * @property string product_options
+ * @property float weight
+ * @property int is_virtual
  * @property string sku
  * @property string name
- * @property string description
+ * @property string|null description
+ * @property string|null applied_rule_ids
+ * @property string|null additional_data
+ * @property int is_qty_decimal
+ * @property int no_discount
  * @property float qty_ordered
  * @property float price
+ * @property float base_cost
  * @property float base_price
  * @property float original_price
  * @property float base_original_price
@@ -43,48 +50,14 @@ use Laragento\Store\Models\Store;
  * @property float row_total_incl_tax
  * @property float base_row_total_incl_tax
  * @property int free_shipping
+ * @property float discount_tax_compensation_amount
+ * @property float base_discount_tax_compensation_amount
  */
 class Item extends Model
 {
     protected $table = 'sales_order_item';
     protected $primaryKey = 'item_id';
-    protected $fillable = [
-        'item_id',
-        'order_id',
-        'parent_item_id',
-        'quote_item_id',
-        'store_id',
-        'product_id',
-        'product_type',
-        'product_options',
-        'sku',
-        'name',
-        'description',
-        'qty_ordered',
-        'price',
-        'base_price',
-        'original_price',
-        'base_original_price',
-        'tax_percent',
-        'tax_amount',
-        'base_tax_amount',
-        'discount_percent',
-        'discount_amount',
-        'base_discount_amount',
-        'row_total',
-        'base_row_total',
-        'row_weight',
-        'base_tax_before_discount',
-        'tax_before_discount',
-        'ext_order_item_id',
-        'locked_do_invoice',
-        'locked_do_ship',
-        'price_incl_tax',
-        'base_price_incl_tax',
-        'row_total_incl_tax',
-        'base_row_total_incl_tax',
-        'free_shipping',
-    ];
+    protected $guarded = [];
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasOne

@@ -15,6 +15,7 @@ use Laragento\Catalog\Repositories\Product\ProductRepository;
  * @property string name
  * @property string description
  * @property string qty
+ * @property float weight
  * @property float price
  * @property float base_price
  * @property float tax_percent
@@ -86,6 +87,64 @@ class QuoteSessionItem
     protected $base_weee_tax_applied_row_amnt;
     protected $base_weee_tax_disposition;
     protected $base_weee_tax_row_disposition;
+
+    // Object only
+    protected $customAttributes = [];
+
+    public function __get($prop)
+    {
+        return $this->$prop;
+    }
+
+    public function __set($prop, $value)
+    {
+        $this->$prop = $value;
+    }
+
+    public function __isset($prop) : bool
+    {
+        return isset($this->$prop);
+    }
+
+    /**
+     * @return array
+     */
+    public function getCustomAttributes(): array
+    {
+        return $this->customAttributes;
+    }
+
+    /**
+     * @param array $customAttributes
+     */
+    public function setCustomAttributes(array $customAttributes): void
+    {
+        $this->customAttributes = $customAttributes;
+    }
+
+    public function product()
+    {
+        return ProductRepository::productBySku($this->sku);
+    }
+
+
+
+    public function toArray()
+    {
+        $serialized = (array)$this;
+        $search = "\x00*\x00";
+        $replacedKeys = str_replace($search, '', array_keys($serialized));
+
+        return array_combine($replacedKeys, $serialized);
+
+    }
+
+    /*****
+     *
+     * We keep this methods for legacy reasons:
+     * Projects without magic getter/setter methods
+     *
+     */
 
     /**
      * @return mixed
@@ -245,6 +304,22 @@ class QuoteSessionItem
     public function setQty($qty): void
     {
         $this->qty = $qty;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getAdditionalData()
+    {
+        return $this->additional_data;
+    }
+
+    /**
+     * @param mixed $additional_data
+     */
+    public function setAdditionalData($additional_data): void
+    {
+        $this->additional_data = $additional_data;
     }
 
     /**
@@ -599,21 +674,6 @@ class QuoteSessionItem
         $this->free_shipping = $free_shipping;
     }
 
-    /**
-     * @return array
-     */
-    public function getCustomAttributes(): array
-    {
-        return $this->customAttributes;
-    }
-
-    /**
-     * @param array $customAttributes
-     */
-    public function setCustomAttributes(array $customAttributes): void
-    {
-        $this->customAttributes = $customAttributes;
-    }
 
     /**
      * @return mixed
@@ -645,22 +705,6 @@ class QuoteSessionItem
     public function setAppliedRuleIds($applied_rule_ids): void
     {
         $this->applied_rule_ids = $applied_rule_ids;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getAdditionalData()
-    {
-        return $this->additional_data;
-    }
-
-    /**
-     * @param mixed $additional_data
-     */
-    public function setAdditionalData($additional_data): void
-    {
-        $this->additional_data = $additional_data;
     }
 
     /**
@@ -917,53 +961,6 @@ class QuoteSessionItem
     public function setBaseWeeeTaxRowDisposition($base_weee_tax_row_disposition): void
     {
         $this->base_weee_tax_row_disposition = $base_weee_tax_row_disposition;
-    }
-
-    public function product()
-    {
-        return ProductRepository::productBySku($this->sku);
-    }
-
-    // Object only
-    protected $customAttributes = [];
-
-    /**
-     * @param $prop
-     * @return mixed
-     */
-    public function __get($prop)
-    {
-        return $this->$prop;
-    }
-
-    /**
-     * @param $prop
-     * @return mixed
-     */
-    public function __set($prop)
-    {
-        return $this->$prop;
-    }
-
-    /**
-     * @param $prop
-     * @return bool
-     */
-    public function __isset($prop) : bool
-    {
-        return isset($this->$prop);
-    }
-
-    /**
-     * @return array
-     */
-    public function toArray()
-    {
-        $serialized = (array)$this;
-        $search = "\x00*\x00";
-        $replacedKeys = str_replace($search, '', array_keys($serialized));
-
-        return array_combine($replacedKeys, $serialized);
     }
 }
 

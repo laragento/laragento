@@ -16,6 +16,8 @@ class QuoteItemManager
     protected $quoteDataRepository;
     protected $quoteItemRepository;
 
+
+
     /**
      * QuoteController constructor.
      * @param QuoteSessionObjectRepositoryInterface $quoteDataRepository
@@ -73,35 +75,40 @@ class QuoteItemManager
     {
         $prices = [];
         $taxes = [
-            'total' => []
+            'total' => [],
+            'base_total' => []
         ];
         $totalWeight = 0.0000;
+
+        // ToDo Must become abstracted as TaxRule/Calculation Module
 
         /** @var QuoteSessionItem $item */
         foreach ($quote->getItems() as $item) {
             array_push($prices, $item->getBaseRowTotalInclTax());
-            $tax = $item->getBaseRowTotalInclTax() - $item->getBaseRowTotal();
+            $baseTax = $item->getBaseRowTotalInclTax() - $item->getBaseRowTotal();
+            $tax = $item->getRowTotalInclTax() - $item->getRowTotal();
             $strIndex = str_replace('.', '_', number_format($item->getTaxPercent(), 2));
             $val = isset($taxes[$strIndex]) ? $taxes[$strIndex] : 0;
-            $taxes[$item->getTaxPercent()] = (float)$val + (float)$tax;
+            $taxes[$strIndex] = (float)$val + (float)$tax;
+            $item->setRowWeight(($item->getWeight() * $item->getQty()));
             $totalWeight = $totalWeight + ($item->getWeight()*$item->getQty());
-            array_push($taxes['total'], $tax);
+            $taxes['base_total'] = $this->formatItemPrices($taxes[$strIndex]);
+            $taxes['total'] = $this->convertBaseToQuote($taxes['base_total']);
         }
-        $grandTotalFull = array_sum($prices);
-        $taxAmountFull = array_sum($taxes['total']);
-        $subTotalFull = $grandTotalFull - $taxAmountFull;
-        $grandTotal = number_format(round((($grandTotalFull + 0.000001) * 100) / 100, 2), 4);
-        $taxes['total'] = number_format(round((($taxAmountFull + 0.000001) * 100) / 100, 2), 4);
-        $subTotal = number_format(round((($subTotalFull + 0.000001) * 100) / 100, 2), 4);
+        $baseGrandTotalFull = array_sum($prices);
+        $baseSubTotalFull = $baseGrandTotalFull - $taxes['base_total'];
+        $baseGrandTotal = $this->formatItemPrices($baseGrandTotalFull);
+        $baseSubTotal = $this->formatItemPrices($baseSubTotalFull);
 
         // ToDo if 5Rp round is needed
         //var_dump(round(($var + 0.000001) * 20) / 20,2);
 
-        $quote->setGrandTotal($grandTotal);
-        $quote->setSubtotal($subTotal);
-        $quote->setSubtotalWithDiscount($subTotal);
-        $quote->setBaseSubtotal($subTotal);
-        $quote->setBaseSubtotalWithDiscount($subTotal);
+        $quote->setGrandTotal($this->convertBaseToQuote($baseGrandTotal));
+        $quote->setBaseGrandTotal($baseGrandTotal);
+        $quote->setSubtotal($this->convertBaseToQuote($baseSubTotal));
+        $quote->setSubtotalWithDiscount($this->convertBaseToQuote($baseSubTotal));
+        $quote->setBaseSubtotal($baseSubTotal);
+        $quote->setBaseSubtotalWithDiscount($baseSubTotal);
         $quote->setTaxGroups($taxes);
         $quote->setTotalWeight($totalWeight);
 
@@ -158,6 +165,22 @@ class QuoteItemManager
         }
 
         return $items;
+    }
+
+    protected function formatItemPrices($value)
+    {
+        return roundPrecicePrice($value, 1, 2, 4);
+    }
+
+    /**
+     * @param $data
+     * @param $rate
+     * @return string
+     */
+    protected function convertBaseToQuote($value): string
+    {
+        $rate = $this->getQuote()->base_to_quote_rate;
+        return $this->formatItemPrices($value * $rate);
     }
 
 }
