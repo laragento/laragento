@@ -32,7 +32,6 @@ class QuoteItemApi extends Controller
         ProductRepository $productRepository
     )
     {
-
         $this->quoteItemRepository = $quoteItemRepository;
         $this->manager = $quoteItemManager;
         $this->productRepository = $productRepository;
@@ -60,12 +59,11 @@ class QuoteItemApi extends Controller
 
     /**
      * Show the specified resource.
-     * @return Response
+     * @return array
      */
     public function get()
     {
         return $this->quoteItemRepository->get();
-
     }
 
     /**

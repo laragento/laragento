@@ -3,9 +3,7 @@
 
 namespace Laragento\Quote\DataObjects;
 
-
 use Laragento\Catalog\Repositories\Product\ProductRepository;
-use Laragento\Catalog\Repositories\Product\ProductRepositoryInterface;
 
 /**
  * QuoteSessionItem model
@@ -37,13 +35,6 @@ use Laragento\Catalog\Repositories\Product\ProductRepositoryInterface;
 
 class QuoteSessionItem
 {
-    /* ORIGINAL from DB, actually not used
-
-    protected $created_at;
-    protected $updated_at;
-
-     */
-
     protected $item_id;
     protected $quote_id;
     protected $product_id;
@@ -95,19 +86,6 @@ class QuoteSessionItem
     protected $base_weee_tax_applied_row_amnt;
     protected $base_weee_tax_disposition;
     protected $base_weee_tax_row_disposition;
-
-    // Object only
-    protected $customAttributes = [];
-
-    public function __get($prop)
-    {
-        return $this->$prop;
-    }
-
-    public function __isset($prop) : bool
-    {
-        return isset($this->$prop);
-    }
 
     /**
      * @return mixed
@@ -941,15 +919,44 @@ class QuoteSessionItem
         $this->base_weee_tax_row_disposition = $base_weee_tax_row_disposition;
     }
 
-
-
     public function product()
     {
         return ProductRepository::productBySku($this->sku);
     }
 
+    // Object only
+    protected $customAttributes = [];
 
+    /**
+     * @param $prop
+     * @return mixed
+     */
+    public function __get($prop)
+    {
+        return $this->$prop;
+    }
 
+    /**
+     * @param $prop
+     * @return mixed
+     */
+    public function __set($prop)
+    {
+        return $this->$prop;
+    }
+
+    /**
+     * @param $prop
+     * @return bool
+     */
+    public function __isset($prop) : bool
+    {
+        return isset($this->$prop);
+    }
+
+    /**
+     * @return array
+     */
     public function toArray()
     {
         $serialized = (array)$this;
@@ -957,9 +964,6 @@ class QuoteSessionItem
         $replacedKeys = str_replace($search, '', array_keys($serialized));
 
         return array_combine($replacedKeys, $serialized);
-
     }
-
-
 }
 

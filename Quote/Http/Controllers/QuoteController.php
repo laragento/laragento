@@ -29,12 +29,12 @@ class QuoteController extends Controller
     public function index()
     {
         //
-
     }
 
     /**
      * Store a newly created resource in storage.
-     * @return Response
+     * @param $storeId
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
     public function store($storeId)
     {
@@ -55,18 +55,16 @@ class QuoteController extends Controller
 
     /**
      * Update the specified resource in storage.
-     * @return Response
+     * @param $storeId
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
     public function update($storeId)
     {
         $quoteData = request()->except('_method','_token');
-
         $quoteData['store_id'] = $storeId;
-
         $this->quoteDataRepository->updateQuote($quoteData);
 
         return redirect(route('quote.show'));
-
     }
 
     /**

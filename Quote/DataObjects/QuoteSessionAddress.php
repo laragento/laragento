@@ -5,19 +5,12 @@ namespace Laragento\Quote\DataObjects;
 
 class QuoteSessionAddress
 {
-    /* ORIGINAL from DB, currently not used
-
-    protected $created_at;
-    protected $updated_at;
-     */
-
-
     protected $address_id;
     protected $quote_id;
     protected $customer_id = null;
     protected $save_in_address_book;
     protected $customer_address_id;
-    protected $address_type; //billing,shipping
+    protected $address_type; // "billing","shipping"
     protected $email;
     protected $prefix;
     protected $firstname;
@@ -954,21 +947,39 @@ class QuoteSessionAddress
     }
 
 
-
-
     // Object only
     protected $customAttributes = [];
 
+    /**
+     * @param $prop
+     * @return mixed
+     */
     public function __get($prop)
     {
         return $this->$prop;
     }
 
+    /**
+     * @param $prop
+     * @return mixed
+     */
+    public function __set($prop)
+    {
+        return $this->$prop;
+    }
+
+    /**
+     * @param $prop
+     * @return bool
+     */
     public function __isset($prop) : bool
     {
         return isset($this->$prop);
     }
 
+    /**
+     * @return array
+     */
     public function toArray()
     {
         $serialized = (array)$this;
@@ -976,9 +987,6 @@ class QuoteSessionAddress
         $replacedKeys = str_replace($search, '', array_keys($serialized));
 
         return array_combine($replacedKeys, $serialized);
-
     }
-
-
 }
 

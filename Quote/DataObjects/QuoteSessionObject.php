@@ -185,11 +185,6 @@ class QuoteSessionObject
     protected $taxGroups = [];
 
     /**
-     * @var array
-     */
-    protected $customAttributes = [];
-
-    /**
      * @var string|null
      */
     protected $cart_id;
@@ -197,6 +192,7 @@ class QuoteSessionObject
 
     /**
      * QuoteSessionObject constructor.
+     * @param CustomerRepositoryInterface $customerRepository
      */
     public function __construct(CustomerRepositoryInterface $customerRepository)
     {
@@ -729,13 +725,32 @@ class QuoteSessionObject
     }
 
 
-    // Object only
 
+    // Object only
+    protected $customAttributes = [];
+
+    /**
+     * @param $prop
+     * @return mixed
+     */
     public function __get($prop)
     {
         return $this->$prop;
     }
 
+    /**
+     * @param $prop
+     * @return mixed
+     */
+    public function __set($prop)
+    {
+        return $this->$prop;
+    }
+
+    /**
+     * @param $prop
+     * @return bool
+     */
     public function __isset($prop) : bool
     {
         return isset($this->$prop);
@@ -750,8 +765,7 @@ class QuoteSessionObject
         $search = "\x00*\x00";
         $replacedKeys = str_replace($search, '', array_keys($serialized));
 
-        return array_combine($replacedKeys,$serialized);
-
+        return array_combine($replacedKeys, $serialized);
     }
 
     /**
@@ -760,7 +774,7 @@ class QuoteSessionObject
      * @param null $hyphen
      * @return string
      */
-    private function generateGUID($trim, $upper, $hyphen = null)
+    protected function generateGUID($trim, $upper, $hyphen = null)
     {
         mt_srand((double)microtime() * 10000);
         $charid = md5(uniqid(rand(), true));
