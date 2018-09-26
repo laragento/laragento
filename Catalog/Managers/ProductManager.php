@@ -52,7 +52,7 @@ class ProductManager {
     {
         $productGridImages = [];
         if (count($relatedProducts) > 0) {
-            $productGridImages = ImageHelper::getImageURLs($relatedProducts->pluck('catalog_category_product.product_id')->toArray(),
+            $productGridImages = ImageHelper::getImageURLs($relatedProducts->pluck('product_id')->toArray(),
                 $width, $height);
         }
         return $productGridImages;

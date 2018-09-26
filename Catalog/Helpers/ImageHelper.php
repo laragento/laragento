@@ -58,6 +58,7 @@ class ImageHelper
             return $result;
         }
 
+
         //get products in cache and set productIds who should be fetched from Magento System
         $execProductIds = [];
         foreach($productIds as $productId) {
@@ -80,7 +81,7 @@ class ImageHelper
 
         //execute image.php from Magento
         $output = null;
-        exec('/usr/bin/php -f ' . config('catalog.magento_category_image_path') . $exec,$output);
+        exec('/usr/bin/php -f ' . config('catalog.magento_image_helper') . $exec,$output);
 
         //map results
         foreach($execProductIds as $key => $execProductId) {

@@ -8,4 +8,5 @@ return [
     'pagination_related_products' => 8,
     'placeholder_image_path' => env('PLACEHOLDER_IMAGE_PATH'),
     'magento_category_image_path' => env('MAGENTO_CATEGORY_IMAGE_PATH'),
+    'magento_image_helper' => env('MAGENTO_IMAGE_HELPER'),
 ];

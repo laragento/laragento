@@ -48,7 +48,7 @@ class QuoteSessionItemRepository implements QuoteSessionItemRepositoryInterface
      */
     public function createItem($data)
     {
-        // Get and set Product
+        // Get product and set item
         $product = $this->productRepository::productBySku($data['sku']);
         $data['product_id'] = $product->entity_id;
         $data['product_type'] = $product->type_id;
@@ -56,12 +56,13 @@ class QuoteSessionItemRepository implements QuoteSessionItemRepositoryInterface
         $data['name'] = $this->getAttributeValue('name', $product->entity_id);
         $data['description'] = $this->getAttributeValue('description', $product->entity_id);
 
-
         if (config('quote.calculateTotals')) {
             // Set Price Information
             $totals = $this->setTotals($product->entity_id, $data['qty'], $data['store_id']);
             $data = array_merge($data, $totals);
         }
+
+
 
         // Populate Item
         $quoteItem = new QuoteSessionItem();
