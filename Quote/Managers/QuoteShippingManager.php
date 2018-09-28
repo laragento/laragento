@@ -12,25 +12,7 @@ class QuoteShippingManager
     protected $quoteDataRepository;
 
     //ToDo Must become Shipping Module getting values from Database & XML File
-    protected $shippingMethods =
-        [
-            'priority' => [
-                'shipping_description' => 'A-Post',
-                'base_shipping_amount_inkl_tax' => '1.00'
-            ],
-            'economy' => [
-                'shipping_description' => 'B-Post',
-                'base_shipping_amount_inkl_tax' => '0.85'
-            ],
-            'express' => [
-                'shipping_description' => 'Express',
-                'base_shipping_amount_inkl_tax' => '5.00'
-            ],
-            'pickup' => [
-                'shipping_description' => 'Abholung',
-                'base_shipping_amount_inkl_tax' => '0.00'
-            ]
-        ];
+    protected $shippingMethods = [];
 
 
 
@@ -73,7 +55,7 @@ class QuoteShippingManager
         $shipping = new QuoteSessionShipping();
         $shipping->setMethod($shippingMethodId);
         $shipping->setDescription($shippingMethod['shipping_description']);
-        $shipping->setPrice($shippingMethod['base_shipping_amount_inkl_tax']);
+        $shipping->setPrice($shippingMethod['base_shipping_amount_incl_tax']);
         $quote->setShipping($shipping);
 
         $this->calculateTotals($quote);
@@ -91,9 +73,22 @@ class QuoteShippingManager
         return null;
     }
 
+    public function setShippingMethods($shippingMethods)
+    {
+        return $this->shippingMethods = $shippingMethods;
+    }
+
     public function getAvailableShippingMethods()
     {
-        return $this->shippingMethods;
+        $methods = [];
+        foreach ($this->shippingMethods as $shippingMethodClass)
+        {
+            $methodClass = new $shippingMethodClass($this->getQuote());
+            if($methodClass->isAvailable()){
+                $methods[] = $methodClass;
+            }
+        }
+        return $methods;
     }
 
     public function calculateTotals($quote)
