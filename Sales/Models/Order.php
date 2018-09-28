@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Laragento\Customer\Models\Customer;
 use Laragento\Sales\Models\Order\Address;
 use Laragento\Sales\Models\Order\Item;
+use Laragento\Sales\Models\Order\Payment;
 use Laragento\Store\Models\Store;
 
 /**
@@ -187,5 +188,13 @@ class Order extends Model
     public function store()
     {
         return $this->hasOne(Store::class, 'store_id', 'store_id');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function payments()
+    {
+        return $this->hasMany(Payment::class,'parent_id', 'entity_id');
     }
 }

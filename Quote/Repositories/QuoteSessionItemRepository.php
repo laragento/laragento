@@ -52,7 +52,7 @@ class QuoteSessionItemRepository implements QuoteSessionItemRepositoryInterface
         $product = $this->productRepository::productBySku($data['sku']);
         $data['product_id'] = $product->entity_id;
         $data['product_type'] = $product->type_id;
-        $data['weight'] =  $this->getAttributeValue('weight', $product->entity_id);
+        $data['weight'] = $this->getAttributeValue('weight', $product->entity_id);
         $data['name'] = $this->getAttributeValue('name', $product->entity_id);
         $data['description'] = $this->getAttributeValue('description', $product->entity_id);
 
@@ -61,7 +61,6 @@ class QuoteSessionItemRepository implements QuoteSessionItemRepositoryInterface
             $totals = $this->setTotals($product->entity_id, $data['qty'], $data['store_id']);
             $data = array_merge($data, $totals);
         }
-
 
 
         // Populate Item
@@ -201,13 +200,12 @@ class QuoteSessionItemRepository implements QuoteSessionItemRepositoryInterface
         $data['tax_percent'] = config('quote.totals.tax_percent');
 
         // Get item prices
-        $specialPrice = $this->specialPrice($storeId,$productId);
-        if($specialPrice != null)
-        {
+        $specialPrice = $this->specialPrice($storeId, $productId);
+        if ($specialPrice != null) {
             $data['base_price_incl_tax'] = $specialPrice;
-
-        }else{
-            $data['base_price_incl_tax'] = $this->formatItemPrices(($val = $this->productAttributeRepository->data('price', $productId,
+        } else {
+            $data['base_price_incl_tax'] = $this->formatItemPrices(($val = $this->productAttributeRepository->data('price',
+                $productId,
                 $storeId)) ? $val->value : 0);
         }
 
@@ -215,7 +213,7 @@ class QuoteSessionItemRepository implements QuoteSessionItemRepositoryInterface
 
 
         // Calculate item tax amounts
-        $taxAmount = $data['base_price_incl_tax'] * $data['tax_percent'] / 100;
+        $taxAmount = $data['base_price_incl_tax'] - ($data['base_price_incl_tax'] / (($data['tax_percent'] / 100) + 1));
         $data['base_tax_amount'] = $this->formatItemPrices($taxAmount);
         $data['tax_amount'] = $this->convertBaseToQuote($data['base_tax_amount']);
 
@@ -231,6 +229,7 @@ class QuoteSessionItemRepository implements QuoteSessionItemRepositoryInterface
 
         // Calculate row totals without taxes
         $base_row_total = $qty * $base_price;
+
         $data['base_row_total'] = $this->formatItemPrices($base_row_total);
         $data['row_total'] = $this->convertBaseToQuote($data['base_row_total']);
 
@@ -255,7 +254,7 @@ class QuoteSessionItemRepository implements QuoteSessionItemRepositoryInterface
      * @param $productId
      * @return null
      */
-    protected function specialPrice($storeId,$productId)
+    protected function specialPrice($storeId, $productId)
     {
         // Todo make less db queries!
         $specialPriceFrom = ($val = $this->productAttributeRepository->data('special_from_date', $productId,
@@ -266,12 +265,10 @@ class QuoteSessionItemRepository implements QuoteSessionItemRepositoryInterface
         $from = \Carbon\Carbon::parse($specialPriceFrom);
         $to = \Carbon\Carbon::parse($specialPriceTo);
 
-        if(\Carbon\Carbon::create()->between($from, $to))
-        {
+        if (\Carbon\Carbon::create()->between($from, $to)) {
             $specialPrice = ($val = $this->productAttributeRepository->data('special_price', $productId,
                 $storeId)) ? $val->value : null;
-            if( $specialPrice != null)
-            {
+            if ($specialPrice != null) {
                 return $specialPrice;
             }
         }
@@ -291,6 +288,7 @@ class QuoteSessionItemRepository implements QuoteSessionItemRepositoryInterface
     protected function convertBaseToQuote($value): string
     {
         $rate = $this->quote()->base_to_quote_rate;
-        return $this->formatItemPrices($value * $rate);
+        $price = $this->formatItemPrices($value * $rate);
+        return $price;
     }
 }

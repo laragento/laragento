@@ -39,6 +39,8 @@ class QuoteAddressManager
     protected function mapAddress($address,$email,$addressType)
     {
         return [
+            'customer_id' => $address->parent_id,
+            'customer_address_id' => $address->entity_id,
             'email' => $email,
             'firstname' => $address->firstname,
             'lastname' => $address->lastname,
@@ -112,8 +114,10 @@ class QuoteAddressManager
         if(isset($addressData['same_as_billing']) && $addressData['same_as_billing'] == 'on'){
             $shippingAddress = $billingAddress;
             $shippingAddress['address_type'] = 'shipping';
+            $shippingAddress['same_as_billing'] = 1;
         }else{
             $shippingAddress = $this->mapShippingAddress($addressData);
+            $shippingAddress['same_as_billing'] = 0;
         }
 
         $addresses[] = $billingAddress;

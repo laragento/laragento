@@ -363,6 +363,8 @@ abstract class AbstractOrderManager
         $rate = $quote->getBaseToQuoteRate();
         $store = Store::whereStoreId($quote->getStoreId())->first();
         $fullStoreName = $store->website->name . "\n" . $store->group->name . "\n" . $store->name;
+        $percent = config('quote.totals.tax_percent');
+
         return [
             "state" => self::ORDER_STATE_NEW,
             "status" => self::ORDER_STATUS_PENDING,
@@ -371,29 +373,29 @@ abstract class AbstractOrderManager
             "shipping_description" => $quote->shipping->description,
             "is_virtual" => 0,
             "store_id" => $store->store_id,
-            "base_discount_amount" => $quote->base_subtotal - $quote->base_subtotal_with_discount,
-            "base_grand_total" => $quote->base_grand_total + $quote->shipping->price,
-            "base_shipping_amount" => $quote->shipping->price - ($this->formatItemPrices($quote->shipping->price * $taxRate)),
-            "base_shipping_tax_amount" => $this->formatItemPrices($quote->shipping->price * $taxRate), // ToDo Tax Calculation
+            "base_discount_amount" => (float)$quote->base_subtotal - (float)$quote->base_subtotal_with_discount,
+            "base_grand_total" => (float)$quote->base_grand_total,
+            "base_shipping_amount" => $quote->shipping->price,
+            "base_shipping_tax_amount" => includedTax($quote->shipping->price, $percent),
             "base_subtotal" => $quote->base_subtotal,
-            "base_tax_amount" => $this->formatItemPrices($quote->base_grand_total * $taxRate), // ToDo Tax Calculation
+            "base_tax_amount" => includedTax($quote->base_grand_total, $percent),
             "base_to_global_rate" => "1.0000", // ToDo Must become Dynamic
             "base_to_order_rate" => "1.0000", // ToDo Must become Dynamic
             "base_total_qty_ordered" => null, // ToDo Must become Dynamic
             "discount_amount" => $quote->subtotal - $quote->subtotal_with_discount,
-            "grand_total" => $this->convertBaseToOrder($quote->base_grand_total + $quote->shipping->price, $quote->base_to_quote_rate) ,
-            "shipping_amount" => $this->convertBaseToOrder($quote->shipping->price - ($this->formatItemPrices($quote->shipping->price * $taxRate)),$quote->base_to_quote_rate), // ToDo Get from shipping entity
-            "shipping_tax_amount" => $this->convertBaseToOrder($quote->shipping->price * $taxRate,$quote->base_to_quote_rate), // ToDo Tax Calculation
+            "grand_total" => $this->convertBaseToOrder($quote->base_grand_total, $quote->base_to_quote_rate),
+            "shipping_amount" => $quote->shipping->price,
+            "shipping_tax_amount" => $this->convertBaseToOrder(includedTax($quote->shipping->price, $percent),$quote->base_to_quote_rate),
             "store_to_base_rate" => "0.0000", // Deprecated in magento
             "store_to_order_rate" => "0.0000", // Deprecated in magento
             "subtotal" => $quote->subtotal,
-            "tax_amount" => $this->convertBaseToOrder($quote->base_grand_total * $taxRate, $quote->base_to_quote_rate),
+            "tax_amount" => $this->convertBaseToOrder(includedTax($quote->base_grand_total, $percent), $quote->base_to_quote_rate),
             "total_qty_ordered" => $quote->items_qty, // todo check
             "can_ship_partially" => 0,
             "can_ship_partially_item" => 0,
             "customer_is_guest" => $quote->customer_is_guest,
             "customer_note_notify" => 0, // ToDo make dynamic No idea whats this
-            "billing_address_id" => null, // ToDo!! Resave Order
+            "billing_address_id" => null, // ToDo!! Re-save Order
             "edit_increment" => 0,// Must become dynamic
             "email_sent" => 0, //ToDo Change after Confirmation sent success event
             "send_email" => 1,  //ToDo Change after Confirmation sent success event
@@ -441,7 +443,7 @@ abstract class AbstractOrderManager
             "shipping_discount_tax_compensation_amount" => "0.0000", //ToDo ToDo Calculate Prices
             "base_shipping_discount_tax_compensation_amnt" => "0.0000", //ToDo ToDo Calculate Prices
             "shipping_incl_tax" => $this->convertBaseToOrder($quote->shipping->price,$quote->base_to_quote_rate), //ToDo ToDo Calculate Prices
-            "base_shipping_incl_tax" => $quote->shipping->price, //ToDo ToDo Calculate Prices
+            "base_shipping_incl_tax" => $quote->shipping->price,
             "coupon_rule_name" => null, //ToDo must become dynamic
             "gift_message_id" => null, //ToDo must become dynamic
             "paypal_ipn_customer_notified" => 0, //ToDo must become dynamic
@@ -515,7 +517,6 @@ abstract class AbstractOrderManager
      */
     protected function convertBaseToOrder($value, $rate): string
     {
-
         return $this->formatItemPrices($value * $rate);
     }
 }

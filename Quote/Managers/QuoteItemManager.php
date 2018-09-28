@@ -1,34 +1,33 @@
 <?php
 
-
 namespace Laragento\Quote\Managers;
-
 
 use Laragento\Quote\DataObjects\QuoteSessionItem;
 use Laragento\Quote\DataObjects\QuoteSessionObject;
-use Laragento\Quote\Repositories\QuoteSessionItemRepository;
 use Laragento\Quote\Repositories\QuoteSessionItemRepositoryInterface;
-use Laragento\Quote\Repositories\QuoteSessionObjectRepository;
 use Laragento\Quote\Repositories\QuoteSessionObjectRepositoryInterface;
 
 class QuoteItemManager
 {
     protected $quoteDataRepository;
     protected $quoteItemRepository;
-
-
+    protected $cartTotals;
+    protected $quoteManager;
 
     /**
-     * QuoteController constructor.
+     * QuoteItemManager constructor.
      * @param QuoteSessionObjectRepositoryInterface $quoteDataRepository
      * @param QuoteSessionItemRepositoryInterface $quoteItemRepository
+     * @param QuoteManager $quoteManager
      */
     public function __construct(
         QuoteSessionObjectRepositoryInterface $quoteDataRepository,
-        QuoteSessionItemRepositoryInterface $quoteItemRepository
+        QuoteSessionItemRepositoryInterface $quoteItemRepository,
+        QuoteManager $quoteManager
     ) {
         $this->quoteDataRepository = $quoteDataRepository;
         $this->quoteItemRepository = $quoteItemRepository;
+        $this->quoteManager = $quoteManager;
     }
 
     /**
@@ -63,55 +62,6 @@ class QuoteItemManager
         } else {
             $quote->setItemsQty(0);
         }
-
-
-        $this->quoteDataRepository->updateQuote($quote);
-    }
-
-    /**
-     * @param QuoteSessionObject $quote
-     */
-    public function calculateTotals($quote)
-    {
-        $prices = [];
-        $taxes = [
-            'total' => [],
-            'base_total' => []
-        ];
-        $totalWeight = 0.0000;
-
-        // ToDo Must become abstracted as TaxRule/Calculation Module
-
-        /** @var QuoteSessionItem $item */
-        foreach ($quote->getItems() as $item) {
-            array_push($prices, $item->getBaseRowTotalInclTax());
-            $baseTax = $item->getBaseRowTotalInclTax() - $item->getBaseRowTotal();
-            $tax = $item->getRowTotalInclTax() - $item->getRowTotal();
-            $strIndex = str_replace('.', '_', number_format($item->getTaxPercent(), 2));
-            $val = isset($taxes[$strIndex]) ? $taxes[$strIndex] : 0;
-            $taxes[$strIndex] = (float)$val + (float)$tax;
-            $item->setRowWeight(($item->getWeight() * $item->getQty()));
-            $totalWeight = $totalWeight + ($item->getWeight()*$item->getQty());
-            $taxes['base_total'] = $this->formatItemPrices($taxes[$strIndex]);
-            $taxes['total'] = $this->convertBaseToQuote($taxes['base_total']);
-        }
-        $baseGrandTotalFull = array_sum($prices);
-        $baseSubTotalFull = $baseGrandTotalFull - $taxes['base_total'];
-        $baseGrandTotal = $this->formatItemPrices($baseGrandTotalFull);
-        $baseSubTotal = $this->formatItemPrices($baseSubTotalFull);
-
-        // ToDo if 5Rp round is needed
-        //var_dump(round(($var + 0.000001) * 20) / 20,2);
-
-        $quote->setGrandTotal($this->convertBaseToQuote($baseGrandTotal));
-        $quote->setBaseGrandTotal($baseGrandTotal);
-        $quote->setSubtotal($this->convertBaseToQuote($baseSubTotal));
-        $quote->setSubtotalWithDiscount($this->convertBaseToQuote($baseSubTotal));
-        $quote->setBaseSubtotal($baseSubTotal);
-        $quote->setBaseSubtotalWithDiscount($baseSubTotal);
-        $quote->setTaxGroups($taxes);
-        $quote->setTotalWeight($totalWeight);
-
 
         $this->quoteDataRepository->updateQuote($quote);
     }
@@ -167,20 +117,8 @@ class QuoteItemManager
         return $items;
     }
 
-    protected function formatItemPrices($value)
+    public function calculateTotals($quote)
     {
-        return roundPrecicePrice($value, 1, 2, 4);
+        $this->quoteManager->calculateTotals($quote);
     }
-
-    /**
-     * @param $data
-     * @param $rate
-     * @return string
-     */
-    protected function convertBaseToQuote($value): string
-    {
-        $rate = $this->getQuote()->base_to_quote_rate;
-        return $this->formatItemPrices($value * $rate);
-    }
-
 }

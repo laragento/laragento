@@ -32,14 +32,21 @@ class QuoteShippingManager
             ]
         ];
 
+
+
+    protected $quoteManager;
+
     /**
      * QuotePaymentManager constructor.
      * @param QuoteSessionObjectRepositoryInterface $quoteDataRepository
+     * @param QuoteManager $quoteManager
      */
     public function __construct(
-        QuoteSessionObjectRepositoryInterface $quoteDataRepository
+        QuoteSessionObjectRepositoryInterface $quoteDataRepository,
+        QuoteManager $quoteManager
     ) {
         $this->quoteDataRepository = $quoteDataRepository;
+        $this->quoteManager = $quoteManager;
     }
 
     /**
@@ -51,7 +58,7 @@ class QuoteShippingManager
     }
 
     /**
-     * @param $shippingMethod
+     * @param $shippingMethodId
      */
     public function setShippingMethod($shippingMethodId)
     {
@@ -68,6 +75,8 @@ class QuoteShippingManager
         $shipping->setDescription($shippingMethod['shipping_description']);
         $shipping->setPrice($shippingMethod['base_shipping_amount_inkl_tax']);
         $quote->setShipping($shipping);
+
+        $this->calculateTotals($quote);
     }
 
     /**
@@ -87,5 +96,8 @@ class QuoteShippingManager
         return $this->shippingMethods;
     }
 
-
+    public function calculateTotals($quote)
+    {
+        $this->quoteManager->calculateTotals($quote);
+    }
 }
