@@ -13,8 +13,7 @@ class QuoteShippingManager
 
     //ToDo Must become Shipping Module getting values from Database & XML File
     protected $shippingMethods = [];
-
-
+    protected $shippingProviders = [];
 
     protected $quoteManager;
 
@@ -54,10 +53,9 @@ class QuoteShippingManager
         $quote = $this->getQuote();
         $shipping = new QuoteSessionShipping();
         $shipping->setMethod($shippingMethodId);
-        $shipping->setDescription($shippingMethod['shipping_description']);
-        $shipping->setPrice($shippingMethod['base_shipping_amount_incl_tax']);
+        $shipping->setDescription($shippingMethod->description());
+        $shipping->setPrice($shippingMethod->price());
         $quote->setShipping($shipping);
-
         $this->calculateTotals($quote);
     }
 
@@ -67,28 +65,30 @@ class QuoteShippingManager
     public function getShippingMethod()
     {
         $quote = $this->getQuote();
-        if(is_object($quote->shipping)){
+        if (is_object($quote->shipping)) {
             return $quote->shipping;
         }
         return null;
     }
 
-    public function setShippingMethods($shippingMethods)
+    public function collectShippingMethods()
     {
-        return $this->shippingMethods = $shippingMethods;
+        $shippingMethodClasses = config('quote.shipping_providers');
+        foreach ($shippingMethodClasses as $shippingMethodClass) {
+            $methodClass = new $shippingMethodClass($this->getQuote());
+            if ($methodClass->isAvailable()) {
+                $this->shippingMethods[] = $methodClass;
+            }
+        }
+        return $this->shippingMethods;
     }
 
     public function getAvailableShippingMethods()
     {
-        $methods = [];
-        foreach ($this->shippingMethods as $shippingMethodClass)
-        {
-            $methodClass = new $shippingMethodClass($this->getQuote());
-            if($methodClass->isAvailable()){
-                $methods[] = $methodClass;
-            }
+        if (empty($this->shippingMethods)) {
+            $this->collectShippingMethods();
         }
-        return $methods;
+        return $this->shippingMethods;
     }
 
     public function calculateTotals($quote)

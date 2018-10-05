@@ -9,5 +9,9 @@ return [
     'tax_calculation_shipping_includes_tax' => true, // Are shipping costs and gateways in admin panel with tax included?
     'tax_display_type' => 1, // 1. Excl. Tax 2. Incl. Tax 3. Incl. and Excl. Tax
     'tax_display_shipping' => 1, // 1. Excl. Tax 2. Incl. Tax 3. Incl. and Excl. Tax
-    'calculateTotals' => true
+    'calculateTotals' => true,
+    'shipping_providers' =>
+    [
+
+    ],
 ];

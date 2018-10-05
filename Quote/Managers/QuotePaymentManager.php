@@ -9,6 +9,7 @@ use Laragento\Quote\Repositories\QuoteSessionObjectRepositoryInterface;
 class QuotePaymentManager
 {
     protected $quoteDataRepository;
+    protected $paymentMethods = [];
 
     /**
      * QuotePaymentManager constructor.
@@ -26,6 +27,41 @@ class QuotePaymentManager
     public function getQuote()
     {
         return $this->quoteDataRepository->getQuote();
+    }
+
+
+    public function collectPaymentMethods()
+    {
+        $paymentMethodClasses = config('quote.payment_providers');
+        foreach ($paymentMethodClasses as $paymentMethodClass) {
+            $methodClass = new $paymentMethodClass($this->getQuote());
+            if ($methodClass->isAvailable()) {
+                $this->paymentMethods[] = $methodClass;
+            }
+        }
+        return $this->paymentMethods;
+    }
+
+    public function getAvailablePaymentMethods()
+    {
+        if (empty($this->paymentMethods)) {
+            $this->collectPaymentMethods();
+        }
+        return $this->paymentMethods;
+    }
+
+    public function getPaymentMethodByCode($code)
+    {
+        if (empty($this->paymentMethods)) {
+            $this->collectPaymentMethods();
+        }
+        foreach ($this->paymentMethods as $paymentMethod){
+            if($paymentMethod->code() == $code)
+            {
+                return $paymentMethod;
+            }
+        }
+        return false;
     }
 
     /**
