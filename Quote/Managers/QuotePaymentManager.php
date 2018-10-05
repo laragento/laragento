@@ -1,9 +1,8 @@
 <?php
-
-
 namespace Laragento\Quote\Managers;
 
 use Laragento\Quote\DataObjects\QuoteSessionObject;
+use Laragento\Quote\DataObjects\QuoteSessionPayment;
 use Laragento\Quote\Repositories\QuoteSessionObjectRepositoryInterface;
 
 class QuotePaymentManager
@@ -29,7 +28,9 @@ class QuotePaymentManager
         return $this->quoteDataRepository->getQuote();
     }
 
-
+    /**
+     * @return array
+     */
     public function collectPaymentMethods()
     {
         $paymentMethodClasses = config('quote.payment_providers');
@@ -42,6 +43,9 @@ class QuotePaymentManager
         return $this->paymentMethods;
     }
 
+    /**
+     * @return QuoteSessionPayment[]
+     */
     public function getAvailablePaymentMethods()
     {
         if (empty($this->paymentMethods)) {
@@ -50,7 +54,11 @@ class QuotePaymentManager
         return $this->paymentMethods;
     }
 
-    public function getPaymentMethodByCode($code)
+    /**
+     * @param $code
+     * @return bool|QuoteSessionPayment
+     */
+    public function getPaymentMethodByCode(String $code)
     {
         if (empty($this->paymentMethods)) {
             $this->collectPaymentMethods();
@@ -65,18 +73,30 @@ class QuotePaymentManager
     }
 
     /**
-     * @param $payment
+     * @param String $code
      */
-    public function storePayment($payment)
+    public function storePaymentByCode(String $code)
+    {
+        $paymentMethod = $this->getPaymentMethodByCode($code);
+        $payment = new QuoteSessionPayment();
+        $payment->setMethod($code);
+        $payment->setAdditionalInformation('{"method_title":"'.$paymentMethod->description().'"}');
+        $this->storePayment($payment);
+    }
+
+    /**
+     * @param QuoteSessionPayment $payment
+     */
+    public function storePayment(QuoteSessionPayment $payment)
     {
         $quote = $this->getQuote();
         $quote->setPayment($payment);
     }
 
     /**
-     *
+     * @return \Laragento\Quote\DataObjects\QuoteSessionPayment
      */
-    public function getPayment()
+    public function getPayment() : QuoteSessionPayment
     {
         $quote = $this->getQuote();
         return $quote->getPayment();

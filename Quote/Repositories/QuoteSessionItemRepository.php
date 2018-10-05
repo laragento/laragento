@@ -200,17 +200,19 @@ class QuoteSessionItemRepository implements QuoteSessionItemRepositoryInterface
         $data['tax_percent'] = config('quote.totals.tax_percent');
 
         // Get item prices
+        $price = $this->formatItemPrices(($val = $this->productAttributeRepository->data('price',
+            $productId,
+            $storeId)) ? $val->value : 0);
         $specialPrice = $this->specialPrice($storeId, $productId);
         if ($specialPrice != null) {
             $data['base_price_incl_tax'] = $specialPrice;
+            $data['base_discount_amount'] = $price - $specialPrice;
         } else {
-            $data['base_price_incl_tax'] = $this->formatItemPrices(($val = $this->productAttributeRepository->data('price',
-                $productId,
-                $storeId)) ? $val->value : 0);
+            $data['base_price_incl_tax'] = $price;
+            $data['base_discount_amount'] = 0.00;
         }
-
+        $data['discount_amount'] = $this->convertBaseToQuote($data['base_discount_amount']);
         $data['price_incl_tax'] = $this->convertBaseToQuote($data['base_price_incl_tax']);
-
 
         // Calculate item tax amounts
         $taxAmount = $data['base_price_incl_tax'] - ($data['base_price_incl_tax'] / (($data['tax_percent'] / 100) + 1));

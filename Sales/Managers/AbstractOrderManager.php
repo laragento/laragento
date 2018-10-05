@@ -7,6 +7,7 @@ use Laragento\Catalog\Repositories\Product\ProductAttributeRepositoryInterface;
 use Laragento\Quote\DataObjects\QuoteSessionAddress;
 use Laragento\Quote\DataObjects\QuoteSessionItem;
 use Laragento\Quote\DataObjects\QuoteSessionObject;
+use Laragento\Quote\DataObjects\QuoteSessionPayment;
 use Laragento\Sales\Models\Order;
 use Laragento\Sales\Models\Order\Address;
 use Laragento\Sales\Models\Order\Grid;
@@ -300,6 +301,7 @@ abstract class AbstractOrderManager
 
     protected function mapQuotePaymentToOrderPayment($quote, $order)
     {
+        /** @var QuoteSessionPayment $payment */
         $payment = $quote->getPayment();
         return [
             //ToDo: add base-values
@@ -313,10 +315,9 @@ abstract class AbstractOrderManager
         ];
     }
 
-    protected function setAdditionalPaymentInfo($payment)
+    protected function setAdditionalPaymentInfo(QuoteSessionPayment $payment)
     {
-        //ToDo: Must become dynamic
-        return '{"method_title":"Check \/ Money order"}';
+        return $payment->getAdditionalInformation();
     }
 
     /**
