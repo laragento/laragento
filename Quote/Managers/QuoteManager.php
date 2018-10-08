@@ -3,7 +3,6 @@
 
 namespace Laragento\Quote\Managers;
 
-
 use Laragento\Quote\DataObjects\QuoteSessionItem;
 use Laragento\Quote\DataObjects\QuoteSessionObject;
 use Laragento\Quote\DataObjects\QuoteSessionTotals;

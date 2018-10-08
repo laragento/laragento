@@ -50,7 +50,7 @@ class QuoteSessionAddressRepository implements QuoteSessionAddressRepositoryInte
     /**
      * @inheritdoc
      */
-    public function create($data)
+    public function create($data) : QuoteSessionAddress
     {
         // Get and set Address
         // [..]
@@ -107,11 +107,11 @@ class QuoteSessionAddressRepository implements QuoteSessionAddressRepositoryInte
     }
 
     /**
-     * Get the cart.
-     *
+     * Get the cart
+     * 
      * @return QuoteSessionObject
      */
-    protected function quote()
+    protected function quote() : QuoteSessionObject
     {
         return $this->quoteDataRepository->getQuote();
     }

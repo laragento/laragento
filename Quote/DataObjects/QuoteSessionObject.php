@@ -209,6 +209,10 @@ class QuoteSessionObject
      * @var string|null
      */
     protected $cart_id;
+
+    /**
+     * @var CustomerRepositoryInterface
+     */
     protected $customerRepository;
 
     /**
@@ -217,9 +221,7 @@ class QuoteSessionObject
      */
     public function __construct(CustomerRepositoryInterface $customerRepository)
     {
-
         $this->customerRepository = $customerRepository;
-
     }
 
     /**

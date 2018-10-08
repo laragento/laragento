@@ -5,20 +5,19 @@ namespace Laragento\Quote\Managers;
 
 use Laragento\Quote\DataObjects\QuoteSessionObject;
 use Laragento\Quote\DataObjects\QuoteSessionShipping;
+use Laragento\Quote\Exceptions\MethodNotFoundException;
+use Laragento\Quote\Managers\PaymentProviders\PaymentProviderInterface;
 use Laragento\Quote\Repositories\QuoteSessionObjectRepositoryInterface;
 
 class QuoteShippingManager
 {
-    protected $quoteDataRepository;
-
-    //ToDo Must become Shipping Module getting values from Database & XML File
-    protected $shippingMethods = [];
-    protected $shippingProviders = [];
-
     protected $quoteManager;
+    protected $quoteDataRepository;
+    protected $shippingMethods = [];
 
     /**
      * QuotePaymentManager constructor.
+     *
      * @param QuoteSessionObjectRepositoryInterface $quoteDataRepository
      * @param QuoteManager $quoteManager
      */
@@ -31,32 +30,34 @@ class QuoteShippingManager
     }
 
     /**
-     * @return QuoteSessionObject
+     * @param $shippingMethodCode
+     * @throws MethodNotFoundException
      */
-    public function getQuote()
-    {
-        return $this->quoteDataRepository->getQuote();
-    }
-
-    /**
-     * @param $shippingMethodId
-     */
-    public function setShippingMethod($shippingMethodId)
+    public function setShippingMethod($shippingMethodCode)
     {
         $allShippingMethods = $this->getAvailableShippingMethods();
-        $shippingMethod = $allShippingMethods[$shippingMethodId];
-        //if(!$this->isActive())
-        //{
-        //throw shippingMethodIsNotActiveException
-        //throw shippingMethodIsNotExistentException
-        //}
+        if(empty($allShippingMethods) || !isset($allShippingMethods[$shippingMethodCode])){
+            throw new MethodNotFoundException();
+        }
+        $shippingMethod = $allShippingMethods[$shippingMethodCode];
         $quote = $this->getQuote();
         $shipping = new QuoteSessionShipping();
-        $shipping->setMethod($shippingMethodId);
+        $shipping->setMethod($shippingMethodCode);
         $shipping->setDescription($shippingMethod->description());
         $shipping->setPrice($shippingMethod->price());
         $quote->setShipping($shipping);
         $this->calculateTotals($quote);
+    }
+
+    /**
+     * @return PaymentProviderInterface[]
+     */
+    public function getAvailableShippingMethods()
+    {
+        if (empty($this->shippingMethods)) {
+            $this->collectShippingMethods();
+        }
+        return $this->shippingMethods;
     }
 
     /**
@@ -71,27 +72,33 @@ class QuoteShippingManager
         return null;
     }
 
-    public function collectShippingMethods()
+    /**
+     * @return array
+     */
+    protected function collectShippingMethods()
     {
         $shippingMethodClasses = config('quote.shipping_providers');
         foreach ($shippingMethodClasses as $shippingMethodClass) {
             $methodClass = new $shippingMethodClass($this->getQuote());
             if ($methodClass->isAvailable()) {
-                $this->shippingMethods[] = $methodClass;
+                $this->shippingMethods[$methodClass->code()] = $methodClass;
             }
         }
         return $this->shippingMethods;
     }
 
-    public function getAvailableShippingMethods()
+    /**
+     * @return QuoteSessionObject
+     */
+    protected function getQuote()
     {
-        if (empty($this->shippingMethods)) {
-            $this->collectShippingMethods();
-        }
-        return $this->shippingMethods;
+        return $this->quoteDataRepository->getQuote();
     }
 
-    public function calculateTotals($quote)
+    /**
+     * @param $quote
+     */
+    protected function calculateTotals($quote)
     {
         $this->quoteManager->calculateTotals($quote);
     }

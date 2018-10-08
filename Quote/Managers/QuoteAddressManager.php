@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Laragento\Quote\Managers;
 
 use Laragento\Quote\DataObjects\QuoteSessionAddress;
@@ -36,6 +35,12 @@ class QuoteAddressManager
     }
 
 
+    /**
+     * @param $address
+     * @param $email
+     * @param $addressType
+     * @return array
+     */
     protected function mapAddress($address,$email,$addressType)
     {
         return [
@@ -81,6 +86,10 @@ class QuoteAddressManager
         ];
     }
 
+    /**
+     * @param $addressData
+     * @return array
+     */
     protected function mapShippingAddress($addressData)
     {
         if(isset($addressData['shipping_address'])){
@@ -143,24 +152,26 @@ class QuoteAddressManager
     }
 
     /**
-     * @return null
+     * @return QuoteSessionAddress
      */
-    public function getBillingAddress()
+    public function getBillingAddress() : QuoteSessionAddress
     {
         return $this->getAddressByType('billing');
     }
 
     /**
-     * @return null
+     * @return QuoteSessionAddress
      */
-    public function getShippingAddress()
+    public function getShippingAddress() : QuoteSessionAddress
     {
         return $this->getAddressByType('shipping');
     }
-
-
-
-    private function getAddressByType($type)
+    
+    /**
+     * @param $type
+     * @return QuoteSessionAddress
+     */
+    private function getAddressByType($type) : QuoteSessionAddress
     {
         $quote = $this->getQuote();
         $addresses = $quote->getAddresses();

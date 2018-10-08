@@ -3,6 +3,7 @@ namespace Laragento\Quote\Managers;
 
 use Laragento\Quote\DataObjects\QuoteSessionObject;
 use Laragento\Quote\DataObjects\QuoteSessionPayment;
+use Laragento\Quote\Exceptions\MethodNotFoundException;
 use Laragento\Quote\Repositories\QuoteSessionObjectRepositoryInterface;
 
 class QuotePaymentManager
@@ -21,29 +22,6 @@ class QuotePaymentManager
     }
 
     /**
-     * @return QuoteSessionObject
-     */
-    public function getQuote()
-    {
-        return $this->quoteDataRepository->getQuote();
-    }
-
-    /**
-     * @return array
-     */
-    public function collectPaymentMethods()
-    {
-        $paymentMethodClasses = config('quote.payment_providers');
-        foreach ($paymentMethodClasses as $paymentMethodClass) {
-            $methodClass = new $paymentMethodClass($this->getQuote());
-            if ($methodClass->isAvailable()) {
-                $this->paymentMethods[] = $methodClass;
-            }
-        }
-        return $this->paymentMethods;
-    }
-
-    /**
      * @return QuoteSessionPayment[]
      */
     public function getAvailablePaymentMethods()
@@ -52,6 +30,24 @@ class QuotePaymentManager
             $this->collectPaymentMethods();
         }
         return $this->paymentMethods;
+    }
+
+    /**
+     * @param QuoteSessionPayment $payment
+     */
+    public function storePayment(QuoteSessionPayment $payment)
+    {
+        $quote = $this->getQuote();
+        $quote->setPayment($payment);
+    }
+
+    /**
+     * @return \Laragento\Quote\DataObjects\QuoteSessionPayment
+     */
+    public function getPayment() : QuoteSessionPayment
+    {
+        $quote = $this->getQuote();
+        return $quote->getPayment();
     }
 
     /**
@@ -74,10 +70,14 @@ class QuotePaymentManager
 
     /**
      * @param String $code
+     * @throws MethodNotFoundException
      */
     public function storePaymentByCode(String $code)
     {
         $paymentMethod = $this->getPaymentMethodByCode($code);
+        if(!$paymentMethod){
+            throw new MethodNotFoundException();
+        }
         $payment = new QuoteSessionPayment();
         $payment->setMethod($code);
         $payment->setAdditionalInformation('{"method_title":"'.$paymentMethod->description().'"}');
@@ -85,21 +85,25 @@ class QuotePaymentManager
     }
 
     /**
-     * @param QuoteSessionPayment $payment
+     * @return array
      */
-    public function storePayment(QuoteSessionPayment $payment)
+    protected function collectPaymentMethods()
     {
-        $quote = $this->getQuote();
-        $quote->setPayment($payment);
+        $paymentMethodClasses = config('quote.payment_providers');
+        foreach ($paymentMethodClasses as $paymentMethodClass) {
+            $methodClass = new $paymentMethodClass($this->getQuote());
+            if ($methodClass->isAvailable()) {
+                $this->paymentMethods[] = $methodClass;
+            }
+        }
+        return $this->paymentMethods;
     }
 
     /**
-     * @return \Laragento\Quote\DataObjects\QuoteSessionPayment
+     * @return QuoteSessionObject
      */
-    public function getPayment() : QuoteSessionPayment
+    protected function getQuote()
     {
-        $quote = $this->getQuote();
-        return $quote->getPayment();
+        return $this->quoteDataRepository->getQuote();
     }
-
 }

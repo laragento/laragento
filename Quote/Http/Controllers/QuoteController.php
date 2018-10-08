@@ -2,10 +2,8 @@
 
 namespace Laragento\Quote\Http\Controllers;
 
-use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Routing\Controller;
-use Laragento\Quote\Repositories\QuoteSessionObjectRepository;
 use Laragento\Quote\Repositories\QuoteSessionObjectRepositoryInterface;
 
 class QuoteController extends Controller

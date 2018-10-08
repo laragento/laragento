@@ -14,4 +14,8 @@ return [
     [
 
     ],
+    'payment_providers' =>
+    [
+
+    ],
 ];
