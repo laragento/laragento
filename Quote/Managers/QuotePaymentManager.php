@@ -76,7 +76,7 @@ class QuotePaymentManager
     {
         $paymentMethod = $this->getPaymentMethodByCode($code);
         if(!$paymentMethod){
-            throw new MethodNotFoundException();
+            throw new MethodNotFoundException('payment_method_not_found');
         }
         $payment = new QuoteSessionPayment();
         $payment->setMethod($code);

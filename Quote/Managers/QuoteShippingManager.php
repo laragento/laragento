@@ -37,7 +37,7 @@ class QuoteShippingManager
     {
         $allShippingMethods = $this->getAvailableShippingMethods();
         if(empty($allShippingMethods) || !isset($allShippingMethods[$shippingMethodCode])){
-            throw new MethodNotFoundException();
+            throw new MethodNotFoundException('shipping_method_not_found');
         }
         $shippingMethod = $allShippingMethods[$shippingMethodCode];
         $quote = $this->getQuote();

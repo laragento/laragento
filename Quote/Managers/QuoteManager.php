@@ -42,8 +42,8 @@ class QuoteManager
     {
         $prices = [];
         $taxes = [
-            'total' => [],
-            'base_total' => []
+            'total' => 0.0000,
+            'base_total' => 0.0000,
         ];
         $totalWeight = 0.0000;
 

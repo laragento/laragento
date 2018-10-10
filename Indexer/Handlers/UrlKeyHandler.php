@@ -2,7 +2,7 @@
 
 namespace Laragento\Indexer\Handlers;
 
-class StockHandler implements IndexHandlerInterface
+class UrlKeyHandler implements IndexHandlerInterface
 {
     /**
      * @param $productId
@@ -14,6 +14,6 @@ class StockHandler implements IndexHandlerInterface
      */
     public static function execute($productId, $productRepository, $attribute, $attributeRepository, $indexModel)
     {
-        return ($productStock = $productRepository::stockByProductId($productId)) ? $productStock->qty : 0;
+        return ($productSlug = $productRepository->urlKeyByProductId($productId)) ? $productSlug : uniqid();
     }
 }

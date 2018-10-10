@@ -72,8 +72,17 @@ class QuoteAddressManager
                 'billing'
             );
         }
+
+        if(isset($addressData['prefix'])){
+            $prefix = $addressData['prefix'];
+        }else
+        {
+            $prefix = "";
+        }
+
         return [
             'email' => $addressData['email'],
+            'prefix' => $prefix,
             'firstname' => $addressData['firstname'],
             'lastname' => $addressData['lastname'],
             'company' => $addressData['company'],
@@ -99,7 +108,16 @@ class QuoteAddressManager
                 'shipping'
             );
         }
+
+        if(isset($addressData['prefix'])){
+            $prefix = $addressData['prefix'];
+        }else
+        {
+            $prefix = "";
+        }
+
         return [
+            'prefix' => $prefix,
             'firstname' => $addressData['shipping_firstname'],
             'lastname' => $addressData['shipping_lastname'],
             'company' => $addressData['shipping_company'],

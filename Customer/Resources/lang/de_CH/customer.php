@@ -27,5 +27,6 @@ return [
     'telephone' => 'Telefonnummer',
     'country' => 'Land',
     'region' => 'Region',
+    'additional_address_line' => 'Adresszusatz'
 
 ];

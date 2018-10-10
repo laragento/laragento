@@ -45,7 +45,7 @@ class ProductRepository implements ProductRepositoryInterface
     }
 
     /**
-     * @param $identifier
+     * @param $id
      * @return \Illuminate\Database\Eloquent\Model|ProductRepository|null
      */
     public static function byId($id)
@@ -177,6 +177,16 @@ class ProductRepository implements ProductRepositoryInterface
             ->whereStockId($stockId)
             ->first();
     }
+
+    /**
+     * @param $productId
+     * @return String
+     */
+    public function urlKeyByProductId($productId) {
+        $name = $this->productAttributeRepository->data('name', $productId);
+        return str_slug($name->value);
+    }
+
 
     /**
      * @param $productId
