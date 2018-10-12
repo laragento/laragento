@@ -10,6 +10,11 @@ class QuoteTestCase extends TestCase
     protected $customerRepository;
     protected $customer;
 
+    /**
+     * @todo better use
+     * $this->customer = factory(Customer::class)->create();
+     * than existing customer
+     */
     public function setUp()
     {
         parent::setUp();

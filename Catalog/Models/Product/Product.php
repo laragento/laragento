@@ -22,12 +22,6 @@ use Laragento\Indexer\Models\ProductIndex;
  * @property string sku
  * @property int has_options
  * @property mixed required_options
- * @property int $entity_id Entity ID
- * @property int $attribute_set_id Attribute Set ID
- * @property string $type_id Type ID
- * @property string|null $sku SKU
- * @property int $has_options Has Options
- * @property int $required_options Required Options
  * @property \Carbon\Carbon $created_at Creation Time
  * @property \Carbon\Carbon $updated_at Update Time
  * @property-read \Illuminate\Database\Eloquent\Collection|\Laragento\Catalog\Models\Category\Category[] $categories

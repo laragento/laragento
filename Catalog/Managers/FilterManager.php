@@ -45,9 +45,6 @@ class FilterManager
         $sort = null
     )
     {
-        if(count($relatedProducts) < 1){
-            return $relatedProducts;
-        }
         if($filters == null)
         {
             $filters = request()->get('filters');
