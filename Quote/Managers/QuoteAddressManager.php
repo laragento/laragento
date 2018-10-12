@@ -138,17 +138,24 @@ class QuoteAddressManager
     {
         $billingAddress = $this->mapBillingAddress($addressData);
 
-        if(isset($addressData['same_as_billing']) && $addressData['same_as_billing'] == 'on'){
-            $shippingAddress = $billingAddress;
-            $shippingAddress['address_type'] = 'shipping';
-            $shippingAddress['same_as_billing'] = 1;
-        }else{
-            $shippingAddress = $this->mapShippingAddress($addressData);
-            $shippingAddress['same_as_billing'] = 0;
+        if (!isset($addressData['same_as_billing']) && !isset($addressData['shipping_address'])) {
+            $shippingAddress = null;
+        } else {
+            if(isset($addressData['same_as_billing']) && $addressData['same_as_billing'] == 'on'){
+                $shippingAddress = $billingAddress;
+                $shippingAddress['address_type'] = 'shipping';
+                $shippingAddress['same_as_billing'] = 1;
+            }else{
+                $shippingAddress = $this->mapShippingAddress($addressData);
+                $shippingAddress['same_as_billing'] = 0;
+            }
         }
 
+
         $addresses[] = $billingAddress;
-        $addresses[] = $shippingAddress;
+        if ($shippingAddress) {
+            $addresses[] = $shippingAddress;
+        }
 
         $storedAddresses = [];
         $quote = $this->getQuote();
