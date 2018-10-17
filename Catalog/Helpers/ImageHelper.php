@@ -16,27 +16,8 @@ class ImageHelper
      * @return string
      */
     public static function getImageURL($productId, $width, $height) {
-        //only run exec in production mode
-        if(App::environment() != 'production') {
-            return url(config('catalog.placeholder_image_path'));
-        }
-
-        $cache = Cache::get('product-image-' . $productId . '-' . $width . '-' . $height);
-        if($cache != null) {
-            return $cache;
-        }
-
-        $output = null;
-        exec('/usr/bin/php -f ' . config('catalog.magento_category_image_path') . ' ' . $productId . ' ' . $width . ' ' . $height,$output);
-        $result = '';
-        if(isset($output[0])) {
-            $result = $output[0];
-        }
-
-        //cache image one day
-        Cache::put('product-image-' . $productId . '-' . $width . '-' . $height, $result, 60);
-
-        return $result;
+        $images = self::getImageURLs([$productId], $width, $height);
+        return $images[$productId];
     }
 
     /**
@@ -48,6 +29,7 @@ class ImageHelper
      * @return array
      */
     public static function getImageURLs($productIds, $width, $height) {
+
         $result = [];
         //only run exec in production mode
         if(App::environment() != 'production') {
@@ -57,7 +39,6 @@ class ImageHelper
 
             return $result;
         }
-
 
         //get products in cache and set productIds who should be fetched from Magento System
         $execProductIds = [];
@@ -69,11 +50,35 @@ class ImageHelper
             }
             $execProductIds[] = $productId;
         }
-
+        //dd(count($execProductIds));
         if(count($execProductIds) == 0) {
             return $result;
         }
 
+        if(config('catalog.magento_access_images_method') == 'file_get_content'){
+            return self::runFileGetContent($execProductIds, $width, $height);
+        }else{
+            return self::runExecute($execProductIds, $width, $height);
+        }
+    }
+
+    public static function runFileGetContent($execProductIds, $width, $height)
+    {
+        $productIdsParams = implode("=",$execProductIds);
+        $imagesJson = file_get_contents(config('catalog.magento_images_complete_url').'?ids='.$productIdsParams.'&width='.$width.'&height='.$height);
+        $images = json_decode($imagesJson, true);
+        $result = [];
+
+        foreach ($images as $key =>$image){
+            $result[$image['product_id']] = $image['images'][0]['image_url'];
+            Cache::put('product-image-' . $image['product_id'] . '-' . $width . '-' . $height, $image['images'][0]['image_url'], 60); //cache image one day
+        }
+
+        return $result;
+    }
+
+    public static function runExecute($execProductIds, $width, $height)
+    {
         $exec = '';
         foreach($execProductIds as $execProductId) {
             $exec .= ' ' . $execProductId . ' ' . $width . ' ' . $height;
@@ -81,6 +86,7 @@ class ImageHelper
 
         //execute image.php from Magento
         $output = null;
+
         exec('/usr/bin/php -f ' . config('catalog.magento_image_helper') . $exec,$output);
 
         //map results
