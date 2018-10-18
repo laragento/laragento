@@ -3,6 +3,8 @@
 namespace Laragento\Customer;
 
 use Illuminate\Support\ServiceProvider;
+use Laragento\Customer\Models\Address;
+use Laragento\Customer\Observers\AddressObserver;
 
 class CustomerServiceProvider extends ServiceProvider
 {
@@ -25,6 +27,7 @@ class CustomerServiceProvider extends ServiceProvider
         $this->registerTranslations();
         $this->registerConfig();
         $this->registerViews();
+        $this->registerObservers();
         //$this->registerFactories();
         $this->loadMigrationsFrom(__DIR__.'/../Database/Migrations');
         $this->loadRoutesFrom(__DIR__.'/../Http/routes.php');
@@ -114,5 +117,10 @@ class CustomerServiceProvider extends ServiceProvider
         } else {
             $this->loadTranslationsFrom($sourcePath, 'customer');
         }
+    }
+
+    public function registerObservers()
+    {
+        Address::observe(AddressObserver::class);
     }
 }

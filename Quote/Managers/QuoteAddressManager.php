@@ -137,7 +137,6 @@ class QuoteAddressManager
     public function updateAddresses($addressData)
     {
         $billingAddress = $this->mapBillingAddress($addressData);
-
         if (!isset($addressData['same_as_billing']) && !isset($addressData['shipping_address'])) {
             $shippingAddress = null;
         } else {
@@ -146,6 +145,7 @@ class QuoteAddressManager
                 $shippingAddress['address_type'] = 'shipping';
                 $shippingAddress['same_as_billing'] = 1;
             }else{
+
                 $shippingAddress = $this->mapShippingAddress($addressData);
                 $shippingAddress['same_as_billing'] = 0;
             }

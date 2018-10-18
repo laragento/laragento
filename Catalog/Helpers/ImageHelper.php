@@ -56,18 +56,17 @@ class ImageHelper
         }
 
         if(config('catalog.magento_access_images_method') == 'file_get_content'){
-            return self::runFileGetContent($execProductIds, $width, $height);
+            return self::runFileGetContent($execProductIds, $width, $height, $result);
         }else{
-            return self::runExecute($execProductIds, $width, $height);
+            return self::runExecute($execProductIds, $width, $height, $result);
         }
     }
 
-    public static function runFileGetContent($execProductIds, $width, $height)
+    public static function runFileGetContent($execProductIds, $width, $height, $result)
     {
         $productIdsParams = implode("=",$execProductIds);
         $imagesJson = file_get_contents(config('catalog.magento_images_complete_url').'?ids='.$productIdsParams.'&width='.$width.'&height='.$height);
         $images = json_decode($imagesJson, true);
-        $result = [];
 
         foreach ($images as $key =>$image){
             $result[$image['product_id']] = $image['images'][0]['image_url'];
@@ -77,7 +76,7 @@ class ImageHelper
         return $result;
     }
 
-    public static function runExecute($execProductIds, $width, $height)
+    public static function runExecute($execProductIds, $width, $height, $result)
     {
         $exec = '';
         foreach($execProductIds as $execProductId) {
