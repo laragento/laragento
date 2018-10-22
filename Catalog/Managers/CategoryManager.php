@@ -48,15 +48,13 @@ class CategoryManager {
      * @param $storeId
      * @return mixed
      */
-    public function getRelatedProducts($categoryId, $storeId)
+    public function getProducts($categoryId, $storeId)
     {
-        $relatedProducts = ProductIndex::join('catalog_category_product', 'lg_catalog_product_index.product_id', '=',
+        return ProductIndex::join('catalog_category_product', 'lg_catalog_product_index.product_id', '=',
             'catalog_category_product.product_id')
             ->where('catalog_category_product.category_id', '=', $categoryId)
             ->whereStatus(true)
             ->whereStoreId($storeId);
-
-        return $relatedProducts;
     }
 
     /**

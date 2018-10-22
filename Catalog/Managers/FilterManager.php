@@ -35,7 +35,7 @@ class FilterManager
      * @param $paginationConfig
      * @param null $filters
      * @param null $sort
-     * @return mixed
+     * @return null
      */
     public function applyFiltersAndSorting(
         $relatedProducts,
@@ -55,11 +55,11 @@ class FilterManager
         }
 
         $this->initialize($relatedProducts, $filterableAttributes);
-        $this->filters = $this->setActiveFilters($filters);
+        $this->setActiveFilters($filters);
         $this->filter();
         $this->sort($sort);
         $this->paginate($paginationConfig);
-        $this->filters = $this->inactivateFilterOptions();
+        $this->inactivateFilterOptions();
         $this->getFilterAttributeLabels();
         return $this->getRelatedProducts();
     }
@@ -69,7 +69,7 @@ class FilterManager
      */
     public function getFilterAttributeLabels()
     {
-        foreach ($this->catalogAttributeRepository->attributeLabels() as $filterLabel) {
+        foreach ($this->catalogAttributeRepository->filterableAttributes() as $filterLabel) {
             $this->filterLabels[$filterLabel->attribute_code] = $filterLabel->frontend_label;
         }
         $this->filterOptionLabels = $this->catalogAttributeRepository->indexedAttributeOptionValues(
@@ -89,7 +89,7 @@ class FilterManager
                         'available' => [],
                         'active' => [],
                         'display_available' => [],
-                        'display_inactive' => [],
+                        'display_inactive' => []
                     ];
             }
         }
@@ -97,13 +97,14 @@ class FilterManager
 
     /**
      * @param $relatedProducts
-     * @param $filters
+     * @param $filterableAttributes
      */
-    public function initialize($relatedProducts, $filters)
+    public function initialize($relatedProducts, $filterableAttributes)
     {
-        $this->setFilter($filters);
+        $this->setFilter($filterableAttributes);
         $this->relatedProducts = $relatedProducts;
-        $this->allProducts = $relatedProducts->get($filters);
+        $this->allProducts = $relatedProducts->get($filterableAttributes);
+
         $this->setAvailableFilters();
     }
 
@@ -114,6 +115,9 @@ class FilterManager
     {
         foreach ($this->allProducts as $i => $product) {
             foreach ($this->filters as $key => $value) {
+                if($key == 'price'){
+                    continue;
+                }
                 if ($product[$key] != '' && !in_array($product[$key], $this->filters[$key]['available'])) {
                     $this->filters[$key]['available'][] = $product[$key];
                 }
@@ -210,6 +214,10 @@ class FilterManager
                 $activeFiltersOptions = $this->filters[$key]['active'];
                 $this->relatedProducts->where(function ($query) use ($activeFiltersOptions, $key) {
                     foreach ($activeFiltersOptions as $activeFilterOption) {
+                        // Price Range Filter
+//                        if (is_price_attribute()) {
+//                            $this->allProducts = $query->whereBetween('price',[35,39]);
+//                        }
                         $query->orWhere($key, $activeFilterOption);
                     }
                 });

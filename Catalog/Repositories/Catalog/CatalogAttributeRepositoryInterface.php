@@ -10,5 +10,6 @@ interface CatalogAttributeRepositoryInterface
      */
     public function catalogAttributesByAttributeSet($attributeSetId);
     public function attributeLabels();
+    public function filterableAttributes();
     public function indexedAttributeOptionValues($optionIdArray);
 }

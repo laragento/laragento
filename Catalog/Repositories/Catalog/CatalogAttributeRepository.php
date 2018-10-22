@@ -31,6 +31,25 @@ class CatalogAttributeRepository extends AttributeRepository implements CatalogA
             ->get()->toArray();
     }
 
+    /**
+     * @return \Illuminate\Support\Collection
+     */
+    public function filterableAttributes()
+    {
+        return DB::table('catalog_eav_attribute')
+            ->where('is_filterable','=','1')
+            ->join('eav_attribute',
+                function ($join) {
+                    $join->on('eav_attribute.attribute_id', '=', 'catalog_eav_attribute.attribute_id');
+                }
+            )
+            ->get(['eav_attribute.attribute_id','attribute_code','frontend_label']);
+    }
+
+    /**
+     * @todo remove is_filterable condition
+     * @return \Illuminate\Support\Collection
+     */
     public function attributeLabels()
     {
         return DB::table('catalog_eav_attribute')
