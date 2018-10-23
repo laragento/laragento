@@ -1,0 +1,25 @@
+{
+  "name": "laragento/core",
+  "description": "Laragento Core Functionality",
+  "type": "extension",
+  "minimum-stability": "dev",
+  "require": {
+    "laragento/store":"dev-dev"
+  },
+  "extra": {
+    "laravel": {
+        "providers": [
+            "Laragento\\Core\\Providers\\CoreServiceProvider"
+        ]
+    }
+  },
+    "autoload": {
+      "psr-4": {
+          "Laragento\\Core\\": "./"
+      },
+      "files": [
+          "Helpers/PriceHelper.php"
+      ]
+  }
+
+}

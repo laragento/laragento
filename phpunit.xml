@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit backupGlobals="false"
+         backupStaticAttributes="false"
+         bootstrap="../../autoload.php"
+         colors="true"
+         convertErrorsToExceptions="true"
+         convertNoticesToExceptions="true"
+         convertWarningsToExceptions="true"
+         processIsolation="false"
+         stopOnFailure="false">
+    <testsuites>
+        <testsuite name="SalesFeature">
+            <directory suffix="Test.php">./Sales/Tests/Feature</directory>
+        </testsuite>
+
+        <testsuite name="SalesUnit">
+            <directory suffix="Test.php">./Sales/Tests/Unit</directory>
+        </testsuite>
+
+        <testsuite name="Feature">
+            <directory suffix="Test.php">./tests/Feature</directory>
+        </testsuite>
+
+        <testsuite name="Unit">
+            <directory suffix="Test.php">./tests/Unit</directory>
+        </testsuite>
+
+        <testsuite name="Catalog">
+            <directory suffix="Test.php">./Catalog/tests/</directory>
+        </testsuite>
+
+        <testsuite name="Checkout">
+            <directory suffix="Test.php">./Checkout/tests/</directory>
+        </testsuite>
+
+        <testsuite name="Core">
+            <directory suffix="Test.php">./Core/tests/</directory>
+        </testsuite>
+
+        <testsuite name="Customer">
+            <directory suffix="Test.php">./Customer/tests/</directory>
+        </testsuite>
+
+
+        <testsuite name="CustomerImportExport">
+            <directory suffix="Test.php">./CustomerImportExport/tests/</directory>
+        </testsuite>
+
+
+        <testsuite name="Eav">
+            <directory suffix="Test.php">./Eav/tests/</directory>
+        </testsuite>
+
+        <testsuite name="ImportExport">
+            <directory suffix="Test.php">./ImportExport/tests/</directory>
+        </testsuite>
+
+        <testsuite name="MediaStorage">
+            <directory suffix="Test.php">./MediaStorage/tests/</directory>
+        </testsuite>
+
+        <testsuite name="Quote">
+            <directory suffix="Test.php">./Quote/tests/</directory>
+        </testsuite>
+
+        <testsuite name="Rating">
+            <directory suffix="Test.php">./Rating/tests/</directory>
+        </testsuite>
+
+        <testsuite name="Review">
+            <directory suffix="Test.php">./Review/tests/</directory>
+        </testsuite>
+
+        <testsuite name="Store">
+            <directory suffix="Test.php">./Store/tests/</directory>
+        </testsuite>
+
+        <testsuite name="XmlChunk">
+            <directory suffix="Test.php">./XmlChunk/tests/</directory>
+        </testsuite>
+    </testsuites>
+    <filter>
+        <whitelist processUncoveredFilesFromWhitelist="true">
+            <directory suffix=".php">./app</directory>
+        </whitelist>
+    </filter>
+</phpunit>

@@ -1,0 +1,23 @@
+/node_modules
+/public/hot
+/public/storage
+/public/docs
+/public/images
+/storage/*.key
+/vendor
+/.idea
+/.vagrant
+Homestead.json
+Homestead.yaml
+npm-debug.log
+yarn-error.log
+.vscode/
+.env*
+.env.testing
+*.sql
+composer.lock
+/bootstrap/cache
+.phpstorm.meta.php
+_ide_helper*
+
+### VENDORS (Temporary solution)

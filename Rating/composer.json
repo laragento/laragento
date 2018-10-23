@@ -1,0 +1,24 @@
+{
+    "name": "laragento/rating",
+    "description": "Laragento Rating",
+    "type": "extension",
+    "minimum-stability": "dev",
+    "require": {
+        "laragento/customer":"dev-dev",
+        "laragento/review": "dev-dev",
+        "laragento/core":"dev-dev",
+        "laragento/store":"dev-dev"
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Laragento\\Rating\\Providers\\RatingServiceProvider"
+            ]
+        }
+    },
+    "autoload": {
+        "psr-4": {
+            "Laragento\\Rating\\": "./"
+        }
+    }
+}

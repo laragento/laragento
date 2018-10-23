@@ -1,0 +1,24 @@
+{
+  "name": "laragento/customer",
+  "description": "All about the Laragento Customer",
+  "type": "extension",
+  "minimum-stability": "dev",
+  "require": {
+    "laragento/directory":"dev-dev"
+  },
+  "extra": {
+    "laravel": {
+        "providers": [
+            "Laragento\\Customer\\Providers\\CustomerServiceProvider"
+        ],
+      "aliases": {
+        "customer": "Laragento\\Customer\\Support\\Facades\\CustomerFacade"
+      }
+    }
+  },
+  "autoload": {
+    "psr-4": {
+      "Laragento\\Customer\\": "./"
+    }
+  }
+}
