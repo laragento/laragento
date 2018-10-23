@@ -35,7 +35,8 @@ class SalesRuleServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //
+        $this->app->bind('Laragento\SalesRule\DataObjects\RuleInterface',
+            'Laragento\SalesRule\DataObjects\Rule');
     }
 
     /**

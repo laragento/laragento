@@ -12,6 +12,7 @@ class SalesRuleCustomerGroup extends Model
 {
     use CompositePrimaryKeys;
     public $timestamps = false;
+    public $incrementing = false;
 
     protected $table = 'salesrule_customer_group';
     protected $primaryKey =

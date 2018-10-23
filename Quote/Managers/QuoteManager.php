@@ -7,15 +7,17 @@ use Laragento\Quote\DataObjects\QuoteSessionItem;
 use Laragento\Quote\DataObjects\QuoteSessionObject;
 use Laragento\Quote\DataObjects\QuoteSessionTotals;
 use Laragento\Quote\Repositories\QuoteSessionObjectRepositoryInterface;
+use Laragento\SalesRule\DataObjects\RuleInterface;
 
 class QuoteManager
 {
     protected $quoteDataRepository;
     protected $quoteItemRepository;
     protected $cartTotals;
+    protected $salesRuleRepository;
 
     /**
-     * QuoteItemManager constructor.
+     * QuoteManager constructor.
      * @param QuoteSessionObjectRepositoryInterface $quoteDataRepository
      * @param QuoteSessionTotals $cartTotals
      */
@@ -82,20 +84,35 @@ class QuoteManager
         $baseGrandTotal = $this->formatItemPrices($baseGrandTotalFull);
         $baseSubTotal = $this->formatItemPrices($baseSubTotalFull);
 
+        // Discount
+        $discount = $this->getDiscount($quote);
+        $baseSubtotalWithDiscount = $baseSubTotal - $discount;
+
+
         // ToDo if 5Rp round is needed
         //var_dump(round(($var + 0.000001) * 20) / 20,2);
 
         $quote->setGrandTotal($this->convertBaseToQuote($baseGrandTotal));
         $quote->setBaseGrandTotal($baseGrandTotal);
         $quote->setSubtotal($this->convertBaseToQuote($baseSubTotal));
-        $quote->setSubtotalWithDiscount($this->convertBaseToQuote($baseSubTotal));
         $quote->setBaseSubtotal($baseSubTotal);
-        $quote->setBaseSubtotalWithDiscount($baseSubTotal);
+        $quote->setSubtotalWithDiscount($this->convertBaseToQuote($baseSubtotalWithDiscount));
+        $quote->setBaseSubtotalWithDiscount($baseSubtotalWithDiscount);
         $quote->setTaxGroups($taxes);
         $quote->setTotalWeight($totalWeight);
 
         $quote = $this->setAdditionalCartInfo($quote,$taxes);
         $this->quoteDataRepository->updateQuote($quote);
+    }
+
+    protected function getDiscount($quote)
+    {
+//        $rules = $this->salesRuleRepository->rules($quote);
+//        /** @var RuleInterface $rule */
+//        foreach ($rules as $rule){
+//            return $rule->discount_amount;
+//        }
+        return 0.0;
     }
 
     protected function formatItemPrices($value)

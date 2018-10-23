@@ -102,6 +102,13 @@
             "symlink": true
           }
         },
+      {
+        "type": "path",
+        "url": "./SalesRule",
+        "options": {
+          "symlink": true
+        }
+      },
         {
             "type": "path",
             "url": "./Rating",
