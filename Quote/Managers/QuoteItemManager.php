@@ -7,7 +7,7 @@ use Laragento\Quote\DataObjects\QuoteSessionObject;
 use Laragento\Quote\Repositories\QuoteSessionItemRepositoryInterface;
 use Laragento\Quote\Repositories\QuoteSessionObjectRepositoryInterface;
 
-class QuoteItemManager
+class QuoteItemManager implements QuoteItemManagerInterface
 {
     protected $quoteDataRepository;
     protected $quoteItemRepository;
@@ -73,6 +73,8 @@ class QuoteItemManager
     public function storeItems($data, $item = null): void
     {
         if (isset($data['sku'])) {
+            // when the item is already in cart
+            $item = $this->quoteItemRepository->bySku($data['sku']);
             $data = $this->storeItemData($data, $item);
         }
         $quote = $this->getQuote();

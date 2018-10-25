@@ -9,6 +9,9 @@ use Illuminate\Database\Eloquent\Model;
  * SalesRule model*/
 class SalesRule extends Model
 {
+    const SALES_RULE_COUPON_TYPE_NO_COUPON = 1;
+    const SALES_RULE_COUPON_TYPE_WITH_COUPON = 2;
+
     protected $table = 'salesrule';
     protected $primaryKey = 'rule_id';
     public $timestamps = false;
@@ -34,7 +37,7 @@ class SalesRule extends Model
         'apply_to_shipping',
         'times_used',
         'is_rss',
-        'coupon_type',
+        'coupon_type',  // 1: No Coupon 2: With coupon
         'use_auto_generation',
         'uses_per_coupon',
         'simple_free_shipping',

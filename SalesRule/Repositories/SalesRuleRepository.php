@@ -32,9 +32,9 @@ class SalesRuleRepository implements SalesRuleRepositoryInterface
         $this->rule = $rule;
     }
 
-    public function isCouponValid($couponCode)
+    public function isCouponValid($quote)
     {
-        $coupon = $this->getActiveCoupon($couponCode);
+        $coupon = $this->getActiveCoupon($quote);
         if (!$coupon) {
             return false;
         }
@@ -62,7 +62,7 @@ class SalesRuleRepository implements SalesRuleRepositoryInterface
     public function getActiveSalesCoupon(QuoteSessionObject $quote)
     {
 
-        $coupon = $this->getActiveCoupon($quote->getCouponCode());
+        $coupon = $this->getActiveCoupon($quote);
 
         $subtotal = $quote->getBaseSubtotal();
 
@@ -92,27 +92,49 @@ class SalesRuleRepository implements SalesRuleRepositoryInterface
         return $this->rule;
     }
 
-    protected function getActiveCoupon($couponCode)
+    /**
+     * @param QuoteSessionObject $quote
+     * @return mixed
+     */
+    protected function getActiveCoupon($quote)
     {
+
+        $customerGroupId = $quote->getCustomerGroupId();
+        $couponCode = $quote->getCouponCode();
         // check if the sales-rule is active and in date range
         // check if the coupon code is correct
         $this->coupon = SalesRuleCoupon::with('rule.groups')
             ->where('code', $couponCode)
-            ->whereHas('rule', function ($query) {
+            ->whereHas('rule', function ($query) use ($customerGroupId){
                 $query->where('is_active', 1)
+                    ->where('coupon_type', SalesRule::SALES_RULE_COUPON_TYPE_WITH_COUPON)
                     ->where('from_date', '<=', date("Y-m-d"))
-                    ->where('to_date', '>=', date("Y-m-d"));
+                    ->where('to_date', '>=', date("Y-m-d"))
+                    ->whereHas('groups', function ($query) use ($customerGroupId) {
+                        $query->where('customer_group_id', $customerGroupId);
+                    });
             })->first();
+
+
 
         return $this->coupon;
     }
 
+    /**
+     * @param QuoteSessionObject $quote
+     * @return mixed
+     */
     protected function getActiveSalesRules($quote)
     {
+        $customerGroupId = $quote->getCustomerGroupId();
+
         return SalesRule::where('is_active', 1)
             ->where('from_date', '<=', date("Y-m-d"))
             ->where('to_date', '>=', date("Y-m-d"))
-            ->where('coupon_type', '1')
+            ->where('coupon_type', SalesRule::SALES_RULE_COUPON_TYPE_NO_COUPON)
+            ->whereHas('groups', function ($query) use ($customerGroupId) {
+                $query->where('customer_group_id', $customerGroupId);
+            })
             ->get();
     }
 }

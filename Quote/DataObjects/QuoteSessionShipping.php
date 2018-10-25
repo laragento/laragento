@@ -105,7 +105,7 @@ class QuoteSessionShipping
     /**
      * @return string
      */
-    public function getPrice(): string
+    public function getPrice()
     {
         return $this->price;
     }

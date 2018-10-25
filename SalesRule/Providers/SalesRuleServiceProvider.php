@@ -37,6 +37,8 @@ class SalesRuleServiceProvider extends ServiceProvider
     {
         $this->app->bind('Laragento\SalesRule\DataObjects\RuleInterface',
             'Laragento\SalesRule\DataObjects\Rule');
+        $this->app->bind('Laragento\SalesRule\Repositories\SalesRuleRepositoryInterface',
+            'Laragento\SalesRule\Repositories\SalesRuleRepository');
     }
 
     /**

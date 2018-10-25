@@ -67,6 +67,11 @@ class QuoteSessionObject
     protected $customAttributes = [];
 
     /**
+     * @var integer
+     */
+    protected $customer_group_id = 0;
+
+    /**
      * @var float
      */
     protected $totalWeight = 0.0000;
@@ -839,9 +844,21 @@ class QuoteSessionObject
         $this->customer_is_guest = $customerIsGuest;
     }
 
+    /**
+     * @return int
+     */
+    public function getCustomerGroupId(): int
+    {
+        return $this->customer_group_id;
+    }
 
-
-
+    /**
+     * @param int $customer_group_id
+     */
+    public function setCustomerGroupId(int $customer_group_id): void
+    {
+        $this->customer_group_id = $customer_group_id;
+    }
 
 
 }
