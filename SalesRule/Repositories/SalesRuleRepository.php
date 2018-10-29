@@ -4,6 +4,7 @@ namespace Laragento\SalesRule\Repositories;
 
 
 use Laragento\Quote\DataObjects\QuoteSessionObject;
+use Laragento\SalesRule\DataObjects\Rule;
 use Laragento\SalesRule\DataObjects\RuleInterface;
 use Laragento\SalesRule\Exceptions\NegativeSubtotalException;
 use Laragento\SalesRule\Models\SalesRule;
@@ -44,13 +45,13 @@ class SalesRuleRepository implements SalesRuleRepositoryInterface
 
     /**
      * @param QuoteSessionObject $quote
-     * @return RuleInterface[]
+     * @return array|mixed
      * @throws NegativeSubtotalException
      */
     public function rules(QuoteSessionObject $quote)
     {
-        $salesRules = $this->getActiveSalesRules($quote);
-        $salesRules[] = $this->getActiveSalesCoupon($quote);
+        $salesRules = $this->getApplicableCartRules($quote);
+        $salesRules[] = $this->getApplicableCouponRule($quote);
         return $salesRules;
     }
 
@@ -59,9 +60,8 @@ class SalesRuleRepository implements SalesRuleRepositoryInterface
      * @return RuleInterface
      * @throws NegativeSubtotalException
      */
-    public function getActiveSalesCoupon(QuoteSessionObject $quote)
+    protected function getApplicableCouponRule(QuoteSessionObject $quote)
     {
-
         $coupon = $this->getActiveCoupon($quote);
 
         $subtotal = $quote->getBaseSubtotal();
@@ -115,9 +115,25 @@ class SalesRuleRepository implements SalesRuleRepositoryInterface
                     });
             })->first();
 
-
-
         return $this->coupon;
+    }
+
+    /**
+     * @param QuoteSessionObject $quote
+     * @return mixed
+     */
+    protected function getApplicableCartRules($quote){
+        $salesRules = $this->getActiveSalesRules($quote);
+        $rules = [];
+        foreach ($salesRules as $salesRule)
+        {
+            /** @var Rule $rule */
+            $rule = new Rule();
+            $rule->discount_amount = $salesRule->discount_amount;
+            $rule->active = true;
+            $rules[] = $rule;
+        }
+        return $rules;
     }
 
     /**

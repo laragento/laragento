@@ -73,10 +73,10 @@ class QuoteItemManager implements QuoteItemManagerInterface
     public function storeItems($data, $item = null): void
     {
         if (isset($data['sku'])) {
-            // when the item is already in cart
             $item = $this->quoteItemRepository->bySku($data['sku']);
             $data = $this->storeItemData($data, $item);
         }
+
         $quote = $this->getQuote();
         $quote->setItems($data);
         $this->settingQuoteItemsInfo($quote);

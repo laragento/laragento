@@ -42,36 +42,7 @@ class QuoteSessionItemRepository implements QuoteSessionItemRepositoryInterface
 
     }
 
-    /**
-     * @inheritdoc
-     * @ToDo Bases and Amounts are not regarding conversions
-     */
-    public function createItem($data)
-    {
-        // Get product and set item
-        $product = $this->productRepository::productBySku($data['sku']);
-        $data['product_id'] = $product->entity_id;
-        $data['product_type'] = $product->type_id;
-        $data['weight'] = $this->getAttributeValue('weight', $product->entity_id);
-        $data['name'] = $this->getAttributeValue('name', $product->entity_id);
-        $data['description'] = $this->getAttributeValue('description', $product->entity_id);
 
-        if (config('quote.calculateTotals')) {
-            // Set Price Information
-            $totals = $this->setTotals($product->entity_id, $data['qty'], $data['store_id']);
-            $data = array_merge($data, $totals);
-        }
-
-
-        // Populate Item
-        $quoteItem = new QuoteSessionItem();
-        foreach ($data as $key => $value) {
-            $function = 'set' . str_replace(' ', '', ucwords(str_replace('_', ' ', $key)));
-            $quoteItem->$function($value);
-        }
-        return $quoteItem;
-
-    }
 
     /**
      * @inheritdoc
@@ -125,6 +96,38 @@ class QuoteSessionItemRepository implements QuoteSessionItemRepositoryInterface
             }
         }
         return null;
+    }
+
+
+    /**
+     * @inheritdoc
+     * @ToDo Bases and Amounts are not regarding conversions
+     */
+    public function createItem($data)
+    {
+        // Get product and set item
+        $product = $this->productRepository::productBySku($data['sku']);
+        $data['product_id'] = $product->entity_id;
+        $data['product_type'] = $product->type_id;
+        $data['weight'] = $this->getAttributeValue('weight', $product->entity_id);
+        $data['name'] = $this->getAttributeValue('name', $product->entity_id);
+        $data['description'] = $this->getAttributeValue('description', $product->entity_id);
+
+        if (config('quote.calculateTotals')) {
+            // Set Price Information
+            $totals = $this->setTotals($product->entity_id, $data['qty'], $data['store_id']);
+            $data = array_merge($data, $totals);
+        }
+
+
+        // Populate Item
+        $quoteItem = new QuoteSessionItem();
+        foreach ($data as $key => $value) {
+            $function = 'set' . str_replace(' ', '', ucwords(str_replace('_', ' ', $key)));
+            $quoteItem->$function($value);
+        }
+        return $quoteItem;
+
     }
 
     /**

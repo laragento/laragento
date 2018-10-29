@@ -65,7 +65,7 @@ class ImageHelper
     public static function runFileGetContent($execProductIds, $width, $height, $result)
     {
         $productIdsParams = implode("=",$execProductIds);
-        $imagesJson = file_get_contents(config('catalog.magento_images_complete_url').'?ids='.$productIdsParams.'&width='.$width.'&height='.$height);
+        $imagesJson = file_get_contents(config('catalog.magento_images_complete_url').'image.php?ids='.$productIdsParams.'&width='.$width.'&height='.$height);
         $images = json_decode($imagesJson, true);
 
         foreach ($images as $key =>$image){

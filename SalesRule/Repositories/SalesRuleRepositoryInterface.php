@@ -17,10 +17,4 @@ interface SalesRuleRepositoryInterface
      * @return mixed
      */
     public function rules(QuoteSessionObject $quote);
-
-    /**
-     * @param QuoteSessionObject $quote
-     * @return mixed
-     */
-    public function getActiveSalesCoupon(QuoteSessionObject $quote);
 }

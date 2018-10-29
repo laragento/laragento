@@ -71,6 +71,9 @@ class QuoteManager implements QuoteManagerInterface
         ];
         $totalWeight = 0.0000;
 
+        /**
+         * Items
+         */
         // ToDo Must become abstracted as TaxRule/Calculation Module
         /** @var QuoteSessionItem $item */
         foreach ($quote->getItems() as $item) {
@@ -86,7 +89,9 @@ class QuoteManager implements QuoteManagerInterface
             $taxes['total'] = $this->convertBaseToQuote($taxes['base_total']);
         }
 
-        // Shipping
+        /**
+         * Shipping
+         */
         $shippingPrice = 0.00;
         $shippingTaxAmount = 0.00;
 
@@ -98,46 +103,52 @@ class QuoteManager implements QuoteManagerInterface
             }
         }
 
-        // Subtotal
+        /**
+         * Subtotal
+         */
         $baseSubTotalFull = array_sum($prices);
         $baseSubTotal = $this->formatItemPrices($baseSubTotalFull);
+        $quote->setSubtotal($this->convertBaseToQuote($baseSubTotal));
+        $quote->setBaseSubtotal($baseSubTotal);
 
-        // Discount
+        /**
+         * Discount
+         */
         $discount = $this->getDiscount($quote);
         $discountTaxAmount = $discount - ($discount / ((config('quote.totals.tax_percent') / 100) + 1));
         $baseSubtotalWithDiscount = $baseSubTotal - $discount;
+        $quote->setSubtotalWithDiscount($this->convertBaseToQuote($baseSubtotalWithDiscount));
+        $quote->setBaseSubtotalWithDiscount($baseSubtotalWithDiscount);
 
-        // Taxes
+
+        /**
+         * Taxes
+         */
         $taxes['base_total'] = $taxes['base_total'] + $shippingTaxAmount - $discountTaxAmount;
         $taxes['total'] = $taxes['total'] + $shippingTaxAmount - $discountTaxAmount;
+        $quote->setTaxGroups($taxes);
 
-        // GrandTotal
+        /**
+         * GrandTotal
+         */
         $baseGrandTotalFull = $baseSubtotalWithDiscount + $shippingPrice;
         $baseGrandTotal = $this->formatItemPrices($baseGrandTotalFull);
+        $quote->setGrandTotal($this->convertBaseToQuote($baseGrandTotal));
+        $quote->setBaseGrandTotal($baseGrandTotal);
 
 
         // ToDo if 5Rp round is needed
         //var_dump(round(($var + 0.000001) * 20) / 20,2);
 
-        // Weight
+        /**
+         * Weight
+         */
         $quote->setTotalWeight($totalWeight);
 
-        // Tax
-        $quote->setTaxGroups($taxes);
 
-        // Subtotal
-        $quote->setSubtotal($this->convertBaseToQuote($baseSubTotal));
-        $quote->setBaseSubtotal($baseSubTotal);
-
-        // Discount
-        $quote->setSubtotalWithDiscount($this->convertBaseToQuote($baseSubtotalWithDiscount));
-        $quote->setBaseSubtotalWithDiscount($baseSubtotalWithDiscount);
-
-        // GrandTotal
-        $quote->setGrandTotal($this->convertBaseToQuote($baseGrandTotal));
-        $quote->setBaseGrandTotal($baseGrandTotal);
-
-        // Additional
+        /**
+         * Additional
+         */
         $quote = $this->setAdditionalCartInfo($quote, $taxes);
 
         // Update Quote
@@ -181,7 +192,6 @@ class QuoteManager implements QuoteManagerInterface
         foreach ($rules as $rule) {
             $discount += $rule->discount_amount;
         }
-
         if ((float)$quote->getBaseSubtotal() < $discount) {
             return 0.00;
         }
