@@ -1,0 +1,25 @@
+{
+    "name": "nwidart/salesrule",
+    "description": "",
+    "authors": [
+        {
+            "name": "Nicolas Widart",
+            "email": "n.widart@gmail.com"
+        }
+    ],
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Laragento\\SalesRule\\Providers\\SalesRuleServiceProvider"
+            ],
+            "aliases": {
+                
+            }
+        }
+    },
+    "autoload": {
+        "psr-4": {
+            "Modules\\SalesRule\\": ""
+        }
+    }
+}

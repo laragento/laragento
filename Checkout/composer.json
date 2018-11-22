@@ -1,0 +1,20 @@
+{
+    "name": "laragento/checkout",
+    "description": "Laragento Checkout",
+    "type": "extension",
+    "minimum-stability": "dev",
+    "require": {},
+    "autoload": {
+        "psr-4": {
+            "Laragento\\Checkout\\": "./"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Laragento\\Checkout\\Providers\\CheckoutServiceProvider"
+            ]
+        }
+    }
+
+}

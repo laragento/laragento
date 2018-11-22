@@ -1,0 +1,21 @@
+{
+    "name": "laragento/directory",
+    "description": "Countries, Regions and Currencies",
+    "type": "extension",
+    "minimum-stability": "dev",
+    "require": {
+        "laragento/core":"dev-dev"
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Laragento\\Directory\\Providers\\DirectoryServiceProvider"
+            ]
+        }
+    },
+    "autoload": {
+        "psr-4": {
+            "Laragento\\Directory\\": "./"
+        }
+    }
+}

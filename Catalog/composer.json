@@ -1,0 +1,28 @@
+{
+    "name": "laragento/catalog",
+    "description": "Yeah",
+    "type": "extension",
+    "minimum-stability": "dev",
+    "require": {
+        "laragento/eav": "dev-dev",
+        "laragento/store": "dev-dev",
+        "laragento/media-storage":"dev-dev",
+        "laragento/import-export":"dev-dev"
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Laragento\\Catalog\\Providers\\CatalogServiceProvider"
+            ],
+            "aliases": {
+                "product": "Laragento\\Catalog\\Support\\Facades\\ProductFacade",
+                "category": "Laragento\\Catalog\\Support\\Facades\\CategoryFacade"
+            }
+        }
+    },
+    "autoload": {
+        "psr-4": {
+            "Laragento\\Catalog\\": "./"
+        }
+    }
+}

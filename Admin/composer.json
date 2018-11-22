@@ -1,0 +1,25 @@
+{
+    "name": "laragento/admin",
+    "description": "",
+    "authors": [
+        {
+            "name": "vonbyte",
+            "email": "info@tazign.ch"
+        }
+    ],
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Laragento\\Admin\\Providers\\AdminServiceProvider"
+            ],
+            "aliases": {
+                
+            }
+        }
+    },
+    "autoload": {
+        "psr-4": {
+            "Laragento\\Admin\\": "./"
+        }
+    }
+}

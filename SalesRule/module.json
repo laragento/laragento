@@ -1,0 +1,16 @@
+{
+    "name": "SalesRule",
+    "alias": "salesrule",
+    "description": "",
+    "keywords": [],
+    "active": 1,
+    "order": 0,
+    "providers": [
+        "Laragento\\SalesRule\\Providers\\SalesRuleServiceProvider"
+    ],
+    "aliases": {},
+    "files": [
+        "start.php"
+    ],
+    "requires": []
+}

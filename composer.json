@@ -1,0 +1,191 @@
+{
+    "name": "laragento/laragento",
+    "description": "The Laragento Framework.",
+    "keywords": [
+        "framework",
+        "laravel",
+        "magento",
+        "laragento"
+    ],
+    "license": "MIT",
+    "type": "project",
+    "minimum-stability": "dev",
+    "repositories": [
+      {
+        "type": "path",
+        "url": "./Admin",
+        "options": {
+          "symlink": true
+        }
+      },
+        {
+            "type": "path",
+            "url": "./Catalog",
+            "options": {
+              "symlink": true
+            }
+        },
+        {
+            "type": "path",
+            "url": "./CatalogImportExport",
+          "options": {
+            "symlink": true
+          }
+        },
+        {
+            "type": "path",
+            "url": "./CatalogUrlRewrite",
+          "options": {
+            "symlink": true
+          }
+        },
+        {
+            "type": "path",
+            "url": "./Checkout",
+          "options": {
+            "symlink": true
+          }
+        },
+        {
+            "type": "path",
+            "url": "./Core",
+          "options": {
+            "symlink": true
+          }
+        },
+        {
+            "type": "path",
+            "url": "./Customer",
+          "options": {
+            "symlink": true
+          }
+        },
+        {
+            "type": "path",
+            "url": "./CustomerImportExport",
+          "options": {
+            "symlink": true
+          }
+        },
+        {
+            "type": "path",
+            "url": "./Directory",
+          "options": {
+            "symlink": true
+          }
+        },
+        {
+            "type": "path",
+            "url": "./Eav",
+          "options": {
+            "symlink": true
+          }
+        },
+        {
+            "type": "path",
+            "url": "./ImportExport",
+          "options": {
+            "symlink": true
+          }
+        },
+        {
+            "type": "path",
+            "url": "./MediaStorage",
+          "options": {
+            "symlink": true
+          }
+        },
+        {
+            "type": "path",
+            "url": "./Quote",
+          "options": {
+            "symlink": true
+          }
+        },
+      {
+        "type": "path",
+        "url": "./SalesRule",
+        "options": {
+          "symlink": true
+        }
+      },
+        {
+            "type": "path",
+            "url": "./Rating",
+          "options": {
+            "symlink": true
+          }
+        },
+        {
+            "type": "path",
+            "url": "./Review",
+          "options": {
+            "symlink": true
+          }
+        },
+        {
+            "type": "path",
+            "url": "./Store",
+          "options": {
+            "symlink": true
+          }
+        },
+        {
+            "type": "path",
+            "url": "./XmlChunk",
+          "options": {
+            "symlink": true
+          }
+        }
+    ],
+    "require": {
+        "php": ">=7.1.3",
+        "laravel/framework": "5.6.*",
+        "laravel/tinker": "~1.0",
+        "nwidart/laravel-modules": "^3.0@dev",
+        "predis/predis": "^1.1",
+        "prewk/xml-string-streamer": "^0.11.0",
+        "spatie/laravel-fractal": "^5.2"
+    },
+    "require-dev": {
+        "barryvdh/laravel-debugbar": "^3.1",
+        "facebook/webdriver": "^1.5",
+        "filp/whoops": "~2.0",
+        "fzaninotto/faker": "~1.4",
+        "laravel/dusk": "~3.0",
+        "mockery/mockery": "0.9.*",
+        "phpunit/phpunit": "^6.5"
+    },
+    "autoload": {
+        "classmap": [
+        ],
+        "psr-4": {
+            "Laragento\\": "./"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            
+        }
+    },
+    "extra": {
+        "laravel": {
+            "dont-discover": [
+
+            ],
+            "providers": [
+                "Laragento\\LaragentoServiceProvider"
+            ]
+        }
+    },
+    "scripts": {
+        "post-root-package-install": [
+            "@php -r \"file_exists('.env') || copy('.env.example', '.env');\""
+        ]
+    },
+    "config": {
+        "preferred-install": "dist",
+        "sort-packages": true,
+        "optimize-autoloader": true
+    }
+}
