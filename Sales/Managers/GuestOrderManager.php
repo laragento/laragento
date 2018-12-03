@@ -5,7 +5,7 @@ namespace Laragento\Sales\Managers;
 use Laragento\Quote\DataObjects\QuoteSessionObject;
 use Laragento\Store\Models\Store;
 
-class GuestOrderManager extends AbstractOrderManager
+class GuestOrderManager extends AbstractOrderManager implements OrderManagerInterface
 {
     /**
      * @param QuoteSessionObject $quote

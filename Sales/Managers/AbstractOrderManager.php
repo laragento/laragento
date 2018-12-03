@@ -20,7 +20,7 @@ use Laragento\Sales\Repositories\OrderRepository;
 use Laragento\Store\Models\Store;
 use Laragento\Store\Repositories\StoreRepositoryInterface;
 
-abstract class AbstractOrderManager
+abstract class AbstractOrderManager implements OrderManagerInterface
 {
     protected $orderItemRepository;
     protected $orderRepository;
@@ -67,7 +67,11 @@ abstract class AbstractOrderManager
 
     protected function mapQuoteItemToOrderItem(QuoteSessionItem $item, Order $order)
     {
-        $originalBasePrice = $this->productAttributeRepository->data('price', $item->product_id, $item->store_id)->value;
+        /**
+         * @todo fix in Laragento!
+         */
+        //$originalBasePrice = $this->productAttributeRepository->data('price', $item->product_id, $item->store_id)->value;
+        $originalBasePrice = $item->price;
         $originalPrice = $this->convertBaseToOrder($originalBasePrice, $order->base_to_order_rate);
 
         $productOptions = '{"info_buyRequest":{"qty":'.$item->qty.',"options":[]}}';
@@ -363,7 +367,11 @@ abstract class AbstractOrderManager
 
         $rate = $quote->getBaseToQuoteRate();
         $store = Store::whereStoreId($quote->getStoreId())->first();
-        $fullStoreName = $store->website->name . "\n" . $store->group->name . "\n" . $store->name;
+        /**
+         * @todo replace this in laragento!
+         */
+        //$fullStoreName = $store->website->name . "\n" . $store->group->name . "\n" . $store->name;
+        $fullStoreName = $store->name;
         $percent = config('quote.totals.tax_percent');
 
         return [
@@ -488,12 +496,17 @@ abstract class AbstractOrderManager
         $tax = Tax::create($taxData);
 
         // calculate tax items
-
         /** @var QuoteSessionItem $item */
         foreach ($quote->getItems() as $item) {
+            /**
+             * @todo replace this in laragento!
+             */
+            $salesOrderItem = Item::select('item_id')->where('sku','=',$item->sku)
+                    ->where('order_id','=',$order->entity_id)
+                    ->first();
             $taxItemData = [
                 'tax_id' => $tax->tax_id,
-                'item_id' => $item->item_id,
+                'item_id' => $salesOrderItem->item_id,
                 'tax_percent' => $item->tax_percent,
                 'amount' => $item->tax_amount,
                 'base_amount' => $item->base_tax_amount,
