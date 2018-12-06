@@ -100,6 +100,8 @@ class QuoteShippingManager
      */
     protected function calculateTotals($quote)
     {
-        $this->quoteManager->calculateTotals($quote);
+        if (config('quote.calculateTotals') == true) {
+            $this->quoteManager->calculateTotals($quote);
+        }
     }
 }

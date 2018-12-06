@@ -80,10 +80,7 @@ class QuoteItemManager implements QuoteItemManagerInterface
         $quote = $this->getQuote();
         $quote->setItems($data);
         $this->settingQuoteItemsInfo($quote);
-
-        if (config('quote.calculateTotals') == true) {
-            $this->calculateTotals($quote);
-        }
+        $this->calculateTotals($quote);
     }
 
     /**
@@ -94,9 +91,7 @@ class QuoteItemManager implements QuoteItemManagerInterface
         $quote = $this->getQuote();
         $quote->setItems($items);
         $this->settingQuoteItemsInfo($quote);
-        if (config('quote.calculateTotals') == true) {
-            $this->calculateTotals($quote);
-        }
+        $this->calculateTotals($quote);
     }
 
     public function storeItemData($data, $item)
@@ -121,6 +116,8 @@ class QuoteItemManager implements QuoteItemManagerInterface
 
     public function calculateTotals($quote)
     {
-        $this->quoteManager->calculateTotals($quote);
+        if (config('quote.calculateTotals') == true) {
+            $this->quoteManager->calculateTotals($quote);
+        }
     }
 }
