@@ -58,7 +58,7 @@ abstract class AbstractOrderManager implements OrderManagerInterface
         $orderData = $this->mapQuoteToOrder($quote);
         $order = $this->orderRepository->store($orderData);
         $this->saveItems($quote, $order);
-        $this->saveAddresses($quote, $order);
+        $order = $this->saveAddresses($quote, $order);
         $this->savePayment($quote, $order);
         $this->saveGrid($quote, $order);
         $this->saveTax($quote, $order);
@@ -198,8 +198,8 @@ abstract class AbstractOrderManager implements OrderManagerInterface
 
         $this->billingAddress = Address::create($billingAddress);
         $this->shippingAddress = Address::create($shippingAddress);
-        $this->orderRepository->store(['billing_address_id' => $this->billingAddress->entity_id], $order->entity_id);
-        $this->orderRepository->store(['shipping_address_id' => $this->shippingAddress->entity_id], $order->entity_id);
+        $order = $this->orderRepository->store(['billing_address_id' => $this->billingAddress->entity_id], $order->entity_id);
+        return $this->orderRepository->store(['shipping_address_id' => $this->shippingAddress->entity_id], $order->entity_id);
     }
 
 
