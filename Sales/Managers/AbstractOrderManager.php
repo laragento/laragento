@@ -224,6 +224,7 @@ abstract class AbstractOrderManager implements OrderManagerInterface
 
     protected function mapOrderToOrderGrid(QuoteSessionObject $quote, $order)
     {
+        $percent = config('quote.totals.tax_percent');
         return [
             'entity_id' => $order->entity_id,
             'status' => $order->status,
@@ -244,7 +245,7 @@ abstract class AbstractOrderManager implements OrderManagerInterface
             'shipping_information' => $order->shipping_description,
             'customer_email' => $order->customer_email,
             'customer_group' => $order->customer_group_id,
-            'subtotal' => $order->base_subtotal,
+            'subtotal' => includedTax($order->base_subtotal,$percent),
             'shipping_and_handling' => $order->shipping_amount,
             'customer_name' => $order->customer_firstname . ' ' . $order->customer_lastname,
             //ToDo make Helper or method
@@ -386,7 +387,7 @@ abstract class AbstractOrderManager implements OrderManagerInterface
             "base_grand_total" => (float)$quote->base_grand_total,
             "base_shipping_amount" => $quote->shipping->price,
             "base_shipping_tax_amount" => includedTax($quote->shipping->price, $percent),
-            "base_subtotal" => $quote->base_subtotal,
+            "base_subtotal" => includedTax($quote->base_subtotal, $percent),
             "base_tax_amount" => includedTax($quote->base_grand_total, $percent),
             "base_to_global_rate" => "1.0000", // ToDo Must become Dynamic
             "base_to_order_rate" => "1.0000", // ToDo Must become Dynamic
@@ -397,26 +398,26 @@ abstract class AbstractOrderManager implements OrderManagerInterface
             "shipping_tax_amount" => $this->convertBaseToOrder(includedTax($quote->shipping->price, $percent),$quote->base_to_quote_rate),
             "store_to_base_rate" => "0.0000", // Deprecated in magento
             "store_to_order_rate" => "0.0000", // Deprecated in magento
-            "subtotal" => $quote->subtotal,
+            "subtotal" => includedTax($quote->subtotal, $percent),
             "tax_amount" => $this->convertBaseToOrder(includedTax($quote->base_grand_total, $percent), $quote->base_to_quote_rate),
             "total_qty_ordered" => $quote->items_qty, // todo check
-            "can_ship_partially" => 0,
-            "can_ship_partially_item" => 0,
+            "can_ship_partially" => null,
+            "can_ship_partially_item" => null,
             "customer_is_guest" => $quote->customer_is_guest,
             "customer_note_notify" => 0, // ToDo make dynamic No idea whats this
             "billing_address_id" => null, // ToDo!! Re-save Order
-            "edit_increment" => 0,// Must become dynamic
+            "edit_increment" => null,// Must become dynamic
             "email_sent" => 0, //ToDo Change after Confirmation sent success event
             "send_email" => 1,  //ToDo Change after Confirmation sent success event
-            "forced_shipment_with_invoice" => 0, // ToDo make dynamic
-            "payment_auth_expiration" => 0, // ToDo make dynamic
+            "forced_shipment_with_invoice" => null, // ToDo make dynamic
+            "payment_auth_expiration" => null, // ToDo make dynamic
             "quote_address_id" => null, // ToDo make dynamic
             "quote_id" => null, // ToDo make dynamic
             "shipping_address_id" => null, // ToDo!! Resave Order
-            "adjustment_negative" => "0.0000", // ToDo Calculate Prices
-            "adjustment_positive" => "0.0000", // ToDo Calculate Prices
-            "base_adjustment_negative" => "0.0000", // ToDo Calculate Prices
-            "base_adjustment_positive" => "0.0000", // ToDo Calculate Prices
+            "adjustment_negative" => null, // ToDo Calculate Prices
+            "adjustment_positive" => null, // ToDo Calculate Prices
+            "base_adjustment_negative" => null, // ToDo Calculate Prices
+            "base_adjustment_positive" => null, // ToDo Calculate Prices
             "base_shipping_discount_amount" => "0.0000", // ToDo Calculate Prices
             "base_subtotal_incl_tax" => $quote->base_subtotal, // ToDo Tax Calculation
             "base_total_due" => $quote->base_grand_total,
@@ -502,8 +503,8 @@ abstract class AbstractOrderManager implements OrderManagerInterface
              * @todo replace this in laragento!
              */
             $salesOrderItem = Item::select('item_id')->where('sku','=',$item->sku)
-                    ->where('order_id','=',$order->entity_id)
-                    ->first();
+                ->where('order_id','=',$order->entity_id)
+                ->first();
             $taxItemData = [
                 'tax_id' => $tax->tax_id,
                 'item_id' => $salesOrderItem->item_id,
