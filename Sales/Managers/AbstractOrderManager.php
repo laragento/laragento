@@ -245,7 +245,7 @@ abstract class AbstractOrderManager implements OrderManagerInterface
             'shipping_information' => $order->shipping_description,
             'customer_email' => $order->customer_email,
             'customer_group' => $order->customer_group_id,
-            'subtotal' => includedTax($order->base_subtotal,$percent),
+            'subtotal' => $order->base_subtotal - includedTax($order->base_subtotal,$percent),
             'shipping_and_handling' => $order->shipping_amount,
             'customer_name' => $order->customer_firstname . ' ' . $order->customer_lastname,
             //ToDo make Helper or method
@@ -387,7 +387,7 @@ abstract class AbstractOrderManager implements OrderManagerInterface
             "base_grand_total" => (float)$quote->base_grand_total,
             "base_shipping_amount" => $quote->shipping->price,
             "base_shipping_tax_amount" => includedTax($quote->shipping->price, $percent),
-            "base_subtotal" => includedTax($quote->base_subtotal, $percent),
+            "base_subtotal" => $quote->base_subtotal - includedTax($quote->base_subtotal, $percent),
             "base_tax_amount" => includedTax($quote->base_grand_total, $percent),
             "base_to_global_rate" => "1.0000", // ToDo Must become Dynamic
             "base_to_order_rate" => "1.0000", // ToDo Must become Dynamic
@@ -398,7 +398,7 @@ abstract class AbstractOrderManager implements OrderManagerInterface
             "shipping_tax_amount" => $this->convertBaseToOrder(includedTax($quote->shipping->price, $percent),$quote->base_to_quote_rate),
             "store_to_base_rate" => "0.0000", // Deprecated in magento
             "store_to_order_rate" => "0.0000", // Deprecated in magento
-            "subtotal" => includedTax($quote->subtotal, $percent),
+            "subtotal" => $quote->subtotal - includedTax($quote->subtotal, $percent),
             "tax_amount" => $this->convertBaseToOrder(includedTax($quote->base_grand_total, $percent), $quote->base_to_quote_rate),
             "total_qty_ordered" => $quote->items_qty, // todo check
             "can_ship_partially" => null,
