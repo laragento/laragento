@@ -17,6 +17,8 @@ class FilterManager
     public $filters = [];
     public $filterLabels = [];
     public $filterOptionLabels = [];
+    public $priceFrom = null;
+    public $priceTo = 100;
 
     public function __construct(
         ProductRepositoryInterface $productRepository,
@@ -43,15 +45,18 @@ class FilterManager
         $paginationConfig,
         $filters = null,
         $sort = null
-    )
-    {
-        if($filters == null)
-        {
+    ) {
+        if ($filters == null) {
             $filters = request()->get('filters');
         }
-        if($sort == null)
-        {
+        if ($sort == null) {
             $sort = request()->get('sort');
+        }
+        if (request()->get('price_from')) {
+            $this->priceFrom = request()->get('price_from');
+        }
+        if (request()->get('price_to')) {
+            $this->priceTo = request()->get('price_to');
         }
 
         $this->initialize($relatedProducts, $filterableAttributes);
@@ -115,7 +120,7 @@ class FilterManager
     {
         foreach ($this->allProducts as $i => $product) {
             foreach ($this->filters as $key => $value) {
-                if($key == 'price'){
+                if ($key == 'price') {
                     continue;
                 }
                 if ($product[$key] != '' && !in_array($product[$key], $this->filters[$key]['available'])) {
@@ -125,8 +130,7 @@ class FilterManager
         }
 
         foreach ($this->filters as $key => $value) {
-            if(count($this->filters[$key]['available']) < 1)
-            {
+            if (count($this->filters[$key]['available']) < 1) {
                 return 0;
             }
 
@@ -150,27 +154,27 @@ class FilterManager
     public function inactivateFilterOptions()
     {
         $mainFilter = false;
-        foreach ($this->relatedProducts as $product){
+        foreach ($this->relatedProducts as $product) {
             foreach ($this->filters as $key => $value) {
-                    if($this->filters[$key]['display_inactive'] == []){
-                        continue;
-                    }
-                    if(count($this->filters[$key]['active']) > 0 && ($mainFilter == false || $mainFilter == $key)){
-                        $mainFilter = $key;
-                        continue;
-                    }
-                    $currentAttributeProductOptions = explode(",", $product[$key]);
-                    $this->filters[$key]['display_inactive'] = array_diff(
-                        $this->filters[$key]['display_inactive'],
-                        $currentAttributeProductOptions);
+                if ($this->filters[$key]['display_inactive'] == []) {
+                    continue;
+                }
+                if (count($this->filters[$key]['active']) > 0 && ($mainFilter == false || $mainFilter == $key)) {
+                    $mainFilter = $key;
+                    continue;
+                }
+                $currentAttributeProductOptions = explode(",", $product[$key]);
+                $this->filters[$key]['display_inactive'] = array_diff(
+                    $this->filters[$key]['display_inactive'],
+                    $currentAttributeProductOptions);
             }
         }
 
         foreach ($this->filters as $key => $value) {
-            if($this->filters[$key]['display_available'] == []){
+            if ($this->filters[$key]['display_available'] == []) {
                 continue;
             }
-            if($mainFilter == $key){
+            if ($mainFilter == $key) {
                 $this->filters[$key]['display_inactive'] = [];
                 continue;
             }
@@ -200,7 +204,6 @@ class FilterManager
                 }
             }
         }
-        //dd($this->filters);
         return $this->filters;
     }
 
@@ -214,16 +217,17 @@ class FilterManager
                 $activeFiltersOptions = $this->filters[$key]['active'];
                 $this->relatedProducts->where(function ($query) use ($activeFiltersOptions, $key) {
                     foreach ($activeFiltersOptions as $activeFilterOption) {
-                        // Price Range Filter
-//                        if (is_price_attribute()) {
-//                            $this->allProducts = $query->whereBetween('price',[35,39]);
-//                        }
                         $query->orWhere($key, $activeFilterOption);
                     }
                 });
             }
+            if (array_key_exists('price', $this->filters)) {
+                // Price Range Filter
+                if ($this->priceFrom && $this->priceTo) {
+                    $this->relatedProducts->whereBetween('price', [$this->priceFrom, $this->priceTo]);
+                }
+            }
         }
-
         return $this->relatedProducts;
     }
 

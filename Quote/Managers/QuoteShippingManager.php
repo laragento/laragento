@@ -45,6 +45,7 @@ class QuoteShippingManager
         $shipping->setMethod($shippingMethodCode);
         $shipping->setDescription($shippingMethod->description());
         $shipping->setPrice($shippingMethod->price());
+        $shipping->setCustomAttributes($shippingMethod->customAttributes());
         $quote->setShipping($shipping);
         $this->calculateTotals($quote);
     }
