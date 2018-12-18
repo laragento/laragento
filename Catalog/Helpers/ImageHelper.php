@@ -142,8 +142,7 @@ class ImageHelper
 //
 //            return $result;
 //        }
-
-
+        
         //get products in cache and set productIds who should be fetched from Magento System
         $execProductIds = [];
         foreach($categoryIds as $categoryId) {
