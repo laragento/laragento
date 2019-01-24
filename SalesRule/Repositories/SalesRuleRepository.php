@@ -98,7 +98,6 @@ class SalesRuleRepository implements SalesRuleRepositoryInterface
      */
     protected function getActiveCoupon($quote)
     {
-
         $customerGroupId = $quote->getCustomerGroupId();
         $couponCode = $quote->getCouponCode();
         // check if the sales-rule is active and in date range
@@ -114,7 +113,6 @@ class SalesRuleRepository implements SalesRuleRepositoryInterface
                         $query->where('customer_group_id', $customerGroupId);
                     });
             })->first();
-
         return $this->coupon;
     }
 

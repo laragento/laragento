@@ -111,8 +111,9 @@ class QuoteSessionItemRepository implements QuoteSessionItemRepositoryInterface
         $data['product_type'] = $product->type_id;
         $data['weight'] = $this->getAttributeValue('weight', $product->entity_id);
         $data['name'] = $this->getAttributeValue('name', $product->entity_id);
-        $data['description'] = $this->getAttributeValue('description', $product->entity_id);
-
+        if(config('quote.use_item_description_in_quote')){
+            $data['description'] = $this->getAttributeValue('description', $product->entity_id);
+        }
         if (config('quote.calculateTotals')) {
             // Set Price Information
             $totals = $this->setTotals($product->entity_id, $data['qty'], $data['store_id']);

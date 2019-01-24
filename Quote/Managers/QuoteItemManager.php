@@ -76,7 +76,6 @@ class QuoteItemManager implements QuoteItemManagerInterface
             $item = $this->quoteItemRepository->bySku($data['sku']);
             $data = $this->storeItemData($data, $item);
         }
-
         $quote = $this->getQuote();
         $quote->setItems($data);
         $this->settingQuoteItemsInfo($quote);
