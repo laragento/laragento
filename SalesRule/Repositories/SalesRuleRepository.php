@@ -77,7 +77,14 @@ class SalesRuleRepository implements SalesRuleRepositoryInterface
         }
 
         // get the discount amount
-        $discountAmount = $coupon->rule->discount_amount;
+        if($coupon->rule->simple_action == RuleInterface::DISCOUNT_ACTION_BY_PERCENT){
+            $discountAmount = $subtotal/100*$coupon->rule->discount_amount;
+        }elseif($coupon->rule->simple_action == RuleInterface::DISCOUNT_ACTION_FIXED_AMOUNT){
+            $discountAmount = $coupon->rule->discount_amount;
+        }else{
+            return $this->rule;
+        }
+
         if ($discountAmount == 0) {
             return $this->rule;
         }
