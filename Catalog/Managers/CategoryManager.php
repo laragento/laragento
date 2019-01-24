@@ -10,15 +10,15 @@ use Laragento\Catalog\Repositories\Category\CategoryRepositoryInterface;
 use Laragento\Indexer\Models\CategoryIndex;
 use Laragento\Indexer\Models\ProductIndex;
 
-class CategoryManager {
+class CategoryManager
+{
     protected $categoryRepository;
     protected $categoryAttributeRepository;
 
     public function __construct(
         CategoryRepositoryInterface $categoryRepository,
         CategoryAttributeRepositoryInterface $categoryAttributeRepository
-    )
-    {
+    ) {
         $this->categoryRepository = $categoryRepository;
         $this->categoryAttributeRepository = $categoryAttributeRepository;
     }
@@ -29,10 +29,11 @@ class CategoryManager {
      * @param $categoryData
      * @return mixed
      */
-    public function mapCategoryData($categoryData) {
+    public function mapCategoryData($categoryData)
+    {
         $categoryData['path'] = '/' . ltrim(strstr($categoryData['url_path'], '/'), '/');
 
-        if($categoryData['image'] != '') {
+        if ($categoryData['image'] != '') {
             $categoryData['image'] = config('catalog.magento_category_image_path') . $categoryData['image'];
         } else {
             //placeholderimage
@@ -63,10 +64,11 @@ class CategoryManager {
      * @param $categorySorting
      * @return array|mixed
      */
-    public function getStoreCategoryTree($storeId, $categorySorting) {
-        if(config('catalog.caching')) {
+    public function getStoreCategoryTree($storeId, $categorySorting)
+    {
+        if (config('catalog.caching')) {
             $sortedCategories = Cache::get($storeId . '-storecategorytree');
-            if($sortedCategories != null) {
+            if ($sortedCategories != null) {
                 return $sortedCategories;
             }
         }
@@ -74,15 +76,15 @@ class CategoryManager {
         //get root category
         $categoryIndex = CategoryIndex::with([
             'category.children.indexCategory.category.children.indexCategory',
-        ])->whereStoreId($storeId);
+        ])->whereStoreId($storeId)->whereIsActive("1");
 
-        if($storeId == 1) {
+        if ($storeId == 1) {
             $categoryIndex->whereName('Amagino');
         }
 
         $categoryIndex = $categoryIndex->first();
 
-        if(!$categoryIndex) {
+        if (!$categoryIndex) {
             Log::error('could not find root category for storeId:' . $storeId);
             abort(500, 'could not find root category for storeId:' . $storeId);
         }
@@ -93,20 +95,23 @@ class CategoryManager {
         //level 1
         $categoryChildren = $categoryIndex->category->children;
 
-        foreach($categorySorting as $name) {
-            $category = $categoryChildren->filter(function($categoryChild) use($name) {
+        foreach ($categorySorting as $name) {
+            $category = $categoryChildren->filter(function ($categoryChild) use ($name) {
                 return $categoryChild->indexCategory->name == $name;
             })->first();
 
 
-            if($category) {
+            if ($category) {
                 $subCategories = [];
-                $subCategoryChildren = $category->indexCategory->category->children->sortBy(function ($subCategoryChild) {
+                $subCategoryChildren = $category->indexCategory->category->children->sortBy(function ($subCategoryChild
+                ) {
                     return $subCategoryChild->indexCategory->name;
                 });
 
-                foreach($subCategoryChildren as $subCategoryChild) {
-                    $subCategories[] = $this->mapCategoryData($subCategoryChild->indexCategory->toArray());
+                foreach ($subCategoryChildren as $subCategoryChild) {
+                    if($subCategoryChild->indexCategory->is_active == "1"){
+                        $subCategories[] = $this->mapCategoryData($subCategoryChild->indexCategory->toArray());
+                    }
                 }
 
                 $sortedCategories[] = [
@@ -116,7 +121,7 @@ class CategoryManager {
             }
         }
 
-        if(config('catalog.caching')) {
+        if (config('catalog.caching')) {
             Cache::forever($storeId . '-storecategorytree', $sortedCategories);
         }
 
