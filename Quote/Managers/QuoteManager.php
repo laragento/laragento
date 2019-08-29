@@ -87,7 +87,8 @@ class QuoteManager implements QuoteManagerInterface
             $weight = (float)$item->getWeight() * (float)$item->getQty();
             $item->setRowWeight($weight);
 
-            $totalWeight = $totalWeight + ($item->getWeight() * $item->getQty());
+            $totalWeight += $weight;
+
             $taxes['base_total'] = $this->formatItemPrices($taxes[$strIndex]);
             $taxes['total'] = $this->convertBaseToQuote($taxes['base_total']);
         }
