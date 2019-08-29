@@ -83,7 +83,10 @@ class QuoteManager implements QuoteManagerInterface
             $strIndex = str_replace('.', '_', number_format($item->getTaxPercent(), 2));
             $val = isset($taxes[$strIndex]) ? $taxes[$strIndex] : 0;
             $taxes[$strIndex] = $val + $tax;
-            $item->setRowWeight(($item->getWeight() * $item->getQty()));
+
+            $weight = (float)$item->getWeight() * (float)$item->getQty();
+            $item->setRowWeight($weight);
+
             $totalWeight = $totalWeight + ($item->getWeight() * $item->getQty());
             $taxes['base_total'] = $this->formatItemPrices($taxes[$strIndex]);
             $taxes['total'] = $this->convertBaseToQuote($taxes['base_total']);
