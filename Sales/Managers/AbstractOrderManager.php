@@ -469,7 +469,7 @@ abstract class AbstractOrderManager implements OrderManagerInterface
             $totalWeight += ((float)$item->getWeight() * (float)$item->getQty());
         }
 
-        die('total Weight: ' . $totalWeight);
+        die('total Weight: ' . number_format(round((($totalWeight + 0.000001) * 100) / 100, 4), 4));
 
         return number_format(round((($totalWeight + 0.000001) * 100) / 100, 4), 4);
     }
