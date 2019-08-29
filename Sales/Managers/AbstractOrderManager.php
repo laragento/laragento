@@ -466,7 +466,7 @@ abstract class AbstractOrderManager implements OrderManagerInterface
 
         /** @var QuoteSessionItem $item */
         foreach ($quote->getItems() as $item) {
-            $totalWeight = $totalWeight + ($item->getWeight() * $item->getQty());
+            $totalWeight += ((float)$item->getWeight() * (float)$item->getQty());
         }
         return number_format(round((($totalWeight + 0.000001) * 100) / 100, 4), 4);
     }
