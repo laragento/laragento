@@ -85,7 +85,6 @@ class QuoteManager implements QuoteManagerInterface
             $taxes[$strIndex] = $val + $tax;
 
             $weight = (float)$item->getWeight() * (float)$item->getQty();
-            die('weight: ' . $weight);
             $item->setRowWeight($weight);
 
             $totalWeight += $weight;
