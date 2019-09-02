@@ -82,7 +82,7 @@ abstract class AbstractOrderManager implements OrderManagerInterface
             'product_id' => $item->product_id,
             'product_type' => $item->product()->type_id,
             'product_options' => $productOptions,
-            'weight' => $item->weight,
+            'weight' => isset($item->weight) ? $item->weight : 0,
             'is_virtual' => 0, // ToDo
             'sku' => $item->sku,
             'name' => $item->name,
